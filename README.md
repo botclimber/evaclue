@@ -6,5 +6,5 @@ Tasks [to be done until 23/05 ]:
 - [ ] landing page | *dennis*
 - [ ] complete notification services (can already be use) | *daniel*
 - [ ] email template | *dennis/daniel*
-- [ ] buy domain evaclue.com | *daniel*
+- [ ] buy domain | *daniel*
 - [ ] deploy documentation | *daniel*

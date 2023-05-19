@@ -117,6 +117,14 @@ gulp.task('build', async function (done) {
         if (stderr) console.log(`Error instaling packages for ${userService}`)
     });
 
+    exec('npm install', {
+        cwd: `Services/${userService}/database/`
+    }, (error, stdout, stderr) => {
+        let logmessage = stdout + `\n${userService} database PACKAGES INSTALLED SUCCESSFULLY` + `\n\n---------------------------------\n`;
+        console.log(logmessage)
+        if (stderr) console.log("Error instaling packages for users database")
+    });
+
     exec('npm install', {   
         cwd: 'Views/userclient/'
     }, (error, stdout, stderr) => {
@@ -124,4 +132,5 @@ gulp.task('build', async function (done) {
         console.log(logmessage)
         if (stderr) console.log("Error instaling packages for userclient")
     });
+
 })

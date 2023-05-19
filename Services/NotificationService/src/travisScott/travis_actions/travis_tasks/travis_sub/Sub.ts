@@ -1,33 +1,80 @@
 import {Db} from "../../../../Db/Db"
 import {Sub} from "../../../travis_types/typeModels"
 import date from "date-and-time"
+import fs from "fs"
 
 export class Subs{
     className: string = "Subs"
+    sub: Sub
 
-    async createSub(email: string, res: Record<string, any>): Promise<Response | void>{
-        const db: Db = new Db()
+    constructor(email: string){
 
         // order matters
-        const sub: Sub = {
+        this.sub = {
             email: email,
             createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss")
         }
-        
+    }
+
+    /**
+     * Saves information in Database
+     * 
+     * @param res 
+     */
+    async createSub(res: Record<string, any>): Promise<Response | void>{
+        const db: Db = new Db()
+
         try{
 
             // check if email already exists
-            const getOne: Sub[] = await db.selectOne<Sub>(sub, this.className)
+            const getOne: Sub[] = await db.selectOne<Sub>(this.sub, this.className)
 
             if(getOne.length) 
                 res.status(400).json({msg:"Email already existing!"})
             else {
-                const result: number = await db.insert(sub, this.className)
+                const result: number = await db.insert(this.sub, this.className)
                 console.log(result , typeof(result))
                 if(result)
                    res.status(200).json({"msg":"row created, thanks!"})
 
             }
+
+        }catch (e){
+            console.log(e)
+            throw (e)
+        }     
+    }
+
+    /**
+     * Saves information in .csv file | only for the cases where DB not available
+     * For test and alternative purposes only
+     * 
+     * @param res 
+     */
+    async createSubToCSV(res: Record<string, any>): Promise<Response | void>{
+        
+        try{    
+
+            // check if email already exists
+            fs.readFile("emails.csv", "utf-8", (err, data: string) => {
+                if(err) console.log(err)
+                else{
+                    if(data){
+                        const checkEmail: boolean = data.includes(this.sub.email)
+                        if(!checkEmail){
+                            fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, (err) => {
+                                if(err) { console.log(err); throw "somehthing went wrong!"}
+                                else{
+                                    fs.close
+                                    res.status(200).json({"msg":"row created, thanks!"})
+                                }
+                            })
+                        }else
+                            // email already registed
+                            res.status(400).json({msg:"Email already existing!"})
+                    }
+                }
+            })
 
         }catch (e){
             console.log(e)

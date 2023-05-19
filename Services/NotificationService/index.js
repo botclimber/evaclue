@@ -41,7 +41,7 @@ app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 
         const email = req.body.email;
         if (email) {
             const sub = new Sub_1.Subs();
-            yield sub.createSub(email, res);
+            yield sub.createSubToCSV(email, res);
         }
         else {
             res.status(400).json({ msg: "Missing email parameter!" });

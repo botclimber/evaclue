@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Subs = void 0;
 const Db_1 = require("../../../../Db/Db");
 const date_and_time_1 = __importDefault(require("date-and-time"));
+const fs_1 = __importDefault(require("fs"));
 class Subs {
     constructor() {
         this.className = "Subs";
@@ -38,6 +39,46 @@ class Subs {
                     if (result)
                         res.status(200).json({ "msg": "row created, thanks!" });
                 }
+            }
+            catch (e) {
+                console.log(e);
+                throw (e);
+            }
+        });
+    }
+    createSubToCSV(email, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // order matters
+            const sub = {
+                email: email,
+                createdAt: date_and_time_1.default.format(new Date(), "YYYY/MM/DD HH:mm:ss")
+            };
+            try {
+                // check if email already exists
+                fs_1.default.readFile("emails.csv", "utf-8", (err, data) => {
+                    if (err)
+                        console.log(err);
+                    else {
+                        if (data) {
+                            const checkEmail = data.includes(sub.email);
+                            if (!checkEmail) {
+                                fs_1.default.writeFile("emails.csv", data + `${sub.email},${sub.createdAt}\n`, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                        throw "somehthing went wrong!";
+                                    }
+                                    else {
+                                        fs_1.default.close;
+                                        res.status(200).json({ "msg": "row created, thanks!" });
+                                    }
+                                });
+                            }
+                            else
+                                // email already registed
+                                res.status(400).json({ msg: "Email already existing!" });
+                        }
+                    }
+                });
             }
             catch (e) {
                 console.log(e);

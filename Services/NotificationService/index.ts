@@ -36,8 +36,8 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
     const email: string = req.body.email
 
     if(email){
-      const sub: Subs = new Subs()
-      await sub.createSub(email, res)
+      const sub: Subs = new Subs(email)
+      await sub.createSub(res)
     
     }else {
       res.status(400).json({msg: "Missing email parameter!"})

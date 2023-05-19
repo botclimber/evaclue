@@ -1,3 +1,4 @@
+import {Response} from "express"
 import {Db} from "../../../../Db/Db"
 import {Sub} from "../../../travis_types/typeModels"
 import date from "date-and-time"
@@ -21,7 +22,7 @@ export class Subs{
      * 
      * @param res 
      */
-    async createSub(res: Record<string, any>): Promise<Response | void>{
+    async createSub(res: Response): Promise<Response | void>{
         const db: Db = new Db()
 
         try{
@@ -51,7 +52,7 @@ export class Subs{
      * 
      * @param res 
      */
-    async createSubToCSV(res: Record<string, any>): Promise<Response | void>{
+    async createSubToCSV(res: Response): Promise<Response | void>{
         
         try{    
 

@@ -6,9 +6,12 @@ export interface User {
 }
 
 export interface ContactResOwner {
+    cId?: number,
     resOwnerId: number,
     userId: number,
-    createdAt: string,
+    resOwnerEmail: string,
+    userName: string,
+    createdAt?: string,
     message?: string
 }
 
@@ -17,3 +20,5 @@ export type Sub = {
     email: string,
     createdAt: string
 }
+
+export type CROPlusUser = ContactResOwner & User

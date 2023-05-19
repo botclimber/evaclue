@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 // ?? if left value is null or undefined || is left value is false
 const SECRET: string = process.env.SECRET ?? ""
 
-export function tokenHandler(req: Request): Promise<Request["body"] & User>{
+export function tokenHandler<T>(req: Request): Promise<T & User>{
 
     return new Promise( (r, e) => {
 
@@ -28,7 +28,7 @@ export function tokenHandler(req: Request): Promise<Request["body"] & User>{
                 if(!(decoded.id && decoded.type && decoded.email)) 
                     e({statusCode: 400, msg: 'missing required keys'})
 
-                r(Object.assign({}, req.body, decoded))
+                r(Object.assign({}, req.body as T, decoded as User))
 
             })
 

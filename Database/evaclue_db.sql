@@ -85,6 +85,9 @@ Create Table contactResOwner(
     id int auto_increment,
     resOnwerId int not null,
     userId int not null,
+    resOwnerEmail varchar(120) not null,
+    userEmail varchar(120) not null,
+    userName varchar(80) not null,
     createdAt datetime,
     PRIMARY KEY (id)
 );

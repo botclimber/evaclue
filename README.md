@@ -32,13 +32,23 @@ Platform for house rent reviews
         JWT_SECRET = "greedisgood"
         DIRNAME = ""
         ```
+    - UserServices\database:
+        - 
+        ```
+        SERVER_PORT = 8001
+        DB_HOST = "localhost"
+        DB_USER = "root"
+        DB_PASSWORD = ""
+        DB_NAME = "evaclue_db"
+        JWT_SECRET = "greedisgood"
+        ```
     - NotificationServices:
         - 
         ```
         PORT = 8002
         DB_HOST = "localhost"
         DB_USER = "root"
-        DB_PASSWORD = "greedisgood"
+        DB_PASSWORD = ""
         DB_NAME = "evaclue_db"
         SECRET = "greedisgood"
         ```

@@ -8,7 +8,7 @@ Platform for house rent reviews
             - email: superAdmin@evaclue.pt
             - pass: diablo4
 
-- create environemnt files in the root dir of each service (.env):
+- create environemnt files in the root dir of each service (.env) and add the following lines:
     - ReviewsServices
         - 
         ``` 
@@ -58,6 +58,7 @@ Platform for house rent reviews
     - run:
         - ``` gulp start ``` (a web page should open automatically)
 
+## Some images about the architecture [deprecated]:
 ![Screenshot](imgs/arq.png)
 ![Screenshot](imgs/wAPIGAT.png)
 

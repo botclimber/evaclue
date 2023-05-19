@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+*.swp
+.env
+*.log
+.vscode
+
+# ignore all log folders
+**/logs
+
+# ignore all user images unless default.gif
+**/userImages/user-*.gif

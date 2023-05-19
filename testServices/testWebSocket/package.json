@@ -1,0 +1,15 @@
+{
+  "name": "testwebsocket",
+  "version": "1.0.0",
+  "description": "testing websockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "botclimber",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.11.0"
+  }
+}

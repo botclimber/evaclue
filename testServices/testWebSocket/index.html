@@ -1,0 +1,50 @@
+<html>
+   <head>
+   <script>
+       const socket = new WebSocket('ws://localhost:8000/');
+
+       socket.onopen = function(e) {
+        	 console.log("[open] Connection established");
+        	 console.log("Sending to server");
+        	 var data = {"msg": "something Dope"}
+        	 socket.send(JSON.stringify(data));
+  	   };
+
+      socket.onerror = function(error) {
+          console.log(`[error]`);
+      };
+
+
+	     socket.onmessage = function(event) {
+		       console.log(`[message] Data received from server: ${event.data}`);
+		       document.getElementById("resp").innerHTML += event.data+"<br>"
+	     };
+
+/*	socket.onclose = function(event) {
+		if (event.wasClean) {
+			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+		} else {
+			// e.g. server process killed or network down
+			// event.code is usually 1006 in this case
+			console.log('[close] Connection died');
+		}
+	};*/
+
+   </script>
+   </head>
+   <body>
+       <div class="button-row">
+		<input type="text" name="msg" id="msg" />
+           	<button id="btn">send</button>
+       </div>
+       <p id="resp">results: </p>
+
+	<script>
+  document.getElementById("btn").onclick = function() {
+    var msg = {"msg": document.getElementById("msg").value}
+    socket.send(JSON.stringify(msg))
+   };
+	</script>
+
+</body>
+</html>

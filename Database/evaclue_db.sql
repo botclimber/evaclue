@@ -103,3 +103,6 @@ Create Table Users(
     verified boolean DEFAULT false,
     PRIMARY KEY (id)
 );
+
+-- Create first super Admin user
+INSERT INTO Users (email, username, firstName, image, lastName, password, type, blocked, verified) VALUES ("superAdmin@evaclue.pt", "admin", "admin", "default.gif", "admin", "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.", "superAdmin", 0, 1);

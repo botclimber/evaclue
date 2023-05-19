@@ -6,7 +6,7 @@ Platform for house rent reviews
     - go to Database folder -> open console -> make connection to mysql db (``` mysql -u username -p ```) -> run .sql file (``` source evaclue_db.sql ```)
         - some superAdmin type start user is also created
             - email: superAdmin@evaclue.pt
-            - pass: diablo4
+            - pass: diablo4Approach.
 
 - create environemnt files in the root dir of each service (.env) and add the following lines:
     - ReviewsServices

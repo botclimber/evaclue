@@ -18,6 +18,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const Sub_1 = require("./src/travisScott/travis_actions/travis_tasks/travis_sub/Sub");
 require("./src/travisScott/travis_types/typeModels"); // interface types
+const tokenHandler_1 = require("./src/travisScott/travis_check/tokenHandler/tokenHandler");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
@@ -33,8 +34,8 @@ app.get('/', (req, res) => {
  * Create new subscription
  */
 app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // 1. input checking
-    // 2. insert in DB
+    // 1. input checking [done]
+    // 2. insert in DB [done]
     // 3. send notification email
     try {
         const email = req.body.email;
@@ -54,25 +55,24 @@ app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 
 }));
 /**
  * Send email to residence owner from user
- * owner email should preferencial be hidden from common user (for now lets just apparently hide it, in future we can just make a request to UsersService by userId in order to find the owner email, and then by completly hide the owner email)
+ * owner email should preferencial be hidden from common user (send it to front end encrypted)
  *
  *
  */
 app.post("/" + service + "/" + v + "/emToOwner", (req, res) => {
-    /*
-    th.tokenHandler(req)
-    .then(_ => {
-      if( _ ){
-        
-        // 1. check token
-        // 2. message check
-        // 3. send message to res owner
-        // 4. response to platform {success or failed}
-      
-      }
+    (0, tokenHandler_1.tokenHandler)(req)
+        .then(_ => {
+        // 1. check token [done]
+        // 2. check body parameters
+        // 3. get email from encrypted
+        // 4. send email to res owner
+        // 5. create record on contactResOwner table
+        // 6. send feedback to user on web page
     })
-    .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
-    */
+        .catch(err => {
+        console.log(err);
+        res.status(err.statusCode).send(JSON.stringify({ msg: err.msg }));
+    });
 });
 // TODO: create massive email sending request
 app.listen(port, () => {

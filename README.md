@@ -69,5 +69,5 @@ Platform for house rent reviews
 - [ ] complete notification services (can already be use) | *daniel*
 - [ ] email template | *dennis/daniel*
 - [ ] buy domain | *daniel*
-- [ ] deploy documentation | *daniel*
-- [ ] add NotificationService to gulp configuration | *daniel*
+- [x] deploy documentation | *daniel*
+- [x] add NotificationService to gulp configuration | *daniel*

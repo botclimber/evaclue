@@ -70,7 +70,7 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
 
     // 2. check body parameters
     if( (!data.userName || data.userName == "") || (!data.message || data.message == "") || (!data.resOwnerEmail || data.resOwnerEmail == "") || (!data.resOwnerId) || (!data.userId)) 
-      res.status(400).json("Missing some required parameters!")
+      res.status(400).json({msg: "Missing some required parameters!"})
     
     else{
 
@@ -83,8 +83,8 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
       const croClass: ContactResOwnerClass = new ContactResOwnerClass(cro, user)
 
       // 4. send email to res owner
-      const emailEngine = new EmailEngine()
-      const status = await emailEngine.send(cro.resOwnerEmail, data.email, data.message)
+      const emailEngine: EmailEngine = new EmailEngine()
+      const status: boolean = await emailEngine.send(cro.resOwnerEmail, data.email, data.message)
 
       if(status){
         // 5. create record on contactResOwner table
@@ -92,8 +92,8 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
         croClass.createContact(res)
         
       }else
-        // send response with error message 
-        ;
+        // send response with error message
+        res.status(500).json({msg: "Something went wrong when trying to send email ?!"})
     }
 
   }catch(err){

@@ -5,11 +5,13 @@ import cors from 'cors'
 import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 import date from "date-and-time"
 
+
 import * as types from './src/travisScott/travis_types/typeModels' // interface types
 import { tokenHandler } from './src/travisScott/travis_check/tokenHandler/tokenHandler';
 import { ContactResOwnerClass } from './src/travisScott/travis_actions/travis_tasks/travis_contactResOwner/ContactResOwnerClass';
 import { tokenReader } from './src/travisScott/travis_check/tokenReader/tokenReader';
 import { EmailEngine } from './src/travisScott/travis_actions/travis_sendEmail/EmailEngine';
+import { EmailTemplate } from './src/travisScott/travis_actions/travis_sendEmail/emailTemplate';
 
 dotenv.config();
 
@@ -66,7 +68,7 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
   try{
 
     // 1. check token [done]
-    const data: Omit<types.CROPlusUser, "cId" | "createdAt"> = await tokenHandler<Omit<types.ContactResOwner, "cId" | "createdAt">>(req)
+    const data: Omit<types.CROPlusUser, "cId" | "userEmail" | "createdAt"> = await tokenHandler<Omit<types.ContactResOwner, "cId" | "createdAt" | "userEmail">>(req)
 
     // 2. check body parameters
     if( (!data.userName || data.userName == "") || (!data.message || data.message == "") || (!data.resOwnerEmail || data.resOwnerEmail == "") || (!data.resOwnerId) || (!data.userId)) 
@@ -77,19 +79,21 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
       // 3. get email from encrypted
       const emailTo: string = await tokenReader<string>(data.resOwnerEmail)
 
-      const cro: types.ContactResOwner = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: emailTo, userName: data.userName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
-      const user: types.User = {id: data.id, email: data.email, type: data.type}
+      const cro: types.ContactResOwner = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: emailTo, userEmail: data.email, userName: data.userName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
 
-      const croClass: ContactResOwnerClass = new ContactResOwnerClass(cro, user)
+      const croClass: ContactResOwnerClass = new ContactResOwnerClass(cro)
 
       // 4. send email to res owner
-      const emailEngine: EmailEngine = new EmailEngine()
-      const status: boolean = await emailEngine.send(cro.resOwnerEmail, data.email, data.message)
+      const html: string = EmailTemplate.forContactResOwner(cro)
+      const subject: string = "Evaclue: Someone is trying to get in touch with!"
+      const emailForm: types.EmailForm = {to: cro.resOwnerEmail, from: data.email, subject: subject, html: html}
+      const emailEngine: EmailEngine = new EmailEngine(emailForm)
+      const status: boolean = await emailEngine.send()
 
       if(status){
         // 5. create record on contactResOwner table
         // 6. send feedback to user on web page
-        croClass.createContact(res)
+        await croClass.createContact(res)
         
       }else
         // send response with error message

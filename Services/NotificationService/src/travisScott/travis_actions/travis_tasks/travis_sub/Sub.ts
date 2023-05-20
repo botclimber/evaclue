@@ -1,12 +1,14 @@
 import {Response} from "express"
 import {Db} from "../../../../Db/Db"
-import {Sub} from "../../../travis_types/typeModels"
+import {EmailForm, Sub} from "../../../travis_types/typeModels"
 import date from "date-and-time"
 import fs from "fs"
+import { EmailTemplate } from "../../travis_sendEmail/emailTemplate"
+import { EmailEngine } from "../../travis_sendEmail/EmailEngine"
 
 export class Subs{
     className: string = "Subs"
-    sub: Sub
+    private sub: Sub
 
     constructor(email: string){
 
@@ -35,9 +37,15 @@ export class Subs{
             else {
                 const result: number = await db.insert(this.sub, this.className)
                 console.log(result , typeof(result))
-                if(result)
-                   res.status(200).json({"msg":"row created, thanks!"})
+                if(result){
+                   
+                    const subject: string = "Thanks for subscribing!"
+                    const html: string = EmailTemplate.forSubscription()
+                    const emailForm: EmailForm = {to: this.sub.email, subject: subject, html: html}
 
+                    new EmailEngine(emailForm).send()
+                    res.status(200).json({"msg":"row created, thanks!"})
+                }
             }
 
         }catch (e){

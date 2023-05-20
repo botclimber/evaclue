@@ -1,20 +1,30 @@
 import {Response} from "express"
 import {Db} from "../../../../Db/Db"
-import {ContactResOwner, User} from "../../../travis_types/typeModels"
-import date from "date-and-time"
+import {ContactResOwner} from "../../../travis_types/typeModels"
 
 export class ContactResOwnerClass{
     className: string = "ContactResOwner"
-    fromUser: User
-    resOwner: ContactResOwner
+    private resOwner: ContactResOwner
 
-    constructor(resOwner: ContactResOwner, fromUser: User){
+    constructor(resOwner: ContactResOwner){
         this.resOwner = resOwner
-        this.fromUser = fromUser
     }
 
     async createContact(res: Response): Promise<Response | void>{
+        const db: Db = new Db()
 
+        try{
+            // for now is not of interest to store the message on DB
+            delete this.resOwner.message
+            const result: number = await db.insert(this.resOwner, this.className)
+            console.log(result , typeof(result))
+            if(result)
+                res.status(200).json({message: "Your message was sent!"})
+
+        }catch (e){
+            console.log(e)
+            throw (e)
+        }   
     }
 
 }

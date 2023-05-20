@@ -51,6 +51,12 @@ Platform for house rent reviews
         DB_PASSWORD = ""
         DB_NAME = "evaclue_db"
         SECRET = "greedisgood"
+
+        SMTP_EMAIL = "rentifyWD@gmail.com"
+        SMTP_HOST = "smtp.gmail.com"
+        SMTP_PORT = 587
+        SMTP_USER = "rentifywd@gmail.com"
+        SMTP_PASS = "kxjkqatwgtyefpzy"
         ```
     - userclient (View):
         - 
@@ -76,7 +82,7 @@ Platform for house rent reviews
 **[to be done until 23/05 ]:**
 - [x] transport from rentify to here | *dennis/daniel*
 - [ ] landing page | *dennis*
-- [ ] complete notification services (can already be use) | *daniel*
+- [x] complete notification services (can already be use) | *daniel*
 - [ ] email template | *dennis/daniel*
 - [ ] buy domain | *daniel*
 - [x] deploy documentation | *daniel*

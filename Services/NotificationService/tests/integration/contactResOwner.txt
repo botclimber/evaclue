@@ -1,0 +1,7 @@
+/**
+ * Tests:
+ *  - token auth missing or incorrect
+ *  - if some required parameter missing
+ *  - if everything fine
+ */
+

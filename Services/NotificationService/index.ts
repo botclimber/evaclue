@@ -4,14 +4,14 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 import date from "date-and-time"
-
+import request from "supertest"
 
 import * as types from './src/travisScott/travis_types/typeModels' // interface types
 import { tokenHandler } from './src/travisScott/travis_check/tokenHandler/tokenHandler';
 import { ContactResOwnerClass } from './src/travisScott/travis_actions/travis_tasks/travis_contactResOwner/ContactResOwnerClass';
 import { tokenReader } from './src/travisScott/travis_check/tokenReader/tokenReader';
 import { EmailEngine } from './src/travisScott/travis_actions/travis_sendEmail/EmailEngine';
-import { EmailTemplate } from './src/travisScott/travis_actions/travis_sendEmail/emailTemplate';
+import { EmailTemplate } from './src/travisScott/travis_actions/travis_sendEmail/EmailTemplate';
 
 dotenv.config();
 
@@ -106,8 +106,6 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
   }
 
 });
-
-// TODO: create massive email sending request
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

@@ -1,4 +1,3 @@
-import { ThrowStatement } from "typescript";
 import { EmailForm } from "../../travis_types/typeModels";
 const nodemailer = require("nodemailer")
 

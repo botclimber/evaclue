@@ -2,7 +2,7 @@
  * Email Template
  */
 
-import { ContactResOwner, Sub } from "../../travis_types/typeModels";
+import { ContactResOwner} from "../../travis_types/typeModels";
 
 export class EmailTemplate {
     static forContactResOwner(data: ContactResOwner): string{
@@ -17,7 +17,7 @@ export class EmailTemplate {
 
     static forSubscription(): string{
         const html = `
-        <p>Welcome to Rentify, Thanks for your subscription we expect to have the platform up and runnning really soon!</p>
+        <p>Welcome to Evalcue, Thanks for your subscription we expect to have the platform up and running really soon!</p>
         `
         return html
     }

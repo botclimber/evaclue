@@ -17,18 +17,18 @@ function tokenHandler(req) {
                 return header.split(" ")[1];
             return undefined;
         };
-        const token = (tokenFromQuery) ? tokenFromQuery : tokenFromHeader;
+        const token = (tokenFromQuery) ? tokenFromQuery : tokenFromHeader();
         if (token) {
             jsonwebtoken_1.default.verify(token, SECRET, (err, decoded) => {
                 if (err)
-                    e({ statusCode: 400, msg: 'Failed to auth token' });
+                    e({ msg: 'Failed to auth token' });
                 if (!(decoded.id && decoded.type && decoded.email))
-                    e({ statusCode: 400, msg: 'missing required keys' });
+                    e({ msg: 'missing required keys' });
                 r(Object.assign({}, req.body, decoded));
             });
         }
         else
-            e({ statusCode: 401, msg: 'authorization must exist in headers' });
+            e({ msg: 'authorization must exist in headers' });
     });
 }
 exports.tokenHandler = tokenHandler;

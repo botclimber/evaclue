@@ -81,9 +81,9 @@ Create Table Subs(
     PRIMARY KEY (id)
 );
 
-Create Table contactResOwner(
+Create Table ContactResOwner(
     id int auto_increment,
-    resOnwerId int not null,
+    resOwnerId int not null,
     userId int not null,
     resOwnerEmail varchar(120) not null,
     userEmail varchar(120) not null,

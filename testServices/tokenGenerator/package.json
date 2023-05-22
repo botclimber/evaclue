@@ -4,13 +4,12 @@
   "description": "some service that generate tokens",
   "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config index.js",
+    "start": "node index.js",
     "test": "test"
   },
   "author": "botclimber",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.3",
     "jsonwebtoken": "^9.0.0"
   }
 }

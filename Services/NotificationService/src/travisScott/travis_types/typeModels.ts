@@ -1,9 +1,11 @@
-
+export type ofType = "superAdmin" | "admin" | "col"
+export type genTestToken = (id: number, type: ofType, email?: string) => string
+export type genEmailToken = (emai: string) => string
 
 export interface User {
     id: number,
     email: string,
-    type: "superAdmin" | "admin" | "col"
+    type: ofType
 }
 
 export interface ContactResOwner {

@@ -25,7 +25,7 @@ class ContactResOwnerClass {
                 const result = yield db.insert(this.resOwner, this.className);
                 console.log(result, typeof (result));
                 if (result)
-                    res.status(200).json({ message: "Your message was sent!" });
+                    res.status(200).json({ msg: "Your message was sent!" });
             }
             catch (e) {
                 console.log(e);

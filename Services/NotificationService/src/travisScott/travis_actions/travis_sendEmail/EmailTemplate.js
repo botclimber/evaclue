@@ -16,7 +16,7 @@ class EmailTemplate {
     }
     static forSubscription() {
         const html = `
-        <p>Welcome to Rentify, Thanks for your subscription we expect to have the platform up and runnning really soon!</p>
+        <p>Welcome to Evalcue, Thanks for your subscription we expect to have the platform up and running really soon!</p>
         `;
         return html;
     }

@@ -4,7 +4,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 import date from "date-and-time"
-import request from "supertest"
 
 import * as types from './src/travisScott/travis_types/typeModels' // interface types
 import { tokenHandler } from './src/travisScott/travis_check/tokenHandler/tokenHandler';
@@ -52,7 +51,7 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
   }catch (e){
     //res.status(500).json({"error": e})
     console.log(e)
-    res.status(500).json("Some Internal Error")
+    res.status(500).json({msg:"Some Internal Error"})
   }
 
 });
@@ -61,6 +60,8 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
  * Send email to residence owner from user
  * owner email should preferencial be hidden from common user (send it to front end encrypted)
  * 
+ * Required parameters:
+ *  - userName, message, resOwnerEmail, userId, resOwnerId
  * 
  */ 
 app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => {
@@ -78,6 +79,7 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
 
       // 3. get email from encrypted
       const emailTo: string = await tokenReader<string>(data.resOwnerEmail)
+      console.log(emailTo)
 
       const cro: types.ContactResOwner = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: emailTo, userEmail: data.email, userName: data.userName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
 
@@ -102,7 +104,7 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
 
   }catch(err){
     console.log(err); 
-    res.status(500).json("Some Internal Error")
+    res.status(500).json({msg:"Some Internal Error"})
   }
 
 });

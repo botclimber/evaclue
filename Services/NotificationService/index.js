@@ -54,13 +54,15 @@ app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 
     catch (e) {
         //res.status(500).json({"error": e})
         console.log(e);
-        res.status(500).json("Some Internal Error");
+        res.status(500).json({ msg: "Some Internal Error" });
     }
 }));
 /**
  * Send email to residence owner from user
  * owner email should preferencial be hidden from common user (send it to front end encrypted)
  *
+ * Required parameters:
+ *  - userName, message, resOwnerEmail, userId, resOwnerId
  *
  */
 app.post("/" + service + "/" + v + "/emToOwner", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -73,6 +75,7 @@ app.post("/" + service + "/" + v + "/emToOwner", (req, res) => __awaiter(void 0,
         else {
             // 3. get email from encrypted
             const emailTo = yield (0, tokenReader_1.tokenReader)(data.resOwnerEmail);
+            console.log(emailTo);
             const cro = { resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: emailTo, userEmail: data.email, userName: data.userName, createdAt: date_and_time_1.default.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message };
             const croClass = new ContactResOwnerClass_1.ContactResOwnerClass(cro);
             // 4. send email to res owner
@@ -93,7 +96,7 @@ app.post("/" + service + "/" + v + "/emToOwner", (req, res) => __awaiter(void 0,
     }
     catch (err) {
         console.log(err);
-        res.status(500).json("Some Internal Error");
+        res.status(500).json({ msg: "Some Internal Error" });
     }
 }));
 app.listen(port, () => {

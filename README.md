@@ -8,6 +8,8 @@ Platform for house rent reviews
             - email: superAdmin@evaclue.pt
             - pass: diablo4Approach.
 
+- create a ``` logs/ ``` folder in the root dir of each service
+ 
 - create environemnt files in the root dir of each service (.env) and add the following lines:
     - ReviewsServices
         - 

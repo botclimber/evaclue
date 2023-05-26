@@ -89,3 +89,4 @@ Platform for house rent reviews
 - [ ] buy domain | *daniel*
 - [x] deploy documentation | *daniel*
 - [x] add NotificationService to gulp configuration | *daniel*
+- [ ] ![#f03c15]add possibility to recieve email and filter multiple regions/rent price/ and then maybe in the future rating average `#f03c15` | *daniel* 

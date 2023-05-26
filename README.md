@@ -89,4 +89,4 @@ Platform for house rent reviews
 - [ ] buy domain | *daniel*
 - [x] deploy documentation | *daniel*
 - [x] add NotificationService to gulp configuration | *daniel*
-- [ ] ```diff - add possibility to recieve email and filter multiple regions/rent price/ and then maybe in the future rating average ``` | *daniel* 
+- [ ] ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) diff - add possibility to recieve email and filter multiple regions/rent price/ and then maybe in the future rating average | *daniel* 

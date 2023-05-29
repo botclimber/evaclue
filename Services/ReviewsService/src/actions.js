@@ -141,7 +141,10 @@ exports.actions = (function(ws = undefined){
 	}
 
 	function setFilter(input){
-		
+		if( (!input.userName || input.userName == "") || (!input.userId) || (!input.userEmail || input.userEmail == "")){
+			helper.setFilter(input)
+
+		}else return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameters missing!"}))
 	}
 
 	function getUserFilters(){ return helper.getUserFilters() }
@@ -159,7 +162,8 @@ exports.actions = (function(ws = undefined){
 			// intern functions
 			getAddresses,
 			getResOwners,
-			getUserFilters
+			getUserFilters,
+			setFilter
 			}
 
 })

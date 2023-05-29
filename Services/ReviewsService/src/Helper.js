@@ -2,6 +2,7 @@ const Db = require("./Db.js")
 const date = require('date-and-time')
 const Location = require('./model/Location.js')
 const addrInfo = require('./model/Address.js')
+const UserFilter = require('./model/UserFilter.js')
 const Reviews = require('./model/Review.js')
 const ResidenceOwners = require("./model/ResidenceOwner.js")
 const conv = require("./convertLocation.js")
@@ -293,6 +294,54 @@ module.exports = class Helper extends Db{
 		this.selectAll("ResidenceOwners")
 		.then(res => {
 			this.returnResponse({claims: res})
+		})
+		.catch(err => console.log(err))
+	}
+
+	setFilet(input){
+
+		const exObject = {tableName: "NBOFilters", columns: ["userId"], values: [input.userId], operator: ""}
+		this.exists(exObject)
+		.then(res => {
+			if(res.length){
+				const hide = parseInt(input.hide)
+				if(hide){
+					const upObject = {tableName: "NBOFilters", id: res, columns: ["hide"], values: [hide]}
+					this.update(upObject)
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter hided `})))
+					.catch(err =>{
+						console.log(err)
+						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+					})
+
+				}else{
+					//all parameters required
+					const upObject = {tableName: "NBOFilters", id: res, columns: ["byCities, byRentPriceMin, byRentPriceMax, hide"], values: [input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0]}
+
+					this.update(upObject)
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter updated`})))
+					.catch(err =>{
+						console.log(err)
+						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+					})
+				}
+
+			}else{
+				// create new
+				const newUserFilter = new UserFilter(input.userName, input.userId, input.userEmail, input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0)
+				const userFilterId = this.insert(newUserFilter)
+
+				userFilterId
+				.then(id => {
+					this.ws.status(200).send(JSON.stringify({msg: `Filter persisted with id: ${id} `}))
+
+				})
+				.catch(err => {
+					console.log(err)
+					this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}))
+				})
+
+			}
 		})
 		.catch(err => console.log(err))
 	}

@@ -295,7 +295,11 @@ module.exports = class Helper extends Db{
 			this.returnResponse({claims: res})
 		})
 		.catch(err => console.log(err))
-	}	
+	}
+	
+	getAddresses(){ return this.selectAll("Addresses")}
+	getResOwners(){return this.selectAll("ResidenceOwners")}
+	getUserFilters(){return this.selectAll("NBOFilters")}
 
 	//getAllForSingleRO(userId){}
 

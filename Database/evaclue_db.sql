@@ -52,7 +52,7 @@ Create Table ResidenceOwners (
   floorOwner varchar(25) not null,
   flatOwner varchar(25) not null,
   rentPrice float(7,2),
-  free int not null,
+  free int not null, -- 0 false, 1 true
   createdOn datetime,
   approvedOn datetime,
   approved int not null,
@@ -104,6 +104,20 @@ Create Table Users(
     type varchar(30) not null,
     blocked boolean DEFAULT false,
     verified boolean DEFAULT false,
+    PRIMARY KEY (id)
+);
+
+-- Notification of available residences on Users defined filters
+-- NBOFilters = Notification Based On Filters
+Create Table NBOFilters(
+    id int auto_increment,
+    userName varchar(120) not null,
+    userId int not null,
+    userEmail varchar(60) not null,
+    byCities varchar(60) not null,
+    byRentPriceMin float(7,2),
+    byRentPriceMax float(7,2),
+    hide int not null,
     PRIMARY KEY (id)
 );
 

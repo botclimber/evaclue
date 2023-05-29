@@ -117,7 +117,7 @@ Create Table NBOFilters(
     byCities varchar(60) not null,
     byRentPriceMin float(7,2),
     byRentPriceMax float(7,2),
-    hide int not null,
+    enable int not null,
     PRIMARY KEY (id)
 );
 

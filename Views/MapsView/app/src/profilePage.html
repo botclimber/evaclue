@@ -116,15 +116,19 @@
                     </div>
                     <form>
                       <div class="d-flex justify-content-between align-items-center experience"><span>Available Filters</span></div><br>
-                      <div class="col-md-12"><label class="labels">By Cities</label><input type="password" id="c_password" class="form-control" placeholder="Braga, Porto, Viseu, etc ..." value=""></div> <br>
+                      <div class="col-md-12"><label class="labels">By Cities</label>
+                        <input type="text" id="byCities" class="form-control" placeholder="Braga, Porto, Viseu, etc ..." value=""></div> <br>
                       <div class="col-md-12">
                         <label class="labels">By Rent Price</label><br>
-                        <input type="number" placeholder="Min">
-                        <input type="number" placeholder="Max" >
+                        <input type="number" placeholder="Min" id="byRentPriceMin" value="">
+                        <input type="number" placeholder="Max" id="byRentPriceMax" value="">
                       </div><br>
                       <div class="col-md-12">
                         <label class="labels">Enable Filter</label><br>
-                        <input type="checkbox">
+                        <input type="checkbox" id="enable" onclick="setFilters()">
+                      </div>
+                      <div class="col-md-12">
+                        <p id="responseMsg"></p><br>
                       </div>
                     </form>
                 

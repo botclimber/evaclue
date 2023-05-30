@@ -53,6 +53,10 @@ app.post('/api/v1/setFilter', (req, res) => {
  
  })
 
+ app.get('/api/v1/getFilter/:userId', (req, res) => {
+  actions.actions(res).getFilter(req.params.userId)
+ })
+
 // TODO: check if userType is col,admin or superAdmin
 app.patch('/api/v1/updateReview/:revId', (req, res) => {
 

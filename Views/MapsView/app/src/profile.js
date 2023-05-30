@@ -67,3 +67,63 @@ async function updateProfileImg(files){
   .catch(err => console.log(err))
 
 }
+
+const byCities = document.getElementById("byCities")
+const byRentPriceMin = document.getElementById("byRentPriceMin")
+const byRentPriceMax = document.getElementById("byRentPriceMax")
+const enable = document.getElementById("enable")
+const resMsg = document.getElementById("responseMsg")
+
+async function setFilters(){
+  const enableValue = (enable.checked)? 1 : 0
+  
+  const data = {
+    userName: `${fName} ${lName}`,
+    byCities: byCities.value,
+    byRentPriceMin: byRentPriceMin.value,
+    byRentPriceMax: byRentPriceMax.value,
+    enable: enableValue,
+  }
+
+  await fetch(reviewsService+'/api/v1/setFilter',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': 'baer '+t
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(data => {
+      console.log(data); 
+      resMsg.innerHTML = data.msg
+
+      byCities.value = data.values.cities
+      byRentPriceMin.value = data.values.rentMin
+      byRentPriceMax.value = data.values.rentMax
+      
+  })
+  .catch(err => console.log(err))
+
+}
+
+async function getFilters(){
+  await fetch(reviewsService+`/api/v1/getFilter/${uId}`,{
+    method: 'GET',
+  })
+  .then(res => res.json())
+  .then(data => {
+      console.log(data); 
+      byCities.value = (data.values.cities)? data.values.cities : "Not Set"
+      byRentPriceMin.value = (data.values.rentMin >= 0)? data.values.rentMin : 0
+      byRentPriceMax.value = (data.values.rentMax >= 0)? data.values.rentMax : 0
+      enable.checked = (data.values.enable >= 0)? data.values.enable : 0
+
+  })
+  .catch(err => console.log(err))
+}
+
+// TODO: write this function | response message more pretty
+//function setCheckBoxUnchecked(){}
+
+getFilters()

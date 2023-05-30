@@ -2,7 +2,7 @@ const Db = require("./Db.js")
 const date = require('date-and-time')
 const Location = require('./model/Location.js')
 const addrInfo = require('./model/Address.js')
-const UserFilter = require('./model/UserFilter.js')
+const NBOFilters = require('./model/NBOFilters.js')
 const Reviews = require('./model/Review.js')
 const ResidenceOwners = require("./model/ResidenceOwner.js")
 const conv = require("./convertLocation.js")
@@ -298,15 +298,20 @@ module.exports = class Helper extends Db{
 		.catch(err => console.log(err))
 	}
 
-	setFilet(input){
+	/**
+	 * 
+	 * @param {Object} input 
+	 */
+	setFilter(input){
 
 		const exObject = {tableName: "NBOFilters", columns: ["userId"], values: [input.userId], operator: ""}
 		this.exists(exObject)
 		.then(res => {
 			if(res.length){
-				const hide = parseInt(input.hide)
-				if(hide){
-					const upObject = {tableName: "NBOFilters", id: res, columns: ["hide"], values: [hide]}
+				const enable = parseInt(input.enable)
+				
+				if(!enable){
+					const upObject = {tableName: "NBOFilters", id: res[0].id, columns: ["enable"], values: [enable]}
 					this.update(upObject)
 					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter hided `})))
 					.catch(err =>{
@@ -316,10 +321,10 @@ module.exports = class Helper extends Db{
 
 				}else{
 					//all parameters required
-					const upObject = {tableName: "NBOFilters", id: res, columns: ["byCities, byRentPriceMin, byRentPriceMax, hide"], values: [input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0]}
+					const upObject = {tableName: "NBOFilters", id: res[0].id, columns: ["byCities", "byRentPriceMin", "byRentPriceMax", "enable"], values: [input.byCities, input.byRentPriceMin, input.byRentPriceMax, 1]}
 
 					this.update(upObject)
-					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter updated`})))
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter updated`, values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}})))
 					.catch(err =>{
 						console.log(err)
 						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
@@ -328,12 +333,12 @@ module.exports = class Helper extends Db{
 
 			}else{
 				// create new
-				const newUserFilter = new UserFilter(input.userName, input.userId, input.userEmail, input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0)
+				const newUserFilter = new NBOFilters(input.userName, input.userId, input.userEmail, input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0)
 				const userFilterId = this.insert(newUserFilter)
 
 				userFilterId
 				.then(id => {
-					this.ws.status(200).send(JSON.stringify({msg: `Filter persisted with id: ${id} `}))
+					this.ws.status(200).send(JSON.stringify({msg: `Filter persisted with id: ${id} `, values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}}))
 
 				})
 				.catch(err => {
@@ -341,6 +346,28 @@ module.exports = class Helper extends Db{
 					this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}))
 				})
 
+			}
+		})
+		.catch(err => console.log(err))
+	}
+
+	getFilter(userId){
+		const filterExists = {tableName: "NBOFilters", columns: ["userId"], values: [userId], operator: ""}
+		this.exists(filterExists)
+		.then(res => {
+			if(res.length){
+				this.selectOne("NBOFilters", res[0].id)
+				.then(data => {
+					console.log("SELECTED DATA:")
+					console.log(data)
+					
+					const response = {msg: "filter found", values: {cities: data.byCities, rentMin: data.byRentPriceMin, rentMax: data.byRentPriceMax, enable: data.enable}}
+
+					this.returnResponse(response)
+				})
+
+			}else{
+				this.ws.status(204).send(JSON.stringify({msg: "no filter set"}))
 			}
 		})
 		.catch(err => console.log(err))

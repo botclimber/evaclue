@@ -141,10 +141,21 @@ exports.actions = (function(ws = undefined){
 	}
 
 	function setFilter(input){
-		if( (!input.userName || input.userName == "") || (!input.userId) || (!input.userEmail || input.userEmail == "")){
-			helper.setFilter(input)
 
-		}else return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameters missing!"}))
+		if( (!input.userName || input.userName == "") || (!input.userId) || (!input.userEmail || input.userEmail == "")){
+			return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameters missing!"}))
+		
+		}else{
+			input.byCities = (!input.byCities || input.byCities == "")? "not Defined": input.byCities 
+			input.byRentPriceMin = (!input.byRentPriceMin || input.byRentPriceMin == "")? 0.0: input.byRentPriceMin 
+			input.byRentPriceMax = (!input.byRentPriceMax || input.byRentPriceMax == "")? 0.0: input.byRentPriceMax 
+			helper.setFilter(input)
+		}
+	}
+
+	function getFilter(userId){
+		if(userId) helper.getFilter(userId)
+		else return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameter missing!"}))
 	}
 
 	function getUserFilters(){ return helper.getUserFilters() }
@@ -163,7 +174,8 @@ exports.actions = (function(ws = undefined){
 			getAddresses,
 			getResOwners,
 			getUserFilters,
-			setFilter
+			setFilter,
+			getFilter
 			}
 
 })

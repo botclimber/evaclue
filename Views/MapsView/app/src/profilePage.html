@@ -117,19 +117,18 @@
                     <form>
                       <div class="d-flex justify-content-between align-items-center experience"><span>Available Filters</span></div><br>
                       <div class="col-md-12"><label class="labels">By Cities</label>
-                        <input type="text" id="byCities" class="form-control" placeholder="Braga, Porto, Viseu, etc ..." value=""></div> <br>
+                        <input type="text" id="byCities" onchange="setCheckBoxUnchecked()" class="form-control" placeholder="Braga, Porto, Viseu, etc ..." value=""></div> <br>
                       <div class="col-md-12">
                         <label class="labels">By Rent Price</label><br>
-                        <input type="number" placeholder="Min" id="byRentPriceMin" value="">
-                        <input type="number" placeholder="Max" id="byRentPriceMax" value="">
+                        <input type="number" onchange="setCheckBoxUnchecked()" placeholder="Min" id="byRentPriceMin" value="">
+                        <input type="number" onchange="setCheckBoxUnchecked()" placeholder="Max" id="byRentPriceMax" value="">
                       </div><br>
                       <div class="col-md-12">
                         <label class="labels">Enable Filter</label><br>
                         <input type="checkbox" id="enable" onclick="setFilters()">
                       </div>
-                      <div class="col-md-12">
-                        <p id="responseMsg"></p><br>
-                      </div>
+                      <br>
+                      <div class="d-flex justify-content-between align-items-center experience"><span style="color:#b8410d" id="responseMsg"></span></div><br>
                     </form>
                 
                   </div>

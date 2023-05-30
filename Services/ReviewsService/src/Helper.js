@@ -313,7 +313,7 @@ module.exports = class Helper extends Db{
 				if(!enable){
 					const upObject = {tableName: "NBOFilters", id: res[0].id, columns: ["enable"], values: [enable]}
 					this.update(upObject)
-					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter hided `})))
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter Disabled `})))
 					.catch(err =>{
 						console.log(err)
 						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
@@ -338,7 +338,8 @@ module.exports = class Helper extends Db{
 
 				userFilterId
 				.then(id => {
-					this.ws.status(200).send(JSON.stringify({msg: `Filter persisted with id: ${id} `, values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}}))
+					console.log(`New Filter created with id: ${id}`)
+					this.ws.status(200).send(JSON.stringify({msg: "Filter Created", values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}}))
 
 				})
 				.catch(err => {

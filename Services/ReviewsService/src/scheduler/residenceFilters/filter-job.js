@@ -7,12 +7,12 @@ const act = require("../../actions.js")
  * @return {Object} {toBeInformed: [{toEmail: string, cities: string[], lat: number[], lng: number[]}]}
  */
 sendNotOnFilter = async () => {
+    
     const addresses = await act.actions().getAddresses()
     const resOwners = await act.actions().getResOwners()
     const usersFilters = await act.actions().getUserFilters()
 
-    // console.log(addresses, resOwners, usersFilters)
-
+    console.log("filtering on free residences ...")
     const filteredByFreeResOwners = resOwners.filter(r => r.free == 1)
 
     const mapResToAddress = (res) => {
@@ -20,7 +20,10 @@ sendNotOnFilter = async () => {
        return {...res, ...{city: city}}
     }
 
+    console.log("match residence owner with address ...")
     const resOwnerPlusCity = filteredByFreeResOwners.map(mapResToAddress)
+
+    console.log("Prepare data to be sent within the request ...")
     const usersToBeNotified = usersFilters.filter( r => r.enable == 1).map( r => {
         const cities = r.byCities.split(",")
         const rent = [r.byRentPriceMin, r.byRentPriceMax]
@@ -37,11 +40,16 @@ sendNotOnFilter = async () => {
         }
     })
 
+    console.log("Data preparation finished:")
+    console.log(`\t\t ${usersToBeNotified}`)
+
+    console.log("\n sending request to Notification Service ...")
     // TODO: make the request to the notification services with the already prepared data, then on the notification services create the message template and massive sent it to users
     
+
 }
 
-await sendNotOnFilter()
+sendNotOnFilter()
 
 /*const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [1,3,6];

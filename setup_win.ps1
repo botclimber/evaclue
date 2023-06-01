@@ -26,7 +26,7 @@ Write-Host
 $mysqlSetup = @{
     "DB_HOST"     = "localhost"
     "DB_USER"     = $rootUser
-    "DB_PASSWORD" = $rootPassword
+    "DB_PASSWORD" = "$rootPassword"
     "DB_NAME"     = "evaclue_db"
 }
 $mysqlSetup.GetEnumerator() | ForEach-Object {
@@ -70,7 +70,7 @@ $reviewsServiceSetup = @{
     "PORT"    = 8000
     "DB_HOST" = "localhost"
     "DB_USER" = $rootUser
-    "DB_PASSWORD" = $rootPassword
+    "DB_PASSWORD" = "$rootPassword"
     "DB_NAME" = "evaclue_db"
     "APIKEY" = "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
     "SECRET" = "greedisgood"
@@ -92,7 +92,7 @@ $usersServiceSetup = @{
     "SERVER_PORT" = 8001
     "DB_HOST"     = "localhost"
     "DB_USER"     = $rootUser
-    "DB_PASSWORD" = $rootPassword
+    "DB_PASSWORD" = "$rootPassword"
     "DB_NAME"     = "evaclue_db"
     "JWT_SECRET"  = "greedisgood"
     "DIRNAME"     = $usersServiceDirname
@@ -112,7 +112,7 @@ $notificationServiceSetup = @{
     "PORT"         = 8002
     "DB_HOST"      = "localhost"
     "DB_USER"      = $rootUser
-    "DB_PASSWORD"  = $rootPassword
+    "DB_PASSWORD"  = "$rootPassword"
     "DB_NAME"      = "evaclue_db"
     "SECRET"       = "greedisgood"
     "SMTP_EMAIL"   = "rentifyWD@gmail.com"

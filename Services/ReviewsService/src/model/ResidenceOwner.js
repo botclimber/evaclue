@@ -4,8 +4,8 @@ module.exports = class ResidenceOwners {
   constructor(userId, userName, userImg, addressId, cityLat, cityLng, floorOwner, flatOwner, free, fileProof, hide = 0){
 
 	this.userId = userId
-	this.userName = userName,
-	this.userImg = userImg,
+	this.userName = userName
+	this.userImg = userImg
 	this.adminId = 0
 	this.addressId = addressId
 	this.cityLat = cityLat

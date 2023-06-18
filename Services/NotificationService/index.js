@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
  */
 app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // 1. input checking [done]
+    //    1.1 TODO: check maybe by using pattern if its really an email format 
     // 2. insert in DB [done]
     // 3. send notification email
     try {

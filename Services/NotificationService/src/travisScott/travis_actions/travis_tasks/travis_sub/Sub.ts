@@ -32,9 +32,10 @@ export class Subs{
             // check if email already exists
             const getOne: Sub[] = await db.selectOne<Sub>(this.sub, this.className)
 
-            if(getOne.length) 
-                res.status(400).json({msg:"Email already existing!"})
-            else {
+            if(getOne.length){
+                console.log(`Email ${this.sub.email} exists!`)
+                res.status(400).json({"msg":"Email already existing!"})
+            }else {
                 const result: number = await db.insert(this.sub, this.className)
                 console.log(result , typeof(result))
                 if(result){
@@ -44,7 +45,7 @@ export class Subs{
                     const emailForm: EmailForm = {to: this.sub.email, subject: subject, html: html}
 
                     new EmailEngine(emailForm).send()
-                    res.status(200).json({"msg":"row created, thanks!"})
+                    res.status(200).json({"msg":"Email subscribed, thanks!"})
                 }
             }
 

@@ -38,8 +38,10 @@ class Subs {
             try {
                 // check if email already exists
                 const getOne = yield db.selectOne(this.sub, this.className);
-                if (getOne.length)
-                    res.status(400).json({ msg: "Email already existing!" });
+                if (getOne.length) {
+                    console.log(`Email ${this.sub.email} exists!`);
+                    res.status(400).json({ "msg": "Email already existing!" });
+                }
                 else {
                     const result = yield db.insert(this.sub, this.className);
                     console.log(result, typeof (result));

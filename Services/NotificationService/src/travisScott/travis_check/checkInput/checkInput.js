@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailClassValidator = void 0;
 class EmailClassValidator {
     constructor() {
-        this.emailEnforcedExpression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        this.emailEnforcedExpression = /^[\w\.-]+@[\w\.-]+\.\w+$/i;
     }
     checkEmailFormat(email) {
         return __awaiter(this, void 0, void 0, function* () { return this.emailEnforcedExpression.test(email); });

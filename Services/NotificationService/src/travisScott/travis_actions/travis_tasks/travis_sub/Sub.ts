@@ -67,22 +67,23 @@ export class Subs{
 
             // check if email already exists
             fs.readFile("emails.csv", "utf-8", (err, data: string) => {
+                console.log(this.sub.email)
                 if(err) console.log(err)
                 else{
-                    if(data){
-                        const checkEmail: boolean = data.includes(this.sub.email)
-                        if(!checkEmail){
-                            fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, (err) => {
-                                if(err) { console.log(err); throw "somehthing went wrong!"}
-                                else{
-                                    fs.close
-                                    res.status(200).json({"msg":"row created, thanks!"})
-                                }
-                            })
-                        }else
-                            // email already registed
-                            res.status(400).json({msg:"Email already existing!"})
-                    }
+                    
+                    const checkEmail: boolean = data.includes(this.sub.email)
+                    if(!checkEmail){
+                        fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, (err) => {
+                            if(err) { console.log(err); throw "somehthing went wrong!"}
+                            else{
+                                fs.close
+                                res.status(200).json({"msg":"row created, thanks!"})
+                            }
+                        })
+                    }else
+                        // email already registed
+                        res.status(400).json({msg:"Email already existing!"})
+                    
                 }
             })
 

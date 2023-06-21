@@ -71,27 +71,26 @@ class Subs {
             try {
                 // check if email already exists
                 fs_1.default.readFile("emails.csv", "utf-8", (err, data) => {
+                    console.log(this.sub.email);
                     if (err)
                         console.log(err);
                     else {
-                        if (data) {
-                            const checkEmail = data.includes(this.sub.email);
-                            if (!checkEmail) {
-                                fs_1.default.writeFile("emails.csv", data + `${this.sub.email},${this.sub.createdAt}\n`, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                        throw "somehthing went wrong!";
-                                    }
-                                    else {
-                                        fs_1.default.close;
-                                        res.status(200).json({ "msg": "row created, thanks!" });
-                                    }
-                                });
-                            }
-                            else
-                                // email already registed
-                                res.status(400).json({ msg: "Email already existing!" });
+                        const checkEmail = data.includes(this.sub.email);
+                        if (!checkEmail) {
+                            fs_1.default.writeFile("emails.csv", data + `${this.sub.email},${this.sub.createdAt}\n`, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                    throw "somehthing went wrong!";
+                                }
+                                else {
+                                    fs_1.default.close;
+                                    res.status(200).json({ "msg": "row created, thanks!" });
+                                }
+                            });
                         }
+                        else
+                            // email already registed
+                            res.status(400).json({ msg: "Email already existing!" });
                     }
                 });
             }

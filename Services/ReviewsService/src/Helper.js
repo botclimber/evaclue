@@ -2,6 +2,7 @@ const Db = require("./Db.js")
 const date = require('date-and-time')
 const Location = require('./model/Location.js')
 const addrInfo = require('./model/Address.js')
+const NBOFilters = require('./model/NBOFilters.js')
 const Reviews = require('./model/Review.js')
 const ResidenceOwners = require("./model/ResidenceOwner.js")
 const conv = require("./convertLocation.js")
@@ -295,7 +296,87 @@ module.exports = class Helper extends Db{
 			this.returnResponse({claims: res})
 		})
 		.catch(err => console.log(err))
-	}	
+	}
+
+	/**
+	 * 
+	 * @param {Object} input 
+	 */
+	setFilter(input){
+
+		const exObject = {tableName: "NBOFilters", columns: ["userId"], values: [input.userId], operator: ""}
+		this.exists(exObject)
+		.then(res => {
+			if(res.length){
+				const enable = parseInt(input.enable)
+				
+				if(!enable){
+					const upObject = {tableName: "NBOFilters", id: res[0].id, columns: ["enable"], values: [enable]}
+					this.update(upObject)
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter Disabled `})))
+					.catch(err =>{
+						console.log(err)
+						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+					})
+
+				}else{
+					//all parameters required
+					const upObject = {tableName: "NBOFilters", id: res[0].id, columns: ["byCities", "byRentPriceMin", "byRentPriceMax", "enable"], values: [input.byCities, input.byRentPriceMin, input.byRentPriceMax, 1]}
+
+					this.update(upObject)
+					.then(res => this.ws.status(200).send(JSON.stringify({msg: `Filter updated`, values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}})))
+					.catch(err =>{
+						console.log(err)
+						this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+					})
+				}
+
+			}else{
+				// create new
+				const newUserFilter = new NBOFilters(input.userName, input.userId, input.userEmail, input.byCities, input.byRentPriceMin, input.byRentPriceMax, 0)
+				const userFilterId = this.insert(newUserFilter)
+
+				userFilterId
+				.then(id => {
+					console.log(`New Filter created with id: ${id}`)
+					this.ws.status(200).send(JSON.stringify({msg: "Filter Created", values: {cities: input.byCities, rentMin: input.byRentPriceMin, rentMax: input.byRentPriceMax}}))
+
+				})
+				.catch(err => {
+					console.log(err)
+					this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}))
+				})
+
+			}
+		})
+		.catch(err => console.log(err))
+	}
+
+	getFilter(userId){
+		const filterExists = {tableName: "NBOFilters", columns: ["userId"], values: [userId], operator: ""}
+		this.exists(filterExists)
+		.then(res => {
+			if(res.length){
+				this.selectOne("NBOFilters", res[0].id)
+				.then(data => {
+					console.log("SELECTED DATA:")
+					console.log(data)
+					
+					const response = {msg: "filter found", values: {cities: data.byCities, rentMin: data.byRentPriceMin, rentMax: data.byRentPriceMax, enable: data.enable}}
+
+					this.returnResponse(response)
+				})
+
+			}else{
+				this.ws.status(204).send(JSON.stringify({msg: "no filter set"}))
+			}
+		})
+		.catch(err => console.log(err))
+	}
+	
+	getAddresses(){ return this.selectAll("Addresses")}
+	getResOwners(){return this.selectAll("ResidenceOwners")}
+	getUserFilters(){return this.selectAll("NBOFilters")}
 
 	//getAllForSingleRO(userId){}
 

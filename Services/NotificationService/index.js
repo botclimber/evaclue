@@ -23,6 +23,7 @@ const ContactResOwnerClass_1 = require("./src/travisScott/travis_actions/travis_
 const tokenReader_1 = require("./src/travisScott/travis_check/tokenReader/tokenReader");
 const EmailEngine_1 = require("./src/travisScott/travis_actions/travis_sendEmail/EmailEngine");
 const EmailTemplate_1 = require("./src/travisScott/travis_actions/travis_sendEmail/EmailTemplate");
+const checkInput_1 = require("./src/travisScott/travis_check/checkInput/checkInput");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
@@ -39,16 +40,18 @@ app.get('/', (req, res) => {
  */
 app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // 1. input checking [done]
+    //    1.1 TODO: check maybe by using pattern if its really an email format 
     // 2. insert in DB [done]
     // 3. send notification email
     try {
         const email = req.body.email;
-        if (email) {
+        const validEmail = yield new checkInput_1.EmailClassValidator().checkEmailFormat(email);
+        if (email && validEmail) {
             const sub = new Sub_1.Subs(email);
-            yield sub.createSub(res);
+            yield sub.createSubToCSV(res);
         }
         else {
-            res.status(400).json({ msg: "Missing email parameter!" });
+            res.status(400).json({ msg: "No email given or written in a wrong format" });
         }
     }
     catch (e) {

@@ -7,6 +7,7 @@ const app = express()
 const port = process.env.PORT
 const actions = require("./src/actions.js")
 const th = require("./src/tokenHandler.js") // token handler
+const sh = require("./src/scheduler/residenceFilters/filter-job.js")
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -40,6 +41,21 @@ app.post('/api/v1/create', (req, res) => {
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 
 })
+
+app.post('/api/v1/setFilter', (req, res) => {
+
+  th.tokenHandler(req)
+  .then(transfData => {
+ 
+    if(transfData) actions.actions(res).setFilter(transfData)
+  })
+  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+ 
+ })
+
+ app.get('/api/v1/getFilter/:userId', (req, res) => {
+  actions.actions(res).getFilter(req.params.userId)
+ })
 
 // TODO: check if userType is col,admin or superAdmin
 app.patch('/api/v1/updateReview/:revId', (req, res) => {

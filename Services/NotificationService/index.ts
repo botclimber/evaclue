@@ -11,6 +11,7 @@ import { ContactResOwnerClass } from './src/travisScott/travis_actions/travis_ta
 import { tokenReader } from './src/travisScott/travis_check/tokenReader/tokenReader';
 import { EmailEngine } from './src/travisScott/travis_actions/travis_sendEmail/EmailEngine';
 import { EmailTemplate } from './src/travisScott/travis_actions/travis_sendEmail/EmailTemplate';
+import { EmailClassValidator } from './src/travisScott/travis_check/checkInput/checkInput';
 
 dotenv.config();
 
@@ -35,17 +36,19 @@ app.get('/', (req: Request, res: Response) => {
 app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
   
   // 1. input checking [done]
+  //    1.1 TODO: check maybe by using pattern if its really an email format 
   // 2. insert in DB [done]
   // 3. send notification email
   try{
     const email: string = req.body.email
+    const validEmail: boolean = await new EmailClassValidator().checkEmailFormat(email)
 
-    if(email){
+    if(email && validEmail){
       const sub: Subs = new Subs(email)
-      await sub.createSub(res)
+      await sub.createSubToCSV(res)
     
     }else {
-      res.status(400).json({msg: "Missing email parameter!"})
+      res.status(400).json({msg: "No email given or written in a wrong format"})
     }
     
   }catch (e){

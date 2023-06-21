@@ -3,7 +3,7 @@ const Helper = require("./Helper.js")
 const {isAuthz} = require("./authorization.js")
 
 // ws is an array or list of clients
-exports.actions = (function(ws){
+exports.actions = (function(ws = undefined){
 	const helper = new Helper(ws)
 
 	// ACTION TO SEARCH FOR ADDRESS
@@ -140,6 +140,28 @@ exports.actions = (function(ws){
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
 	}
 
+	function setFilter(input){
+
+		if( (!input.userName || input.userName == "") || (!input.userId) || (!input.userEmail || input.userEmail == "")){
+			return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameters missing!"}))
+		
+		}else{
+			input.byCities = (!input.byCities || input.byCities == "")? "not Defined": input.byCities 
+			input.byRentPriceMin = (!input.byRentPriceMin || input.byRentPriceMin == "")? 0.0: input.byRentPriceMin 
+			input.byRentPriceMax = (!input.byRentPriceMax || input.byRentPriceMax == "")? 0.0: input.byRentPriceMax 
+			helper.setFilter(input)
+		}
+	}
+
+	function getFilter(userId){
+		if(userId) helper.getFilter(userId)
+		else return ws.status(400).send(JSON.stringify({msg: "Bad request, some required parameter missing!"}))
+	}
+
+	function getUserFilters(){ return helper.getUserFilters() }
+	function getAddresses(){ return helper.getAddresses() }
+	function getResOwners(){ return helper.getResOwners() }
+
 	return { search, 
 			insertReview, 
 			getAllReviews, 
@@ -147,6 +169,13 @@ exports.actions = (function(ws){
 			createResOwner, 
 			approveResidenceOwner, 
 			getAllResidenceOwners, 
-			getResidencesForCity }
+			getResidencesForCity,
+			// intern functions
+			getAddresses,
+			getResOwners,
+			getUserFilters,
+			setFilter,
+			getFilter
+			}
 
 })

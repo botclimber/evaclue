@@ -50,7 +50,7 @@ class Subs {
                         const html = EmailTemplate_1.EmailTemplate.forSubscription();
                         const emailForm = { to: this.sub.email, subject: subject, html: html };
                         new EmailEngine_1.EmailEngine(emailForm).send();
-                        res.status(200).json({ "msg": "row created, thanks!" });
+                        res.status(200).json({ "msg": "Email subscribed, thanks!" });
                     }
                 }
             }

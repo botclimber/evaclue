@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8002;
 
 const v: string = "v1"
 const service: string = "notification"

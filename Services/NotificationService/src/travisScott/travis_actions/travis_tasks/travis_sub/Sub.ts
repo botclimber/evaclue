@@ -77,12 +77,19 @@ export class Subs{
                             if(err) { console.log(err); throw "somehthing went wrong!"}
                             else{
                                 fs.close
-                                res.status(200).json({"msg":"row created, thanks!"})
+
+                                const subject: string = "Thanks for subscribing!"
+                                const html: string = EmailTemplate.forSubscription()
+                                const emailForm: EmailForm = {to: this.sub.email, subject: subject, html: html}
+
+                                new EmailEngine(emailForm).send()
+
+                                res.status(200).json({"msg":"Email subscribed, thanks!"})
                             }
                         })
                     }else
                         // email already registed
-                        res.status(400).json({msg:"Email already existing!"})
+                        res.status(400).json({"msg":"Email already existing!"})
                     
                 }
             })

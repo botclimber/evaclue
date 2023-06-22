@@ -84,13 +84,17 @@ class Subs {
                                 }
                                 else {
                                     fs_1.default.close;
-                                    res.status(200).json({ "msg": "row created, thanks!" });
+                                    const subject = "Thanks for subscribing!";
+                                    const html = EmailTemplate_1.EmailTemplate.forSubscription();
+                                    const emailForm = { to: this.sub.email, subject: subject, html: html };
+                                    new EmailEngine_1.EmailEngine(emailForm).send();
+                                    res.status(200).json({ "msg": "Email subscribed, thanks!" });
                                 }
                             });
                         }
                         else
                             // email already registed
-                            res.status(400).json({ msg: "Email already existing!" });
+                            res.status(400).json({ "msg": "Email already existing!" });
                     }
                 });
             }

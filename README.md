@@ -8,7 +8,7 @@ Platform for house rent reviews
             - email: superAdmin@evaclue.pt
             - pass: diablo4Approach.
 
-- create "ecosystem.config.json" file on root dir with following code:
+- create "ecosystem.config.js" file on root dir with following code:
 ```
 module.exports = {
   apps:[{

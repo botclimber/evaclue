@@ -4,7 +4,8 @@
   "description": "hello world",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
+    "compile": "npx tsc",
+    "start": "node ./src/server.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "dev": "nodemon --exec ts-node ./src/server.ts"
   },
@@ -16,13 +17,15 @@
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "date-and-time": "^2.4.3",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "express-fileupload": "^1.4.0",
     "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
+    "mysql2": "^3.4.0",
     "nodemailer": "^6.9.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.17",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

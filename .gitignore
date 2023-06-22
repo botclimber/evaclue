@@ -1,3 +1,5 @@
+package-lock.json
+ecosystem.config.js
 emails.csv
 node_modules
 .DS_Store

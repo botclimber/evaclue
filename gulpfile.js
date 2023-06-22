@@ -20,7 +20,7 @@ gulp.task('start', function (cb) {
         cb(err);
     });
 
-    exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
+   /* exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
         cwd: `Services/${userService}/`,
     }, function (err, stdout, stderr) {
         if(err) exec("killall node")
@@ -45,7 +45,7 @@ gulp.task('start', function (cb) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
-    });
+    });*/
 
     exec('npm run dev', {
         cwd: 'Views/Admin/root/rentify-admin/',

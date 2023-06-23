@@ -35,10 +35,6 @@ const service = "notification";
 app.get('/', (req, res) => {
     res.send('Notification Service | API page on development ...');
 });
-// for test purposes
-app.get("/" + service + "/" + v + "/", (req, res) => {
-    res.status(200).json({ msg: 'Notification Service | API page on development ...' });
-});
 /**
  * Create new subscription
  */

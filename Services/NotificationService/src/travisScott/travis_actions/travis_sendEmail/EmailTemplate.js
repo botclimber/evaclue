@@ -15,7 +15,7 @@ class EmailTemplate {
         return html;
     }
     static forSubscription() {
-        const html = `
+        /*const html = `
         <p><É com grande satisfação que anunciamos o lançamento da Evaclue, a plataforma de aluguer de propriedades que está a mudar a forma como as pessoas procuram e alugam casas.
 Com a Evaclue, pode facilmente encontrar uma casa que corresponda às suas necessidades, através de informações detalhadas e comentários de proprietários e inquilinos anteriores. Os proprietários de imóveis, por sua vez, têm a oportunidade de encontrar inquilinos confiáveis e de qualidade.
 A nossa plataforma foi concebida para tornar o processo de aluguer de propriedades mais fácil e transparente, fornecendo informações úteis e confiáveis. Além disso, a Evaclue está a simplificar e a possibilitar uma conexão direta entre inquilinos e proprietários de imóveis para contratos de arrendamento a longo prazo, eliminando intermediários e taxas desnecessárias.</p><p>
@@ -25,7 +25,8 @@ Agradecemos a sua atenção e esperamos tê-lo(a) como um dos nossos utilizadore
 
 Atentamente,
 Equipa Evaclue/p>
-        `;
+        `*/
+        const html = "<p>teste de teste</p>";
         return html;
     }
 }

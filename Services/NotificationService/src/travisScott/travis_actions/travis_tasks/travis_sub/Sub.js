@@ -49,7 +49,8 @@ class Subs {
                         const subject = "Thanks for subscribing!";
                         const html = EmailTemplate_1.EmailTemplate.forSubscription();
                         const emailForm = { to: this.sub.email, subject: subject, html: html };
-                        new EmailEngine_1.EmailEngine(emailForm).send();
+                        const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);
+                        yield instanceOfEmail.send();
                         res.status(200).json({ "msg": "Email subscribed, thanks!" });
                     }
                 }
@@ -77,7 +78,8 @@ class Subs {
                     else {
                         const checkEmail = data.includes(this.sub.email);
                         if (!checkEmail) {
-                            fs_1.default.writeFile("emails.csv", data + `${this.sub.email},${this.sub.createdAt}\n`, (err) => {
+                            //fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, async (err) => {
+                            fs_1.default.writeFile("emails.csv", data + `teste@teste.pt,${this.sub.createdAt}\n`, (err) => __awaiter(this, void 0, void 0, function* () {
                                 if (err) {
                                     console.log(err);
                                     throw "somehthing went wrong!";
@@ -87,10 +89,11 @@ class Subs {
                                     const subject = "Thanks for subscribing!";
                                     const html = EmailTemplate_1.EmailTemplate.forSubscription();
                                     const emailForm = { to: this.sub.email, subject: subject, html: html };
-                                    new EmailEngine_1.EmailEngine(emailForm).send();
+                                    const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);
+                                    yield instanceOfEmail.send();
                                     res.status(200).json({ "msg": "Email subscribed, thanks!" });
                                 }
-                            });
+                            }));
                         }
                         else
                             // email already registed

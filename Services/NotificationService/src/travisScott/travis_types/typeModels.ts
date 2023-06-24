@@ -31,7 +31,8 @@ export interface EmailForm {
     envelope?: {from: string, to: string},
     from?: string,
     subject: string,
-    html: string
+    html?: string,
+    text?: string
 }
 
 export type CROPlusUser = ContactResOwner & User

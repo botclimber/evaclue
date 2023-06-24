@@ -1,47 +1,42 @@
 import { EmailForm } from "../../travis_types/typeModels";
-const nodemailer = require("nodemailer")
+import {transporter} from "../../../../index"
 
 export class EmailEngine{
-    private transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        secure: false,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      });
-
     private mailOptions: EmailForm
 
     constructor(data: EmailForm){
+
         // setup format
         // if from exists it means communication between foreing people, otherwise it can be a notification email only.
         const mOptions: EmailForm = (data.from)? Object.assign(data, {cc: data.from, envelope: {from: data.from, to: data.to}}) : Object.assign(data, {from: ""})
         
         // replace from with server email
         mOptions.from = process.env.SMTP_EMAIL ?? "???"
-        console.log("From email assignment: "+mOptions.from, mOptions)
         
         // assign
         this.mailOptions = mOptions
     }
 
-    async send(): Promise<boolean>{
+    async send(): Promise<void>{
 
         try{
-            await this.transporter.sendMail(this.mailOptions)
+            console.log("Sending Email ...")
+            console.log(process.env.SMTP_HOST, process.env.SMTP_PORT, process.env.SMTP_USER, process.env.SMTP_PASS)
+            console.log(this.mailOptions)
+            
+            transporter.sendMail(this.mailOptions, (error: any, info: any) => {
+              if (error) {
+                console.error(error);
 
-            // if no exception we can assume that the mail was sent
-            return true
+              } else {
+                console.log('Email sent: ' + info.response);
+                console.log('Email sent successfully');
+              }
+            });
         
         }
         catch(e){
             console.log(e)
-            throw e
         }
     }
 }

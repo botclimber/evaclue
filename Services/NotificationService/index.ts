@@ -1,5 +1,4 @@
 import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
@@ -12,8 +11,28 @@ import { tokenReader } from './src/travisScott/travis_check/tokenReader/tokenRea
 import { EmailEngine } from './src/travisScott/travis_actions/travis_sendEmail/EmailEngine';
 import { EmailTemplate } from './src/travisScott/travis_actions/travis_sendEmail/EmailTemplate';
 import { EmailClassValidator } from './src/travisScott/travis_check/checkInput/checkInput';
+import nodemailer from "nodemailer";
 
-dotenv.config();
+const emailConfig = {
+  email: "supp.evaclue@gmail.com",
+  host: "smtp.gmail.com",
+  port: 587,
+  user: "supp.evaclue@gmail.com",
+  pass: "drqohvkkewrkrnjt"
+}
+
+export const transporter = nodemailer.createTransport({
+  host: emailConfig.host,
+  port: emailConfig.port,
+  secure: false,
+  auth: {
+    user: emailConfig.user,
+    pass: emailConfig.pass,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 const app: Express = express();
 app.use(bodyParser.json())
@@ -93,7 +112,8 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
       const subject: string = "Evaclue: Someone is trying to get in touch with!"
       const emailForm: types.EmailForm = {to: cro.resOwnerEmail, from: data.email, subject: subject, html: html}
       const emailEngine: EmailEngine = new EmailEngine(emailForm)
-      const status: boolean = await emailEngine.send()
+      await emailEngine.send() // TODO: change this
+      const status: boolean = true
 
       if(status){
         // 5. create record on contactResOwner table

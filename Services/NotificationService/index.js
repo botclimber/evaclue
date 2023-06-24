@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.transporter = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -24,6 +25,7 @@ const tokenReader_1 = require("./src/travisScott/travis_check/tokenReader/tokenR
 const EmailEngine_1 = require("./src/travisScott/travis_actions/travis_sendEmail/EmailEngine");
 const EmailTemplate_1 = require("./src/travisScott/travis_actions/travis_sendEmail/EmailTemplate");
 const checkInput_1 = require("./src/travisScott/travis_check/checkInput/checkInput");
+const nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
@@ -32,6 +34,25 @@ app.use((0, cors_1.default)());
 const port = process.env.PORT || 8002;
 const v = "v1";
 const service = "notification";
+const emailConfig = {
+    email: "supp.evaclue@gmail.com",
+    host: "smtp.gmail.com",
+    port: 587,
+    user: "supp.evaclue@gmail.com",
+    pass: "drqohvkkewrkrnjt"
+};
+exports.transporter = nodemailer_1.default.createTransport({
+    host: emailConfig.host,
+    port: emailConfig.port,
+    secure: false,
+    auth: {
+        user: emailConfig.user,
+        pass: emailConfig.pass,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
 app.get('/', (req, res) => {
     res.send('Notification Service | API page on development ...');
 });
@@ -86,7 +107,8 @@ app.post("/" + service + "/" + v + "/emToOwner", (req, res) => __awaiter(void 0,
             const subject = "Evaclue: Someone is trying to get in touch with!";
             const emailForm = { to: cro.resOwnerEmail, from: data.email, subject: subject, html: html };
             const emailEngine = new EmailEngine_1.EmailEngine(emailForm);
-            const status = yield emailEngine.send();
+            yield emailEngine.send(); // TODO: change this
+            const status = true;
             if (status) {
                 // 5. create record on contactResOwner table
                 // 6. send feedback to user on web page

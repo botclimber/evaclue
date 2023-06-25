@@ -5,7 +5,7 @@ const path = require("path")
 
 const NotificationServer = "http://localhost:8002"
 
-const port = process.env.PORT 
+const port = 80
 
 app.use(express.static(__dirname + "/static"))
 

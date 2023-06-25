@@ -42,7 +42,7 @@ export class Subs{
                    
                     const subject: string = "Thanks for subscribing!"
                     const html: string = EmailTemplate.forSubscription()
-                    const emailForm: EmailForm = {to: this.sub.email, subject: subject, html: html}
+                    const emailForm: EmailForm = {from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html}
                     const instanceOfEmail = new EmailEngine(emailForm)
                     
                     await instanceOfEmail.send()
@@ -75,15 +75,14 @@ export class Subs{
                     
                     const checkEmail: boolean = data.includes(this.sub.email)
                     if(!checkEmail){
-                        //fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, async (err) => {
-                        fs.writeFile("emails.csv", data+`teste@teste.pt,${this.sub.createdAt}\n`, async (err) => {
+                        fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, async (err) => {
                             if(err) { console.log(err); throw "somehthing went wrong!"}
                             else{
                                 fs.close
 
                                 const subject: string = "Thanks for subscribing!"
                                 const html: string = EmailTemplate.forSubscription()
-                                const emailForm: EmailForm = {to: this.sub.email, subject: subject, html: html}
+                                const emailForm: EmailForm = {from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html}
                                 const instanceOfEmail = new EmailEngine(emailForm)
 
                                 await instanceOfEmail.send()

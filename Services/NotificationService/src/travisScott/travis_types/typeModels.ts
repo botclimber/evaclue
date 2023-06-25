@@ -28,11 +28,9 @@ export type Sub = {
 export interface EmailForm {
     to: string,
     cc?: string,
-    envelope?: {from: string, to: string},
-    from?: string,
+    from: string,
     subject: string,
-    html?: string,
-    text?: string
+    html: string,
 }
 
 export type CROPlusUser = ContactResOwner & User

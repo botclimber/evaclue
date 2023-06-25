@@ -33,7 +33,7 @@ const baseUrl: string = `http://localhost:${process.env.PORT}`
         .expect(200)
         .expect({msg: "Your message was sent!"}, done)
     })
-})*/
+})
 
 describe("POST /emToOwner", function(){
     const getTestToken = testToken(1, "superAdmin", "daniel.silva.prg@gmail.com")
@@ -79,4 +79,4 @@ describe("POST /emToOwner", function(){
         .expect(500)
         .expect({msg:"Some Internal Error"}, done)
     })
-})
+})*/

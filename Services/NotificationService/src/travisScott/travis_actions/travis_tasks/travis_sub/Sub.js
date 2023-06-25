@@ -48,7 +48,7 @@ class Subs {
                     if (result) {
                         const subject = "Thanks for subscribing!";
                         const html = EmailTemplate_1.EmailTemplate.forSubscription();
-                        const emailForm = { to: this.sub.email, subject: subject, html: html };
+                        const emailForm = { from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html };
                         const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);
                         yield instanceOfEmail.send();
                         res.status(200).json({ "msg": "Email subscribed, thanks!" });
@@ -88,7 +88,7 @@ class Subs {
                                     fs_1.default.close;
                                     const subject = "Thanks for subscribing!";
                                     const html = EmailTemplate_1.EmailTemplate.forSubscription();
-                                    const emailForm = { to: this.sub.email, subject: subject, html: html };
+                                    const emailForm = { from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html };
                                     const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);
                                     yield instanceOfEmail.send();
                                     res.status(200).json({ "msg": "Email subscribed, thanks!" });

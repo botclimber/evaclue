@@ -1,42 +1,40 @@
 import { EmailForm } from "../../travis_types/typeModels";
-import {transporter} from "../../../../index"
+const nodemailer = require("nodemailer")
 
 export class EmailEngine{
+    private transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
     private mailOptions: EmailForm
 
-    constructor(data: EmailForm){
+    constructor(data: EmailForm){ this.mailOptions = data }
 
-        // setup format
-        // if from exists it means communication between foreing people, otherwise it can be a notification email only.
-        const mOptions: EmailForm = (data.from)? Object.assign(data, {cc: data.from, envelope: {from: data.from, to: data.to}}) : Object.assign(data, {from: ""})
-        
-        // replace from with server email
-        mOptions.from = process.env.SMTP_EMAIL ?? "???"
-        
-        // assign
-        this.mailOptions = mOptions
-    }
-
-    async send(): Promise<void>{
+    async send(): Promise<boolean>{
 
         try{
             console.log("Sending Email ...")
             console.log(process.env.SMTP_HOST, process.env.SMTP_PORT, process.env.SMTP_USER, process.env.SMTP_PASS)
             console.log(this.mailOptions)
             
-            transporter.sendMail(this.mailOptions, (error: any, info: any) => {
-              if (error) {
-                console.error(error);
+            const status = await this.transporter.sendMail(this.mailOptions)
+            console.log("Email sent")
+            console.log(status)
 
-              } else {
-                console.log('Email sent: ' + info.response);
-                console.log('Email sent successfully');
-              }
-            });
-        
+            if(status.accepted.length) return true
+            return false
         }
         catch(e){
             console.log(e)
+            throw e
         }
     }
 }

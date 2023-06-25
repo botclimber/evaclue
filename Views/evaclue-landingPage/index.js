@@ -1,7 +1,14 @@
+const fs = require("fs")
 const express = require("express")
 const proxy = require("express-http-proxy")
+const https = require("https")
 const app = express()
 const path = require("path")
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/evaclue.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/evaclue.com/cert.pem'),
+}
 
 const NotificationServer = `http://localhost:${process.env.not_PORT}`
 
@@ -32,6 +39,6 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, "/static/index.html"))
 })
 
-app.listen(port);
-console.log('Server started at PORT:' + port);
-console.log('Notification Server PATH:'+ NotificationServer);
+https.createServer(options, app).listen(port, function(){
+  console.log("Express server listening on port " + port);
+});

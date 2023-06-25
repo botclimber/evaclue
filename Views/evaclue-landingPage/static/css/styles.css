@@ -2754,7 +2754,7 @@ img.u-pull-left {
  *
  * ------------------------------------------------------------------- */
 .s-header {
-    --logo-width : 9.6rem;
+    --logo-width : 29.6rem;
     z-index      : 100;
     width        : 100%;
     position     : absolute;
@@ -2775,7 +2775,7 @@ img.u-pull-left {
     z-index   : 101;
     transform : translate(0, -50%);
     position  : absolute;
-    top       : 50%;
+    top       : 40%;
     left      : var(--gutter);
 }
 

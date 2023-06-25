@@ -8,9 +8,9 @@ const subStatus = document.getElementById("subStatus")
 async function getSuitableMsg(msg) {
   console.log(msg)
   switch(msg){
-    case "Email subscribed, thanks!": return "Obrigado por subscrever!";
-    case "Email already existing!": return "Email já se encontra registado!";
-    case "No email given or written in a wrong format": return "Email inserido nao é válido!";
+    case "Email subscribed, thanks!": return "A sua subscrição à nossa newsletter foi concluída com sucesso. Obrigado por fazer parte da nossa comunidade!";
+    case "Email already existing!": return "Informamos que o endereço de e-mail fornecido já se encontra registado na nossa base de dados.";
+    case "No email given or written in a wrong format": return "Por favor, insira um endereço de e-mail válido para concluir a subscrição da nossa newsletter.";
     default: return "no conclusion"
   }
 }
@@ -33,5 +33,5 @@ async function subSubmit(){
 
       subStatus.innerHTML = await getSuitableMsg(data.msg)
 
-    }else subStatus.innerHTML = "Insira um email!"
+    }else subStatus.innerHTML = "Insira um endereço de e-mail."
 }

@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const nodemailer = require("nodemailer");
-const port = 80;
+const port = process.env.PORT;
 // Create a transporter using your SMTP settings
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,

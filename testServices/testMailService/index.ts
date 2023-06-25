@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 const app: Express = express();
 const nodemailer = require("nodemailer");
 
-const port = 80
+const port = process.env.PORT 
 
 // Create a transporter using your SMTP settings
 const transporter = nodemailer.createTransport({

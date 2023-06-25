@@ -1,9 +1,7 @@
 import { describe, it } from "@jest/globals";
 import request from "supertest"
-import dotenv from 'dotenv';
-dotenv.config()
 
-const baseUrl: string = `http://localhost:8003`
+const baseUrl: string = `http://localhost:8002`
 const email = "daniel.silva.prg@gmail.com"
 
 describe("POST /sub", function(){

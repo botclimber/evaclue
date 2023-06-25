@@ -1,6 +1,4 @@
 import {createPool, Pool, Query} from "mysql2";
-import dotenv from "dotenv";
-dotenv.config();
 
 type DbConfig = {
     host: string,

@@ -3,7 +3,7 @@ const proxy = require("express-http-proxy")
 const app = express()
 const path = require("path")
 
-const NotificationServer = "http://localhost:8002"
+const NotificationServer = `http://localhost:${process.env.not_PORT}`
 
 const port = process.env.PORT 
 
@@ -33,4 +33,5 @@ app.get('/', function(req, res) {
 })
 
 app.listen(port);
-console.log('Server started at http://localhost:' + port);
+console.log('Server started at PORT:' + port);
+console.log('Notification Server PATH:'+ NotificationServer);

@@ -78,5 +78,3 @@ npm install
 # Build the application
 gulp build
 
-# Start the application
-gulp start

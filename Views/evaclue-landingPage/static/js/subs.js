@@ -1,6 +1,6 @@
 "use strict"
 
-const SubApi = "http://localhost:8003"
+const SubApi = "https://evaclue.com"
 
 const subEmail = document.getElementById("subEmail")
 const subStatus = document.getElementById("subStatus")

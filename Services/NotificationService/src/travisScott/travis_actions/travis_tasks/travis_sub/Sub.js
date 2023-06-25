@@ -78,8 +78,7 @@ class Subs {
                     else {
                         const checkEmail = data.includes(this.sub.email);
                         if (!checkEmail) {
-                            //fs.writeFile("emails.csv", data+`${this.sub.email},${this.sub.createdAt}\n`, async (err) => {
-                            fs_1.default.writeFile("emails.csv", data + `teste@teste.pt,${this.sub.createdAt}\n`, (err) => __awaiter(this, void 0, void 0, function* () {
+                            fs_1.default.writeFile("emails.csv", data + `${this.sub.email},${this.sub.createdAt}\n`, (err) => __awaiter(this, void 0, void 0, function* () {
                                 if (err) {
                                     console.log(err);
                                     throw "somehthing went wrong!";

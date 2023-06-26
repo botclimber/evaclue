@@ -40,7 +40,7 @@ export class Subs{
                 console.log(result , typeof(result))
                 if(result){
                    
-                    const subject: string = "Thanks for subscribing!"
+                    const subject: string = "Obrigado pela sua subscrição!"
                     const html: string = EmailTemplate.forSubscription()
                     const emailForm: EmailForm = {from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html}
                     const instanceOfEmail = new EmailEngine(emailForm)
@@ -80,7 +80,7 @@ export class Subs{
                             else{
                                 fs.close
 
-                                const subject: string = "Thanks for subscribing!"
+                                const subject: string = "Obrigado pela sua subscrição!"
                                 const html: string = EmailTemplate.forSubscription()
                                 const emailForm: EmailForm = {from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html}
                                 const instanceOfEmail = new EmailEngine(emailForm)

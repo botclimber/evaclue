@@ -20,7 +20,8 @@ async function subSubmit(){
     console.log(subEmail.value)
 
     if(subEmail.value != ""){
-      const resp = await fetch(`${SubApi}/notification/v1/sub`,{
+      console.log(SubApi)
+      const resp = await fetch(`${SubApi}/notifications/v1/sub`,{
           method: 'POST',
           body: JSON.stringify({email: subEmail.value}),
           headers: {

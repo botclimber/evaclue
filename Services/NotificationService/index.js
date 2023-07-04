@@ -29,7 +29,7 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 const port = process.env.PORT || 8002;
 const v = "v1";
-const service = "notification";
+const service = "notifications";
 app.get('/', (req, res) => {
     res.send('Notification Service | API page on development ...');
 });

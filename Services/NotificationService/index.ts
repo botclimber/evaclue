@@ -21,7 +21,7 @@ app.use(cors())
 const port = process.env.PORT || 8002;
 
 const v: string = "v1"
-const service: string = "notification"
+const service: string = "notifications"
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Notification Service | API page on development ...');

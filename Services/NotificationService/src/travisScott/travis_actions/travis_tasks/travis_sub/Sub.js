@@ -46,7 +46,7 @@ class Subs {
                     const result = yield db.insert(this.sub, this.className);
                     console.log(result, typeof (result));
                     if (result) {
-                        const subject = "Thanks for subscribing!";
+                        const subject = "Obrigado pela sua subscrição!";
                         const html = EmailTemplate_1.EmailTemplate.forSubscription();
                         const emailForm = { from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html };
                         const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);
@@ -85,7 +85,7 @@ class Subs {
                                 }
                                 else {
                                     fs_1.default.close;
-                                    const subject = "Thanks for subscribing!";
+                                    const subject = "Obrigado pela sua subscrição!";
                                     const html = EmailTemplate_1.EmailTemplate.forSubscription();
                                     const emailForm = { from: process.env.SMTP_EMAIL || "???", to: this.sub.email, subject: subject, html: html };
                                     const instanceOfEmail = new EmailEngine_1.EmailEngine(emailForm);

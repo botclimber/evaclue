@@ -9,6 +9,8 @@ const actions = require("./src/actions.js")
 const th = require("./src/tokenHandler.js") // token handler
 const sh = require("./src/scheduler/residenceFilters/filter-job.js")
 
+const revPath = "/reviews/v1"
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -20,17 +22,17 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname+'/index.html')
 })
 
-app.get('/api/v1/search', (req, res) => {
+app.get(`${revPath}/search`, (req, res) => {
 
   const address = {city: req.query.city || "Porto", street: req.query.street || "", buildingNumber: req.query.nr || "", onlyAppr: req.query.onlyAppr || 1}
   actions.actions(res).search(address)
 })
 
-app.get('/api/v1/reviews', (req, res) => {
+app.get(`${revPath}/reviews`, (req, res) => {
   actions.actions(res).getAllReviews()
 })
 
-app.post('/api/v1/create', (req, res) => {
+app.post(`${revPath}/create`, (req, res) => {
 
  th.tokenHandler(req)
  .then(transfData => {
@@ -42,7 +44,7 @@ app.post('/api/v1/create', (req, res) => {
 
 })
 
-app.post('/api/v1/setFilter', (req, res) => {
+app.post(`${revPath}/setFilter`, (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
@@ -53,12 +55,12 @@ app.post('/api/v1/setFilter', (req, res) => {
  
  })
 
- app.get('/api/v1/getFilter/:userId', (req, res) => {
+ app.get(`${revPath}/getFilter/:userId`, (req, res) => {
   actions.actions(res).getFilter(req.params.userId)
  })
 
 // TODO: check if userType is col,admin or superAdmin
-app.patch('/api/v1/updateReview/:revId', (req, res) => {
+app.patch(`${revPath}/updateReview/:revId`, (req, res) => {
 
   th.tokenHandler(req)
  .then(transfData => {
@@ -74,7 +76,7 @@ app.patch('/api/v1/updateReview/:revId', (req, res) => {
  * | RESIDENCE OWNER |
  * +-----------------+
  */
-app.post('/api/v1/resOwner/createResOwner', (req, res) => {
+app.post(`${revPath}/resOwner/createResOwner`, (req, res) => {
 
   th.tokenHandler(req)
   .then(_ => {
@@ -86,14 +88,14 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })
 
- app.get('/api/v1/resOwner/getByCity', (req, res) => {
+ app.get(`${revPath}/resOwner/getByCity`, (req, res) => {
 
   const city = req.query.city || ""
   actions.actions(res).getResidencesForCity(city)
   
  })
 
- app.get('/api/v1/resOwner/getAll', (req, res) => {
+ app.get(`${revPath}/resOwner/getAll`, (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
@@ -102,7 +104,7 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })
 
- app.patch('/api/v1/resOwner/updateApproval/:claimId', (req, res) => {
+ app.patch(`${revPath}/resOwner/updateApproval/:claimId`, (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {

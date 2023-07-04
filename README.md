@@ -8,70 +8,90 @@ Platform for house rent reviews
             - email: superAdmin@evaclue.pt
             - pass: diablo4Approach.
 
-- create "ecosystem.config.js" file on root dir with following code:
+- create "system.config.js" file on root dir with following code (fill missing parameters with what suits you better):
 ```
+const notPort = 8002
+const landPort = 80
+const revPort = 8000
+const userPort = 8001
+
 module.exports = {
-  apps:[{
-    name: "evaclue-landingPage",
-    script: "./Views/evaclue-landingPage/index.js",
-    watch: true,
-    env: {
-      "PORT": 80
-    }
-  },
+    apps : [
+        {
+            name   : "NotService",
+            script : "./Services/NotificationService/index.js",
+            env: {
+                "PORT": notPort,
+                "SMTP_EMAIL": "supp.evaclue@gmail.com",
+                "SMTP_HOST": "smtp.gmail.com",
+                "SMTP_PORT": 587,
+                "SMTP_USER": "supp.evaclue@gmail.com",
+                "SMTP_PASS": "drqohvkkewrkrnjt"
+            }
+        },
+        {
+            name   : "RevServices",
+            script: "./Services/ReviewsService/index.js",
+            watch: true,
+            env: {
+                "PORT": revPort,
+                "DB_HOST": "localhost",
+                "DB_USER": "root",
+                "DB_PASSWORD": "",
+                "DB_NAME": "evaclue_db",
+                "APIKEY": "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ",
+                "SECRET": "greedisgood",
+                "DIRNAME": ""
+            }
+        },
+        {
+            name: "UsersService",
+            script: "./Services/UsersService/dist/src/server.js",
+            watch: true,
+            env: {
+                "SERVER_PORT": userPort,
+                "DB_HOST": "localhost",
+                "DB_USER": "root",
+                "DB_PASSWORD": "",
+                "DB_NAME": "evaclue_db",
+                "JWT_SECRET": "greedisgood",
+                "DIRNAME": ""
+            }
+        },
 
-  {
-    name: "NotificationServices",
-    script: "./Services/NotificationService/index.js",
-    watch: true,
-    env: {
-      "PORT": 8002,
-      "DB_HOST": "localhost",
-      "DB_USER": "root",
-      "DB_PASSWORD": "",
-      "DB_NAME": "evaclue_db",
-      "SECRET": "greedisgood",
-    
-      "SMTP_EMAIL": "rentifyWD@gmail.com",
-      "SMTP_HOST": "smtp.gmail.com",
-      "SMTP_PORT": 587,
-      "SMTP_USER": "rentifywd@gmail.com",
-      "SMTP_PASS": "kxjkqatwgtyefpzy"
-    }
-  },
+        {
+            name   : "landPage",
+            script : "./Views/evaclue-landingPage/index.js",
+            env: {
+                "PORT": landPort,
+                "not_PORT": notPort,
+                "rev_PORT": revPort,
+                "user_PORT": userPort
+            }
+        },
 
-  {
-    name: "ReviewsService",
-    script: "./Services/ReviewsService/index.js",
-    watch: true,
-    env: {
-      "PORT": 8000,
-      "DB_HOST": "localhost",
-      "DB_USER": "root",
-      "DB_PASSWORD": "",
-      "DB_NAME": "evaclue_db",
-      "APIKEY": "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ",
-      "SECRET": "greedisgood",
-      "DIRNAME": ""
-    }
-  },
+        {
+            name   : "MainPlatform",
+            cwd    : "./Views/MapsView/app",
+            script : "npm",
+            args   : "start"
+        },
 
-  {
-    name: "UsersService",
-    script: "./Services/UsersService/dist/src/server.js",
-    watch: true,
-    env: {
-      "SERVER_PORT": 8001,
-      "DB_HOST": "localhost",
-      "DB_USER": "root",
-      "DB_PASSWORD": "",
-      "DB_NAME": "evaclue_db",
-      "JWT_SECRET": "greedisgood",
-      "DIRNAME": ""
-    }
-  }
-]
+        {
+            name   : "authPage",
+            cwd    : "./Views/userclient",
+            script : "npm",
+            args   : "run serve"
+        },
 
+        {
+            name   : "AdminPlatform",
+            cwd    : "./Views/Admin/root/rentify-admin",
+            script : "npm",
+            args   : "run dev"
+        },
+
+    ]
 }
 ```
 
@@ -86,22 +106,10 @@ module.exports = {
 
 - Start Project:
     - run:
-        - ``` pm2 start ecosystem.config.json ```
+        - ``` pm2 start system.config.json ```
 
-    - for dev purposes (MANDATORY):
-        - ``` gulp start ``` (this is needed to deploy front-end pages)
-
-## Some images about the architecture [deprecated]:
-![Screenshot](imgs/arq.png)
-![Screenshot](imgs/wAPIGAT.png)
+## Some images about the architecture:
+![Screenshot](imgs/ev.png)
 
 ## Tasks
-**[to be done until 23/05 ]:**
-- [x] transport from rentify to here | *dennis/daniel*
-- [x] landing page | *dennis*
-- [x] complete notification services (can already be use) | *daniel*
-- [ ] email template | *dennis/daniel*
-- [x] buy domain | *daniel*
-- [x] deploy documentation | *daniel*
-- [x] add NotificationService to gulp configuration | *daniel*
-- [ ] ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) add possibility to recieve email and filter multiple regions/rent price/ and then maybe in the future rating average | *daniel* 
+-

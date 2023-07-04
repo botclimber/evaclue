@@ -1,6 +1,6 @@
 import {Response} from "express"
 import {Db} from "../../../../Db/Db"
-import {EmailForm, Sub} from "../../../travis_types/typeModels"
+import {EmailForm, Sub} from "../../../types/typeModels"
 import date from "date-and-time"
 import fs from "fs"
 import { EmailTemplate } from "../../travis_sendEmail/EmailTemplate"

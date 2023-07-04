@@ -2,7 +2,7 @@
  * Email Template
  */
 
-import { ContactResOwner} from "../../travis_types/typeModels";
+import { ContactResOwner} from "../../types/typeModels";
 
 export class EmailTemplate {
     static forContactResOwner(data: ContactResOwner): string{

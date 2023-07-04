@@ -1,6 +1,6 @@
 import {Response} from "express"
 import {Db} from "../../../../Db/Db"
-import {ContactResOwner} from "../../../travis_types/typeModels"
+import {ContactResOwner} from "../../../types/typeModels"
 
 export class ContactResOwnerClass{
     className: string = "ContactResOwner"

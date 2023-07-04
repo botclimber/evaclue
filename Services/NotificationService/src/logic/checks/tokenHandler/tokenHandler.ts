@@ -1,5 +1,5 @@
 import {Request} from "express"
-import {User} from "../../travis_types/typeModels"
+import {User} from "../../types/typeModels"
 import jwt from "jsonwebtoken"
 
 // ?? if left value is null or undefined || is left value is false

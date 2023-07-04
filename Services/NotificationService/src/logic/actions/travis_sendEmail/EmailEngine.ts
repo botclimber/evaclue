@@ -1,4 +1,4 @@
-import { EmailForm } from "../../travis_types/typeModels";
+import { EmailForm } from "../../types/typeModels";
 const nodemailer = require("nodemailer")
 
 export class EmailEngine{

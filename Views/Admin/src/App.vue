@@ -46,7 +46,7 @@ export default {
   methods: {
 
     async getAllReviews(){
-      const res = await fetch(this.apis.reviewsApi+'/api/v1/reviews').catch(err => console.log(err))
+      const res = await fetch(this.apis.reviewsApi+'/reviews').catch(err => console.log(err))
       const data = await res.json()
 
       this.reviews = data.reviews

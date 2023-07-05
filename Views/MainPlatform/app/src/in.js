@@ -4,8 +4,8 @@
    * global http values
    */
 const authPage = "http://localhost:8081"
-const reviewsService = "http://localhost:8000"
-const userService = "http://localhost:8001"
+const reviewsService = "http://localhost/reviews/v1"
+const userService = "http://localhost/user"
 
 const tokenName = 't'
 const typeName = "tType"

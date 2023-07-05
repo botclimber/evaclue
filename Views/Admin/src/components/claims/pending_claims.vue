@@ -22,7 +22,7 @@ export default{
 
     async updateClaim(claimId, dec){
       if(confirm("Are you sure ?")){
-        const res = await fetch(this.apis.reviewsApi+'/api/v1/resOwner/updateApproval/'+claimId,{
+        const res = await fetch(this.apis.reviewsApi+'/resOwner/updateApproval/'+claimId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
           'authorization': 'baer '+this.tk},
@@ -36,7 +36,7 @@ export default{
 
     // TODO: build getClaims method | change UI page | update ReviewsService methods
     async getAllClaims(){
-        const res = await fetch(this.apis.reviewsApi+'/api/v1/resOwner/getAll?token='+this.tk).catch(err => console.log(err))
+        const res = await fetch(this.apis.reviewsApi+'/resOwner/getAll?token='+this.tk).catch(err => console.log(err))
         const data = await res.json()
         console.log(data)
 
@@ -70,7 +70,7 @@ export default{
 
                 <tr v-for="row of allData" :key="row.id">
                   <td>
-                    <img style="width:50px;height:50px" :src="'http://localhost:8080/images/userImages/'+row.userImg"/>
+                    <img style="width:50px;height:50px" :src="'http://localhost/images/userImages/'+row.userImg"/>
                   </td>
                   <td>{{row.userName}}</td>
                   <td><a :href="'src/assets/images/resProofFiles/'+row.fileProof" target="_blank">{{row.fileProof}}</a> </td>

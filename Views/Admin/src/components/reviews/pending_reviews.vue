@@ -19,7 +19,7 @@ export default{
 
     async updateReview(revId, dec){
       if(confirm("Are you sure ?")){
-        const res = await fetch(this.apis.reviewsApi+'/api/v1/updateReview/'+revId,{
+        const res = await fetch(this.apis.reviewsApi+'/updateReview/'+revId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
           'authorization': 'baer '+this.tk},

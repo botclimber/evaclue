@@ -44,7 +44,7 @@ claimResidenceBtn.addEventListener("click", async (event) => {
         fileData.append("file", fileProof.files[0])
         fileData.append("data", JSON.stringify(data))
         
-        await fetch(reviewsService+'/api/v1/resOwner/createResOwner',{
+        await fetch(reviewsService+'/resOwner/createResOwner',{
             method: 'POST',
             headers: {
                 'authorization':'baer '+t,

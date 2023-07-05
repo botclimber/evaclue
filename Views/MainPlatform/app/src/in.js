@@ -5,7 +5,7 @@
    */
 const authPage = "http://localhost:8081"
 const reviewsService = "http://localhost/reviews/v1"
-const userService = "http://localhost/user"
+const userService = "http://localhost"
 
 const tokenName = 't'
 const typeName = "tType"

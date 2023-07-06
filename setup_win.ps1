@@ -93,7 +93,7 @@ module.exports = {
             env: {
                 "PORT": revPort,
                 "DB_HOST": "localhost",
-                "DB_USER": $rootUser,
+                "DB_USER": "$rootUser",
                 "DB_PASSWORD": "$rootPassword",
                 "DB_NAME": "evaclue_db",
                 "APIKEY": "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ",
@@ -108,7 +108,7 @@ module.exports = {
             env: {
                 "SERVER_PORT": userPort,
                 "DB_HOST": "localhost",
-                "DB_USER": $rootUser,
+                "DB_USER": "$rootUser",
                 "DB_PASSWORD": "$rootPassword",
                 "DB_NAME": "evaclue_db",
                 "JWT_SECRET": "greedisgood",
@@ -151,9 +151,9 @@ module.exports = {
 }
 "@
 
-$filePath = Join-Path -Path $PSScriptRoot -ChildPath "system.config.js"
-$code | Out-File -FilePath $filePath
-Write-Host "system.config.js file created successfully at: $filePath"
+$systemConfigFilePath = Join-Path -Path $PSScriptRoot -ChildPath "system.config.js"
+$systemConfigCode | Out-File -FilePath $systemConfigFilePath -Encoding UTF8
+Write-Host "system.config.js file created successfully at: $systemConfigFilePath"
 Write-Host
 
 # Project dependencies installation

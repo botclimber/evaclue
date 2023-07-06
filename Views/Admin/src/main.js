@@ -3,7 +3,7 @@ import App from './App.vue'
 
 const apis = {
   reviewsApi: "http://localhost/reviews/v1",
-  usersApi: "http://localhost/user"
+  usersApi: "http://localhost"
 }
 
 const urlParams = new URLSearchParams(window.location.search)

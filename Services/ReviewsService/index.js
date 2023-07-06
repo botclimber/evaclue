@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
 app.use(fileupload());
-app.use(express.static("public"));
+app.use(express.static(__dirname + '/public'));
 
-app.get('/', (req, res) => {
+app.get(`${revPath}/`, (req, res) => {
   res.sendFile(__dirname+'/index.html')
 })
 

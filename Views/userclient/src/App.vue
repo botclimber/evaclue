@@ -3,7 +3,7 @@
     <v-app>
       <main>
         <nav style="backgroundColor: #B7410E;" class="navbar justify-content-center">
-          <a :href="evacluePage" class="navbar-brand" style="color:white">Rentify</a>
+          <a :href="evacluePage" class="navbar-brand" style="color:white">Evaclue</a>
         </nav>  
 
         <router-view />
@@ -16,7 +16,7 @@
             style="background-color: rgba(0, 0, 0, 0.2)"
           >
             © 2023 Copyright:
-            <a class="text-white" :href="evacluePage">Rentify.com</a>
+            <a class="text-white" :href="evacluePage">www.evaclue.com</a>
           </div>
         </footer>
       </main>

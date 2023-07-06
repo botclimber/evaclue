@@ -13,11 +13,11 @@ const userService = "UsersService"
 gulp.task('build', async function (done) {
 
     exec('npm install', {
-        cwd: 'Views/Admin/root/rentify-admin/'
+        cwd: 'Views/Admin/'
     }, (error, stdout, stderr) => {
-        let logmessage = stdout + "\nRentify-Admin PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
+        let logmessage = stdout + "\nEvaclue-Admin PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
         console.log(logmessage)
-        if (stderr) console.log("Error instaling packages for rentify-admin")
+        if (stderr) console.log("Error instaling packages for Evaclue-admin")
     });
 
     /* @deprecated

@@ -17,7 +17,7 @@ const UsersServer = `http://localhost:${process.env.user_PORT}`
 
 const port = process.env.PORT 
 
-app.use(express.static(__dirname + "/static"))
+//app.use(express.static(__dirname + "/static"))
 
 /*app.use("/not/*", (req, res) => {
   const url = req.baseUrl.replace("/not","")
@@ -62,8 +62,12 @@ app.all("/user/*", proxy(UsersServer, {
 /**
  * serve main platform when trying to request root endpoint
  */
-app.get('/', function(req, res) {
+/*app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, "/static/index.html"))
+})*/
+
+app.get('/', function(req, res) {
+  res.redirect("http://localhost:8080/")
 })
 
 // for PROD

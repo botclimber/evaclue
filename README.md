@@ -86,7 +86,7 @@ module.exports = {
 
         {
             name   : "AdminPlatform",
-            cwd    : "./Views/Admin/root/rentify-admin",
+            cwd    : "./Views/Admin",
             script : "npm",
             args   : "run dev"
         },

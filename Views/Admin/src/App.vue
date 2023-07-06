@@ -74,7 +74,7 @@ export default {
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="#/"><b style="color:white">RENTIFY</b></a>
+        <a class="sidebar-brand brand-logo" href="#/"><b style="color:white">Evaclue</b></a>
         <a class="sidebar-brand brand-logo-mini" href="#/"><b style="color:white">R</b></a>
       </div>
       <ul class="nav">
@@ -250,7 +250,7 @@ export default {
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Rentify 2023</span>
+          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Evaclue 2023</span>
         </div>
       </footer>
 

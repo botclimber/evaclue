@@ -93,7 +93,7 @@ async function setFilters(){
   }
 
   try{
-    const res = await fetch(reviewsService+'/api/v1/setFilter',{
+    const res = await fetch(reviewsService+'/setFilter',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ async function setFilters(){
 async function getFilters(){
 
   try{
-    const res = await fetch(reviewsService+`/api/v1/getFilter/${uId}`,{
+    const res = await fetch(reviewsService+`/getFilter/${uId}`,{
       method: 'GET',
     })
     .then(res => res.json())

@@ -1,30 +1,69 @@
-<script>
+<script >
 import Home from './components/Home.vue'
 import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
+import Pending_Reviews from './components/reviews/pending_reviews.vue'
+import All_Reviews from './components/reviews/all_reviews.vue'
+import User_Profile from './components/profile/user_profile.vue'
+import New_Col from './components/profile/new_col.vue'
+import Pending_Claims from './components/claims/pending_claims.vue'
 
 const routes = {
   '/': Home,
   '/chartjs': Chartjs,
-  '/basic_elements': Basic_Elements
+  '/basic_elements': Basic_Elements,
+  '/pending_reviews': Pending_Reviews,
+  '/all_reviews': All_Reviews,
+  '/user_profile': User_Profile,
+  '/new_col': New_Col,
+  '/pending_claims': Pending_Claims
+
 }
 
 export default {
+  name: "App",
+
+  inject: ['apis','tk','firstName','lastName'],
+
   data() {
     return {
-      currentPath: window.location.hash
+      apis: this.apis,
+      reviews: null,
+      currentPath: window.location.hash,
     }
   },
+
+  created(){
+      this.getAllReviews()
+  },
+
   computed: {
     currentView() {
       return routes[this.currentPath.slice(1) || '/'] || NotFound
     }
   },
+
+  methods: {
+
+    async getAllReviews(){
+      const res = await fetch(this.apis.reviewsApi+'/reviews').catch(err => console.log(err))
+      const data = await res.json()
+
+      this.reviews = data.reviews
+
+    },
+
+    logout(){
+      window.location.href = "http://localhost:8081/"
+    }
+
+  },
+
   mounted() {
     window.addEventListener('hashchange', () => {
 		  this.currentPath = window.location.hash
 		})
-  }
+  },
 }
 
 </script>
@@ -35,8 +74,8 @@ export default {
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="#/"><img src="./assets/images/logo.svg" alt="logo" /></a>
-        <a class="sidebar-brand brand-logo-mini" href="#/"><img src="./assets/images/logo-mini.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo" href="#/"><b style="color:white">Evaclue</b></a>
+        <a class="sidebar-brand brand-logo-mini" href="#/"><b style="color:white">R</b></a>
       </div>
       <ul class="nav">
         <li class="nav-item profile">
@@ -47,7 +86,7 @@ export default {
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
-                <h5 class="mb-0 font-weight-normal">Anon</h5>
+                <h5 class="mb-0 font-weight-normal">{{firstName}} {{lastName}} {{test}}</h5>
                 <span>Admin</span>
               </div>
             </div>
@@ -65,21 +104,28 @@ export default {
           </a>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="#/basic_elements">
+          <a class="nav-link" href="#/all_reviews">
             <span class="menu-icon">
-              <i class="mdi mdi-playlist-play"></i>
+              <i class="mdi mdi-speedometer"></i>
             </span>
-            <span class="menu-title">Form Elements</span>
+            <span class="menu-title">Reviews</span>
           </a>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="#/chartjs">
-            <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
-            </span>
-            <span class="menu-title">Charts</span>
-          </a>
-        </li>
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <span class="menu-icon">
+                <i class="mdi mdi-table-large"></i>
+              </span>
+              <span class="menu-title">Approvals</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="#/pending_claims"> Pending Claims  </a></li>
+                <li class="nav-item"> <a class="nav-link" href="#/pending_reviews"> Pending Reviews </a></li>
+              </ul>
+            </div>
+          </li>
       </ul>
     </nav>
     <!-- partial -->
@@ -101,47 +147,6 @@ export default {
             </li>
           </ul>
           <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item dropdown border-left">
-              <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-email"></i>
-                <span class="count bg-success"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                <h6 class="p-3 mb-0">Messages</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                    <p class="text-muted mb-0"> 1 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
-                    <p class="text-muted mb-0"> 15 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
-                    <p class="text-muted mb-0"> 18 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <p class="p-3 mb-0 text-center">4 new messages</p>
-              </div>
-            </li>
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell"></i>
@@ -193,25 +198,35 @@ export default {
               <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                 <div class="navbar-profile">
                   <img class="img-xs rounded-circle" src="./assets/images/faces/face15.jpg" alt="">
-                  <p class="mb-0 d-none d-sm-block navbar-profile-name">Anon</p>
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name">{{firstName}} {{lastName}}</p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                 <h6 class="p-3 mb-0">Profile</h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a href = "#/new_col" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-user text-success"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Regist Colaborator</p>
+                  </div>
+                </a>
+                <a href = "#/user_profile" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-settings text-success"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <p class="preview-subject mb-1">Settings</p>
+                    <p class="preview-subject mb-1">Profile</p>
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a @click="logout" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-logout text-danger"></i>
@@ -221,8 +236,6 @@ export default {
                     <p class="preview-subject mb-1">Log out</p>
                   </div>
                 </a>
-                <div class="dropdown-divider"></div>
-                <p class="p-3 mb-0 text-center">Advanced settings</p>
               </div>
             </li>
           </ul>
@@ -233,11 +246,11 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" />
+        <component :is="currentView" :reviews="reviews" :tk="tk" :apis="apis"/>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Rentify 2023</span>
+          <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Evaclue 2023</span>
         </div>
       </footer>
 

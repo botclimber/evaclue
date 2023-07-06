@@ -110,7 +110,7 @@ import MarkerClusterer from '@google/markerclustererplus';
 
                         currentCity.innerHTML = component.long_name+": Available residences"
                         
-                        fetch(reviewsService+'/api/v1/resOwner/getByCity?city='+component.long_name)
+                        fetch(reviewsService+'/resOwner/getByCity?city='+component.long_name)
                         .then(res => res.json())
                         .then((dataFromServer) => {
                           console.log(dataFromServer)
@@ -174,7 +174,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   function search(city, street = "", nr = ""){
   
-    fetch(reviewsService+'/api/v1/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
+    fetch(reviewsService+'/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
     .then(res => res.json())
     .then((data) => {console.log(data); mountPage(data)})
     .catch(err => console.log(err))
@@ -245,7 +245,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   async function cReview(data){
     console.log(data)
-    await fetch('http://127.0.0.1:8000/api/v1/create',{
+    await fetch(reviewsService+'/create',{
         method: 'POST',
         body: JSON.stringify(data),
         headers: {

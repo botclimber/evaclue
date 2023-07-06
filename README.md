@@ -91,7 +91,7 @@ module.exports = {
 
         {
             name   : "AdminPlatform",
-            cwd    : "./Views/Admin/root/rentify-admin",
+            cwd    : "./Views/Admin",
             script : "npm",
             args   : "run dev"
         },
@@ -202,9 +202,11 @@ module.exports = {
   - run:
     - `pm2 start system.config.js`
 
-## Some images about the architecture:
-
+## Architecture:
 ![Screenshot](imgs/ev.png)
+
+## Versioning
+![Screenshot](imgs/versionFlow.png)
 
 ## Tasks
 

@@ -15,7 +15,7 @@ Clear-Host
 
 # Display Evaclue Setup Configuration
 Write-Host "╔══════════════════════════════════════╗" -ForegroundColor red
-Write-Host "║     EVACLUE - Setup Wizard v0.1      ║" -ForegroundColor red
+Write-Host "║     EVACLUE - Setup Wizard v0.2      ║" -ForegroundColor red
 Write-Host "╚══════════════════════════════════════╝" -ForegroundColor red
 Write-Host
 
@@ -61,98 +61,132 @@ foreach ($path in $logsPath) {
 }
 Write-Host
 
-# Prompt for Reviews Service setup
-Write-Host "Reviews Service Setup" -ForegroundColor Yellow
-Write-Host "---------------------" -ForegroundColor Yellow
-Write-Host
-$reviewsServiceDirname = Read-Host -Prompt "Enter Reviews Service resProofFiles DIRNAME"
-$reviewsServiceSetup = @{
-    "PORT"    = 8000
-    "DB_HOST" = "localhost"
-    "DB_USER" = $rootUser
-    "DB_PASSWORD" = "$rootPassword"
-    "DB_NAME" = "evaclue_db"
-    "APIKEY" = "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
-    "SECRET" = "greedisgood"
-    "DIRNAME" = $reviewsServiceDirname
-}
-$reviewsServiceSetup.GetEnumerator() | ForEach-Object {
-    $key = $_.Key
-    $value = $_.Value
-    Write-Host "$key = $value"
-}
+# System Config Setup Prompt
+Write-Host "System Config Setup" -ForegroundColor Yellow
+Write-Host "-------------------" -ForegroundColor Yellow
 Write-Host
 
-# Prompt for Users Service setup
-Write-Host "Users Service Setup" -ForegroundColor Yellow
-Write-Host "--------------------" -ForegroundColor Yellow
-Write-Host
-$usersServiceDirname = Read-Host -Prompt "Enter Users Service userImages DIRNAME"
-$usersServiceSetup = @{
-    "SERVER_PORT" = 8001
-    "DB_HOST"     = "localhost"
-    "DB_USER"     = $rootUser
-    "DB_PASSWORD" = "$rootPassword"
-    "DB_NAME"     = "evaclue_db"
-    "JWT_SECRET"  = "greedisgood"
-    "DIRNAME"     = $usersServiceDirname
+$code = @"
+const notPort = 8002
+const landPort = 80
+const revPort = 8000
+const userPort = 8001
+
+module.exports = {
+    apps : [
+        {
+            name   : "NotService",
+            script : "./Services/NotificationService/index.js",
+            env: {
+                "PORT": notPort,
+                "SMTP_EMAIL": "supp.evaclue@gmail.com",
+                "SMTP_HOST": "smtp.gmail.com",
+                "SMTP_PORT": 587,
+                "SMTP_USER": "supp.evaclue@gmail.com",
+                "SMTP_PASS": "drqohvkkewrkrnjt"
+            }
+        },
+        {
+            name   : "RevServices",
+            script: "./Services/ReviewsService/index.js",
+            watch: true,
+            env: {
+                "PORT": revPort,
+                "DB_HOST": "localhost",
+                "DB_USER": $rootUser,
+                "DB_PASSWORD": "$rootPassword",
+                "DB_NAME": "evaclue_db",
+                "APIKEY": "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ",
+                "SECRET": "greedisgood",
+                "DIRNAME": "./Views/Admin/root/rentify-admin/src/assets/images/resProofFiles"
+            }
+        },
+        {
+            name: "UsersService",
+            script: "./Services/UsersService/dist/src/server.js",
+            watch: true,
+            env: {
+                "SERVER_PORT": userPort,
+                "DB_HOST": "localhost",
+                "DB_USER": $rootUser,
+                "DB_PASSWORD": "$rootPassword",
+                "DB_NAME": "evaclue_db",
+                "JWT_SECRET": "greedisgood",
+                "DIRNAME": "./Views/MapsView/app/src/images/userImages"
+            }
+        },
+
+        {
+            name   : "landPage",
+            script : "./Views/evaclue-landingPage/index.js",
+            env: {
+                "PORT": landPort,
+                "not_PORT": notPort,
+                "rev_PORT": revPort,
+                "user_PORT": userPort
+            }
+        },
+
+        {
+            name   : "MainPlatform",
+            cwd    : "./Views/MapsView/app",
+            script : "npm",
+            args   : "start"
+        },
+
+        {
+            name   : "authPage",
+            cwd    : "./Views/userclient",
+            script : "npm",
+            args   : "run serve"
+        },
+
+        {
+            name   : "AdminPlatform",
+            cwd    : "./Views/Admin/root/rentify-admin",
+            script : "npm",
+            args   : "run dev"
+        },
+    ]
 }
-$usersServiceSetup.GetEnumerator() | ForEach-Object {
-    $key = $_.Key
-    $value = $_.Value
-    Write-Host "$key = $value"
-}
+"@
+
+$filePath = Join-Path -Path $PSScriptRoot -ChildPath "system.config.js"
+$code | Out-File -FilePath $filePath
+Write-Host "system.config.js file created successfully at: $filePath"
 Write-Host
 
-# Prompt for Notification Service setup
-Write-Host "Notification Service Setup" -ForegroundColor Yellow
-Write-Host "--------------------------" -ForegroundColor Yellow
-Write-Host
-$notificationServiceSetup = @{
-    "PORT"         = 8002
-    "DB_HOST"      = "localhost"
-    "DB_USER"      = $rootUser
-    "DB_PASSWORD"  = "$rootPassword"
-    "DB_NAME"      = "evaclue_db"
-    "SECRET"       = "greedisgood"
-    "SMTP_EMAIL"   = "rentifyWD@gmail.com"
-    "SMTP_HOST"    = "smtp.gmail.com"
-    "SMTP_PORT"    = 587
-    "SMTP_USER"    = "rentifywd@gmail.com"
-    "SMTP_PASS"    = "kxjkqatwgtyefpzy"
-}
-$notificationServiceSetup.GetEnumerator() | ForEach-Object {
-    $key = $_.Key
-    $value = $_.Value
-    Write-Host "$key = $value"
-}
-Write-Host
-
-# Prompt for User Client setup
-Write-Host "User Client Setup" -ForegroundColor Yellow
-Write-Host "-----------------" -ForegroundColor Yellow
-Write-Host
-$userClientSetup = @{
-    "VUE_APP_SERVER_PORT" = 8001
-}
-$userClientSetup.GetEnumerator() | ForEach-Object {
-    $key = $_.Key
-    $value = $_.Value
-    Write-Host "$key = $value"
-}
+# Project dependencies installation
+Write-Host "Project Dependencies Installation" -ForegroundColor Yellow
+Write-Host "-------------------" -ForegroundColor Yellow
 Write-Host
 
 # Install gulp globally
 Write-Host "Installing gulp globally..." -ForegroundColor Cyan
+Write-Host
 npm install --global gulp-cli
 
 # Install project dependencies
+Write-Host
 Write-Host "Installing project dependencies..." -ForegroundColor Cyan
 npm install
 
 # Build the application
+Write-Host
 Write-Host "Building the application..." -ForegroundColor Cyan
+Write-Host
 gulp build
 
+# Install PM2 Process Manager
+Write-Host "Installing PM2..." -ForegroundColor Cyan
+Write-Host
+npm install pm2 -g
+
+Write-Host
 Write-Host
 Write-Host "Setup configuration completed successfully!" -ForegroundColor Green
+Write-Host
+
+# Start the project
+#Write-Host "Starting..." -ForegroundColor Cyan
+#pm2 start system.config.json

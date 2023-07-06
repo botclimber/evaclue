@@ -151,8 +151,8 @@ module.exports = {
 }
 "@
 
-$systemConfigFilePath = Join-Path -Path $PSScriptRoot -ChildPath "system.config.js"
-$systemConfigCode | Out-File -FilePath $systemConfigFilePath -Encoding UTF8
+$filePath = Join-Path -Path $PSScriptRoot -ChildPath "system.config.js"
+$code | Out-File -FilePath $filePath -Encoding UTF8
 Write-Host "system.config.js file created successfully at: $systemConfigFilePath"
 Write-Host
 

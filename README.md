@@ -167,7 +167,7 @@ module.exports = {
 
     {
       name: "MainPlatform",
-      cwd: "./Views/MapsView/app/",
+      cwd: "./Views/MainPlatform/app/",
       script: "startscript.js",
     },
 
@@ -179,11 +179,12 @@ module.exports = {
 
     {
       name: "AdminPlatform",
-      cwd: "./Views/Admin/root/rentify-admin/",
+      cwd: "./Views/Admin/",
       script: "startscript.js",
     },
   ],
 };
+
 
 ```
 

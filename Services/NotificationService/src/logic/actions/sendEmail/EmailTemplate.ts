@@ -2,7 +2,7 @@
  * Email Template
  */
 
-import { ContactResOwner} from "../../types/typeModels";
+import { AvailableRents, ContactResOwner, available} from "../../types/typeModels";
 
 export class EmailTemplate {
     static forContactResOwner(data: ContactResOwner): string{
@@ -144,7 +144,14 @@ export class EmailTemplate {
         return html
     }
 
-    static forNotificationOfAvailableRents(): string{
+    static forNotificationOfAvailableRents(input: AvailableRents): string{
+      const url = "http://localhost:8080"
+
+      const options: available[] = input.available
+      const buildTable = options.map(element => {
+        return `<tr><td><a href="${url}/mainPage.html?city=${element.city}">${element.city}</a><p>${element.street}, nr ${element.nr}</p><span>${element.rentPrice} eur/month</span></td></tr>`
+      }) 
+
       const html = `
       <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -162,9 +169,7 @@ export class EmailTemplate {
   </xml>
 </noscript>
 <![endif]-->
-<style>
-  table, td, div, h1, p {font-family: Arial, sans-serif;}
-</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body style="margin:0;padding:0;">
 <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
@@ -178,18 +183,13 @@ export class EmailTemplate {
         </tr>
         <tr>
           <td style="padding:36px 30px 42px 30px;">
-            <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
-              <tr>
-                <td style="padding:0 0 36px 0;color:#153643;">
-                  <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">É com grande satisfação que anunciamos o lançamento da Evaclue, a plataforma de aluguer de propriedades que está a mudar a forma como as pessoas procuram e alugam casas.
-                    Com a Evaclue, pode facilmente encontrar uma casa que corresponda às suas necessidades, através de informações detalhadas e comentários de proprietários e inquilinos anteriores. Os proprietários de imóveis, por sua vez, têm a oportunidade de encontrar inquilinos confiáveis e de qualidade.
-                    A nossa plataforma foi concebida para tornar o processo de aluguer de propriedades mais fácil e transparente, fornecendo informações úteis e confiáveis. Além disso, a Evaclue está a simplificar e a possibilitar uma conexão direta entre inquilinos e proprietários de imóveis para contratos de arrendamento a longo prazo, eliminando intermediários e taxas desnecessárias.
-                    Temos orgulho em oferecer uma experiência única aos nossos utilizadores, com uma interface intuitiva, fácil de usar e repleta de recursos úteis. A Evaclue também oferece segurança e proteção para todos os utilizadores, graças à nossa abordagem rigorosa na verificação da identidade e histórico dos inquilinos e proprietários.
-                    Estamos muito animados com o lançamento da Evaclue, por isso convidamos todos os interessados a experimentar a plataforma. Junte-se à nossa comunidade, subscreva a nossa Newsletter e esteja entre os primeiros a desfrutar desta nova plataforma.</p>
-                  <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">Agradecemos a sua atenção e esperamos tê-lo(a) como um dos nossos utilizadores em breve.</p>
-                </td>
-              </tr>
+            <h2>Evaclue Rent Alerts</h2>
+            <h4>We found 30 available Rents:</h4>
+            <table class="table table-bordered" role="presentation">
+              ${buildTable}
             </table>
+
+            <p>go to evaclue to check all suitable available rents.</p>
           </td>
         </tr>
         <tr>

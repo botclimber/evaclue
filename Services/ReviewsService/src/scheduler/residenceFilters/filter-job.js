@@ -39,7 +39,7 @@ sendNotOnFilter = async () => {
         */
 
         return { toEmail: r.userEmail, available: byRent.map(data => {
-            return {userId: data.userId, city: data.city.city, flat: data.flatOwner, floor: data.floorOwner, rentPrice: data.rentPrice, lat: data.cityLat, lng: data.cityLng} 
+            return {resOwnerId: data.userId, city: data.city.city, street: data.city.street, nr: data.city.nr, flat: data.flatOwner, floor: data.floorOwner, rentPrice: data.rentPrice, lat: data.cityLat, lng: data.cityLng} 
            }) }
     })
 

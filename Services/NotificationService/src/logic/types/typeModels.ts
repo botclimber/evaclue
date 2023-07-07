@@ -45,15 +45,19 @@ export interface EmailForm {
 
 export type CROPlusUser = ContactResOwner & User
 
+export interface available {    
+    resOwnerId: number,
+    city: string,
+    street: string,
+    nr: number,
+    flat: string,
+    floor: string,
+    rentPrice: number,
+    lat: number,
+    lng: number
+}
+
 export interface AvailableRents {
     toEmail: string,
-    available: [{
-        userId: number,
-        city: string,
-        flat: string,
-        floor: string,
-        rentPrice: number,
-        lat: number,
-        lng: number
-    }]
+    available: Array<available>
 }

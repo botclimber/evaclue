@@ -1,5 +1,6 @@
-import {Users, AvailableRents} from "../../../types/typeModels"
-import {Db} from "../../../../Db/Db"
+import {AvailableRents, EmailForm} from "../../../types/typeModels"
+import { EmailTemplate } from "../../sendEmail/EmailTemplate"
+import { EmailEngine } from "../../sendEmail/EmailEngine"
 
 export class NotifyUsers {
     className: string = "NotifyUsers"
@@ -10,18 +11,16 @@ export class NotifyUsers {
     }
     
     async sendEmailToUsers(){
-        const db: Db = new Db()
-
-        const usersMap = new Map<number, string>();
-        
-        (await db.selectAll<Users>("Users")).forEach(element => {
-            usersMap.set(element.id, element.email)
-        });
-
-        this.usersToBeNotified.forEach(element => {
+        this.usersToBeNotified.forEach( async element => {
             // get resOwner email
-        });
+            const subject: string = "We found some available Rents that suits you"
+            const html: string = EmailTemplate.forNotificationOfAvailableRents(element)
+            const emailForm: EmailForm = {from: process.env.SMTP_EMAIL || "???", to: element.toEmail, subject: subject, html: html}
+            const instanceOfEmail = new EmailEngine(emailForm)
 
+            await instanceOfEmail.send()
+            
+        });
     }
 
 }

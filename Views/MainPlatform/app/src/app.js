@@ -74,11 +74,6 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   const urlParams = new URLSearchParams(window.location.search)
   const city = urlParams.get("city") || "Braga"
-  
-  function makeCallBack(data, lat, lng){
-
-      
-}
 
   function mountPage(data){
     var locations = data.locations
@@ -300,19 +295,19 @@ import MarkerClusterer from '@google/markerclustererplus';
     }
   }
   
-  /*nrAnon.addEventListener('change', (event) => {
+  nrAnon.addEventListener('change', (event) => {
   
     switch(parseInt(nrAnon.value)){
       case 0: nrAnon.value = 1; break;
       case 1: nrAnon.value = 0; break;
     }
   
-  })*/
+  })
   
   function displayMap(cityCoords) {
     const mapOptions = {
       // change here city coords
-        center: { lat: cityCoords.lat, lng: cityCoords.lng },
+        center: { lat: parseFloat(cityCoords.lat), lng: parseFloat(cityCoords.lng) },
   
     // zoom must be adapted to user search
     /* TODO:

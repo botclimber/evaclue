@@ -7,6 +7,7 @@ const Reviews = require('./model/Review.js')
 const ResidenceOwners = require("./model/ResidenceOwner.js")
 const conv = require("./convertLocation.js")
 const fh = require("./fileHandler.js")
+const Validator = require("./Validator.js")
 
 module.exports = class Helper extends Db{
 	constructor(ws){
@@ -125,6 +126,8 @@ module.exports = class Helper extends Db{
 	 * @param {*} data
 	 */
 	createReview(lat, lng, data){
+		console.log("data:")
+		console.log(data)
 
 		//Reviews.addReview(review)
 		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [lat, lng], operator: "and"})
@@ -132,7 +135,17 @@ module.exports = class Helper extends Db{
 
 			if(res.length) { // for this case if existing, expects only one record
 				console.log("Address with id: "+res[0].id+" already registed ...")
-				this.#setupResReview(res[0].id,data, res[0].lat, res[0].lng)
+
+				Validator.multipleReviews(this, {userId: data.userId, addressId: res[0].id})
+				.then(resultFromValidator => {
+
+					if(!resultFromValidator)
+						this.#setupResReview(res[0].id, data, res[0].lat, res[0].lng)
+					
+					else
+						this.ws.status(403).send(JSON.stringify({msg: 'You already made a review for this location. Wait until you are able to review it again.'}))
+				})
+				.catch(err => console.log(err))
 
 			}else{
 				console.log("None existing address, registering it ...")

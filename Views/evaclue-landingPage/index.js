@@ -89,20 +89,14 @@ app.all(
  * serve main platform when trying to request root endpoint
  */
 
-app.get("/", function (req, res) {
+/*app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "/static/index.html"));
-});
+});*/
 
-/*app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, "/static/index.html"))
-})*/
-
-/* for dev purposes
-
-
+//for dev purposes
 app.get('/', function(req, res) {
   res.redirect("http://localhost:8080/")
-})*/
+})
 
 
 // for PROD

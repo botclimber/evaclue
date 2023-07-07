@@ -79,7 +79,7 @@ module.exports = class DB{
 		console.log('Checking if record exists in db ...')
 
 		const check = chgConfig.columns.map( (value, key) => value+' = ?').join(' '+chgConfig.operator+' ')
-		const sql = 'SELECT id FROM '+chgConfig.tableName+' WHERE '+check
+		const sql = 'SELECT * FROM '+chgConfig.tableName+' WHERE '+check
 
 		console.log("[SQL - EXISTS]: "+sql)
 		const res = await this.con.promise().execute(sql, chgConfig.values)
@@ -95,6 +95,23 @@ module.exports = class DB{
 		console.log("[SQL - SELECTONE]: "+sql)
 		const res = await this.con.promise().execute(sql, [id])
 		return res[0][0]
+	}
+
+	/**
+	 * 
+	 * @param {String} tableName 
+	 * @param {Object} Params {field, value}
+	 * @returns 
+	 */
+	async selectAllByParam(tableName, Params){
+
+		console.log(`Getting data from ${tableName} where ${Params.field} is ${Params.value}`)
+
+		const sql = `SELECT * FROM ${tableName} WHERE ${Params.field} = ${this.#sqlValuesTypeSafer(Params.value)}`
+
+		console.log("[SQL - SELECTONE]: "+sql)
+		const res = await this.con.promise().execute(sql)
+		return res[0]
 	}
 
 

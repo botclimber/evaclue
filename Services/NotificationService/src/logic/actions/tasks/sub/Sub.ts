@@ -3,8 +3,8 @@ import {Db} from "../../../../Db/Db"
 import {EmailForm, Sub} from "../../../types/typeModels"
 import date from "date-and-time"
 import fs from "fs"
-import { EmailTemplate } from "../../travis_sendEmail/EmailTemplate"
-import { EmailEngine } from "../../travis_sendEmail/EmailEngine"
+import { EmailTemplate } from "../../sendEmail/EmailTemplate"
+import { EmailEngine } from "../../sendEmail/EmailEngine"
 
 export class Subs{
     className: string = "Subs"

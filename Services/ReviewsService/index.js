@@ -7,7 +7,8 @@ const app = express()
 const port = process.env.PORT
 const actions = require("./src/actions.js")
 const th = require("./src/tokenHandler.js") // token handler
-const sh = require("./src/scheduler/residenceFilters/filter-job.js")
+
+require("./src/scheduler/residenceFilters/filter-job.js")
 
 const revPath = "/reviews/v1"
 
@@ -24,7 +25,9 @@ app.get(`${revPath}/`, (req, res) => {
 
 app.get(`${revPath}/search`, (req, res) => {
 
-  const address = {city: req.query.city || "Porto", street: req.query.street || "", buildingNumber: req.query.nr || "", onlyAppr: req.query.onlyAppr || 1}
+  console.log("Search:")
+  console.log(req)
+  const address = {city: req.query.city, street: req.query.street || "", buildingNumber: req.query.nr || "", onlyAppr: req.query.onlyAppr || 1}
   actions.actions(res).search(address)
 })
 

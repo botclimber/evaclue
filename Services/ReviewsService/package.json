@@ -4,9 +4,9 @@
   "description": "service to manage user reviews",
   "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config index.js",
+    "start": "node index.js",
     "test": "test",
-    "seed": "node -r dotenv/config db/seed.js"
+    "seed": "node db/seed.js"
   },
   "author": "botclimber",
   "license": "ISC",

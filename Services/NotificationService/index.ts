@@ -1,16 +1,17 @@
 import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import {Subs} from './src/logic/actions/travis_tasks/travis_sub/Sub'
+import {Subs} from './src/logic/actions/tasks/sub/Sub'
 import date from "date-and-time"
 
 import * as types from './src/logic/types/typeModels' // interface types
 import { tokenHandler } from './src/logic/checks/tokenHandler/tokenHandler';
-import { ContactResOwnerClass } from './src/logic/actions/travis_tasks/travis_contactResOwner/ContactResOwnerClass';
+import { ContactResOwnerClass } from './src/logic/actions/tasks/contactResOwner/ContactResOwnerClass';
 import { tokenReader } from './src/logic/checks/tokenReader/tokenReader';
-import { EmailEngine } from './src/logic/actions/travis_sendEmail/EmailEngine';
-import { EmailTemplate } from './src/logic/actions/travis_sendEmail/EmailTemplate';
+import { EmailEngine } from './src/logic/actions/sendEmail/EmailEngine';
+import { EmailTemplate } from './src/logic/actions/sendEmail/EmailTemplate';
 import { EmailClassValidator } from './src/logic/checks/checkInput/checkInput';
+import { NotifyUsers } from './src/logic/actions/tasks/massivelyEmail/NotifyUsers';
 
 const app: Express = express();
 app.use(bodyParser.json())
@@ -108,6 +109,21 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
   }
 
 });
+
+app.post(`/${service}/${v}/notifyUsers`, async (req: Request, res: Response) => {
+  try{
+    const data: types.AvailableRents[] = req.body.data
+    const notifyUsers: NotifyUsers = new NotifyUsers(data)
+
+    await notifyUsers.sendEmailToUsers()
+
+    res.status(202).json({msg:"Notification of available rents by email process complete."})
+    
+  }catch(err){
+    console.log(err); 
+    res.status(500).json({msg:"Some Internal Error"})
+  }
+})
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

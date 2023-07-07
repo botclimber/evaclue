@@ -13,3 +13,6 @@ node_modules
 
 # ignore all user images unless default.gif
 **/userImages/user-*.gif
+
+# ignore all residence proof files
+**/resProofFiles/userProofOfRes-*.pdf

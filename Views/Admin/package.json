@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "node-cmd": "^5.0.0",
     "vite": "^4.0.0"
   }
 }

@@ -196,6 +196,9 @@ module.exports = {
   - install gulp cli
     - `npm install --global gulp-cli`
 
+  - install webpack globaly
+    - `npm install -g webpack-dev-server`
+
   - install packages for all services/views:
     - `gulp build`
 
@@ -203,8 +206,10 @@ module.exports = {
     - `npm install pm2 -g`
 
   - To start Project (will run services and views):
-
     - `pm2 start system.config.js`
+
+  - To open monitor page of pm2:
+    - `pm2 monitor`
 
 ## Architecture:
 ![Screenshot](imgs/ev.png)

@@ -187,20 +187,28 @@ module.exports = {
 
 ```
 
-- Install all dependencies:
+- Install all dependencies (run commands in the root folder):
 
-  - install gulp
+  - install packages
+    - `npm install`
+
+  - install gulp cli
     - `npm install --global gulp-cli`
-  - go to the root dir of project (evaclue/) and run command:
 
+  - install webpack globaly
+    - `npm install -g webpack-dev-server`
+
+  - install packages for all services/views:
     - `gulp build`
 
-  - install pm2
+  - install pm2 globaly
     - `npm install pm2 -g`
 
-- Start Project:
-  - run:
+  - To start Project (will run services and views):
     - `pm2 start system.config.js`
+
+  - To open monitor page of pm2:
+    - `pm2 monitor`
 
 ## Architecture:
 ![Screenshot](imgs/ev.png)

@@ -14,5 +14,8 @@
     "express-http-proxy": "^1.6.3",
     "http": "^0.0.1-security",
     "https": "^1.0.0"
+  },
+  "devDependencies": {
+    "node-cmd": "^5.0.0"
   }
 }

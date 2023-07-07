@@ -22,7 +22,7 @@ claimResidenceBtn.addEventListener("click", async (event) => {
     if( ((resLat.value !== "" && resLng.value !== "") || resCity.value !=="" && resStreet.value !== "" && resBNumber.value !== "" ) && (resFloor.value !== "" && resSide.value !== "" && fileProof.files[0] && (resFreeNo.checked || resFreeYes.checked))){
 
         console.log(fileProof.files)
-        const free = (resFreeNo.checked )? 0 : 1
+        const free = (resFreeNo.checked )? 1 : 0
 
         const data = {
             resLat: resLat.value,

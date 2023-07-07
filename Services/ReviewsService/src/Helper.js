@@ -191,6 +191,9 @@ module.exports = class Helper extends Db{
 			conv.getLatLng({city: city})
 			.then(res => {
 				
+				console.log("Handling File ...")
+				fh.fileHandler(files, fileName, process.env.DIRNAME)
+
 				// create residenceOwner
 				console.log("Creating residenceOwner row ...")
 				console.log(input.userId, input.userName, input.userImage, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
@@ -210,14 +213,19 @@ module.exports = class Helper extends Db{
 		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [input.resLat, input.resLng], operator: "and"})
 		.then(res => {
 
-			console.log("Handling File ...")
-			fh.fileHandler(files, fileName, process.env.DIRNAME)
-
 			if(res.length) { // for this case if existing, expects only one record
 				console.log("Address with id: "+res[0].id+" already registed ...")
 
-				console.log("calling residence owner handler ...")
-				return cResidenceOwner(res[0].id, res[0].city, fileName)
+				this.exists({tableName: "ResidenceOwners", columns: ["userId", "addressId"], values: [input.userId, res[0].id], operator: "and"})
+				.then( _ => {
+					
+					if( !(_.length)){
+						console.log("calling residence owner handler ...")
+						return cResidenceOwner(res[0].id, res[0].city, fileName)
+					
+					}else
+						this.ws.status(409).send(JSON.stringify({msg: 'You already claimed this location, wait for it to be approved or re-assigned'}))
+				})
 
 			}else{
 				// create address and residenceOwner record

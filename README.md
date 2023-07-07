@@ -167,7 +167,7 @@ module.exports = {
 
     {
       name: "MainPlatform",
-      cwd: "./Views/MapsView/app/",
+      cwd: "./Views/MainPlatform/app/",
       script: "startscript.js",
     },
 
@@ -179,27 +179,31 @@ module.exports = {
 
     {
       name: "AdminPlatform",
-      cwd: "./Views/Admin/root/rentify-admin/",
+      cwd: "./Views/Admin/",
       script: "startscript.js",
     },
   ],
 };
 
+
 ```
 
-- Install all dependencies:
+- Install all dependencies (run commands in the root folder):
 
-  - install gulp
+  - install packages
+    - `npm install`
+
+  - install gulp cli
     - `npm install --global gulp-cli`
-  - go to the root dir of project (evaclue/) and run command:
 
+  - install packages for all services/views:
     - `gulp build`
 
-  - install pm2
+  - install pm2 globaly
     - `npm install pm2 -g`
 
-- Start Project:
-  - run:
+  - To start Project (will run services and views):
+
     - `pm2 start system.config.js`
 
 ## Architecture:

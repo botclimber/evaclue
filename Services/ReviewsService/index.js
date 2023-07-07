@@ -7,7 +7,8 @@ const app = express()
 const port = process.env.PORT
 const actions = require("./src/actions.js")
 const th = require("./src/tokenHandler.js") // token handler
-const sh = require("./src/scheduler/residenceFilters/filter-job.js")
+
+require("./src/scheduler/residenceFilters/filter-job.js")
 
 const revPath = "/reviews/v1"
 

@@ -1,4 +1,5 @@
 const schedule = require("node-schedule")
+const axios = require("axios")
 const act = require("../../actions.js")
 
 /**
@@ -47,16 +48,26 @@ sendNotOnFilter = async () => {
     console.log(usersToBeNotified)
 
     console.log("\n sending request to Notification Service ...")
-    // TODO: make the request to the notification services with the already prepared data, then on the notification services create the message template and massive sent it to users
-    
-
+    await axios
+        .post(`http://localhost:${process.env.not_PORT}/notifications/v1/notifyUsers`, {data: usersToBeNotified}, { headers: {"Content-Type": "application/json"}} )
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
 }
 
-sendNotOnFilter()
+const rule = new schedule.RecurrenceRule();
 
-/*const rule = new schedule.RecurrenceRule();
+/**
+ * runs on monday, wednesday and saturday
+ */
 rule.dayOfWeek = [1,3,6];
 rule.hour = 20;
 rule.minute = 0;
 
-schedule.scheduleJob(rule, async function(){ await sendNotOnFilter() });*/
+/* For test purposes
+
+rule.dayOfWeek = [0, new schedule.Range(4, 6)];
+rule.hour = 18;
+rule.minute = 45;
+*/
+
+schedule.scheduleJob(rule, async function(){ await sendNotOnFilter() });

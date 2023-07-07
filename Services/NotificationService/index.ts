@@ -110,8 +110,7 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
 
 });
 
-app.post(`/${service}/${v}/NotifyUsers`, async (req: Request, res: Response) => {
-
+app.post(`/${service}/${v}/notifyUsers`, async (req: Request, res: Response) => {
   try{
     const data: types.AvailableRents[] = req.body.data
     const notifyUsers: NotifyUsers = new NotifyUsers(data)
@@ -124,7 +123,6 @@ app.post(`/${service}/${v}/NotifyUsers`, async (req: Request, res: Response) => 
     console.log(err); 
     res.status(500).json({msg:"Some Internal Error"})
   }
-   
 })
 
 app.listen(port, () => {

@@ -15,14 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
-const Sub_1 = require("./src/logic/actions/travis_tasks/travis_sub/Sub");
+const Sub_1 = require("./src/logic/actions/tasks/sub/Sub");
 const date_and_time_1 = __importDefault(require("date-and-time"));
 const tokenHandler_1 = require("./src/logic/checks/tokenHandler/tokenHandler");
-const ContactResOwnerClass_1 = require("./src/logic/actions/travis_tasks/travis_contactResOwner/ContactResOwnerClass");
+const ContactResOwnerClass_1 = require("./src/logic/actions/tasks/contactResOwner/ContactResOwnerClass");
 const tokenReader_1 = require("./src/logic/checks/tokenReader/tokenReader");
-const EmailEngine_1 = require("./src/logic/actions/travis_sendEmail/EmailEngine");
-const EmailTemplate_1 = require("./src/logic/actions/travis_sendEmail/EmailTemplate");
+const EmailEngine_1 = require("./src/logic/actions/sendEmail/EmailEngine");
+const EmailTemplate_1 = require("./src/logic/actions/sendEmail/EmailTemplate");
 const checkInput_1 = require("./src/logic/checks/checkInput/checkInput");
+const NotifyUsers_1 = require("./src/logic/actions/tasks/massivelyEmail/NotifyUsers");
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
@@ -94,6 +95,18 @@ app.post("/" + service + "/" + v + "/emToOwner", (req, res) => __awaiter(void 0,
                 // send response with error message
                 res.status(500).json({ msg: "Something went wrong when trying to send email ?!" });
         }
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "Some Internal Error" });
+    }
+}));
+app.post(`/${service}/${v}/notifyUsers`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = req.body.data;
+        const notifyUsers = new NotifyUsers_1.NotifyUsers(data);
+        yield notifyUsers.sendEmailToUsers();
+        res.status(202).json({ msg: "Notification of available rents by email process complete." });
     }
     catch (err) {
         console.log(err);

@@ -16,8 +16,8 @@ exports.Subs = void 0;
 const Db_1 = require("../../../../Db/Db");
 const date_and_time_1 = __importDefault(require("date-and-time"));
 const fs_1 = __importDefault(require("fs"));
-const EmailTemplate_1 = require("../../travis_sendEmail/EmailTemplate");
-const EmailEngine_1 = require("../../travis_sendEmail/EmailEngine");
+const EmailTemplate_1 = require("../../sendEmail/EmailTemplate");
+const EmailEngine_1 = require("../../sendEmail/EmailEngine");
 class Subs {
     constructor(email) {
         this.className = "Subs";

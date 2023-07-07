@@ -11,6 +11,10 @@ export class NotifyUsers {
     }
     
     async sendEmailToUsers(){
+
+        try {
+
+        console.log("Sending notification email to all users ...")
         this.usersToBeNotified.forEach( async element => {
             // get resOwner email
             const subject: string = "We found some available Rents that suits you"
@@ -21,6 +25,11 @@ export class NotifyUsers {
             await instanceOfEmail.send()
             
         });
+
+        }catch(err){
+            console.log(err)
+            throw err
+        }
     }
 
 }

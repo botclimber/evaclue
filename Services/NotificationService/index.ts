@@ -11,6 +11,7 @@ import { tokenReader } from './src/logic/checks/tokenReader/tokenReader';
 import { EmailEngine } from './src/logic/actions/sendEmail/EmailEngine';
 import { EmailTemplate } from './src/logic/actions/sendEmail/EmailTemplate';
 import { EmailClassValidator } from './src/logic/checks/checkInput/checkInput';
+import { NotifyUsers } from './src/logic/actions/tasks/massivelyEmail/NotifyUsers';
 
 const app: Express = express();
 app.use(bodyParser.json())
@@ -110,6 +111,19 @@ app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => 
 });
 
 app.post(`/${service}/${v}/NotifyUsers`, async (req: Request, res: Response) => {
+
+  try{
+    const data: types.AvailableRents[] = req.body.data
+    const notifyUsers: NotifyUsers = new NotifyUsers(data)
+
+    await notifyUsers.sendEmailToUsers()
+
+    res.status(202).json({msg:"Notification of available rents by email process complete."})
+    
+  }catch(err){
+    console.log(err); 
+    res.status(500).json({msg:"Some Internal Error"})
+  }
    
 })
 

@@ -70,7 +70,7 @@ export default{
 
                 <tr v-for="row of allData" :key="row.id">
                   <td>
-                    <img style="width:50px;height:50px" :src="'http://localhost/images/userImages/'+row.userImg"/>
+                    <img style="width:50px;height:50px" :src="+apis.mainPlatform+'/images/userImages/'+row.userImg"/>
                   </td>
                   <td>{{row.userName}}</td>
                   <td><a :href="'src/assets/images/resProofFiles/'+row.fileProof" target="_blank">{{row.fileProof}}</a> </td>

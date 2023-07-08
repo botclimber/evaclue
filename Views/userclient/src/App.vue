@@ -29,7 +29,7 @@ export default {
   name: "app",
   setup() {
     return {
-      evacluePage: 'http://localhost',
+      evacluePage: 'http://localhost/',
     };
   },
 };

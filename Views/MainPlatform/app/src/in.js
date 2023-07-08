@@ -3,9 +3,13 @@
 /**
    * global http values
    */
-const authPage = "http://localhost:8081"
-const reviewsService = "http://localhost/reviews/v1"
-const userService = "http://localhost"
+const domain = "http://localhost"
+const loginPage_PORT = 8011
+
+const authPage = `${domain}:${loginPage_PORT}`
+console.log(authPage)
+const reviewsService = `${domain}/reviews/v1`
+const userService = domain
 
 const tokenName = 't'
 const typeName = "tType"

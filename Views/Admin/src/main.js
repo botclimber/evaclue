@@ -1,9 +1,15 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 
+const domain = "http://localhost"
+const loginPage_PORT = 8011
+const mainPage_PORT = 8010
+
 const apis = {
-  reviewsApi: "http://localhost/reviews/v1",
-  usersApi: "http://localhost"
+  loginPage: `${domain}:${loginPage_PORT}`,
+  mainPlatform: `${domain}:${mainPage_PORT}`,
+  reviewsApi: `${domain}/reviews/v1`,
+  usersApi: domain
 }
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -31,7 +37,7 @@ async function authVerification (){
 
       .mount('#app')
 
-    }else window.location.href = "http://localhost:8081/"
+    }else window.location.href = `${domain}:${loginPage_PORT}`
 }
 
 authVerification()

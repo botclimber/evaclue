@@ -121,7 +121,7 @@ export default defineComponent({
           // redirect to evaclue home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = process.env.domain+":"+process.env.mainPage_PORT+"/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
+          window.location.href = "http://localhost:8010/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
         })
         .catch((error) => {
           this.qResponse = error["response"].data.message

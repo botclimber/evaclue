@@ -54,7 +54,7 @@ export default {
     },
 
     logout(){
-      window.location.href = `${domain}:${loginPage_PORT}`
+      window.location.href = this.apis.loginPage
     }
 
   },

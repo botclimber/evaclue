@@ -8,9 +8,6 @@
  *  t       token
  *  uId     user id
  * 
- *  authPage = "http://localhost:8081"
- *  reviewsService = "http://localhost:8000"
- *  userService = "http://localhost:8001"
  */ 
 
 const proImg = document.getElementById("profileImage")

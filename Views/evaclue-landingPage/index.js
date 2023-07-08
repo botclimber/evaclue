@@ -22,7 +22,7 @@ const adminPage = `${process.env.domain}:${process.env.adminPage_PORT}`
 
 const port = process.env.PORT;
 
-app.use(express.static(__dirname + "/static"));
+//app.use(express.static(__dirname + "/static"));
 
 /*app.use("/not/*", (req, res) => {
   const url = req.baseUrl.replace("/not","")
@@ -32,6 +32,12 @@ app.use(express.static(__dirname + "/static"));
 
   return proxy(fullUrl) 
 })*/
+
+app.get('/', function(req, res) {
+
+  console.log(mainPlatform)
+  res.redirect(mainPlatform)
+})
 
 app.all(
   "/notifications/v1/*",
@@ -97,12 +103,6 @@ app.all(
 /*app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "/static/index.html"));
 });*/
-
-//for dev purposes
-app.get('/', function(req, res) {
-  res.redirect(mainPlatform)
-})
-
 
 // for PROD
 /*https.createServer(options, app).listen(port, function(){

@@ -15,17 +15,30 @@ Platform for house rent reviews
 - For Windows Machine check second example of the file
 
 ```
-const notPort = 8002
-const landPort = 80
-const revPort = 8000
-const userPort = 8001
+const domain = "http://localhost"
+
+/* 
+if VIEWS ports are changed here, you also need 
+to change it on the correct location.
+*/
+const mainPlatformPort = 8010 
+const loginPagePort = 8011
+const adminPlatformPort = 8012
+
+const revPort   = 8000
+const userPort  = 8001
+const notPort   = 8002
+const landPort  = 80
 
 module.exports = {
     apps : [
         {
             name   : "NotService",
             script : "./Services/NotificationService/index.js",
+            watch: true,
             env: {
+                "domain": domain,
+                "mainPage_PORT": mainPlatformPort,
                 "PORT": notPort,
                 "SMTP_EMAIL": "supp.evaclue@gmail.com",
                 "SMTP_HOST": "smtp.gmail.com",
@@ -68,33 +81,41 @@ module.exports = {
         {
             name   : "landPage",
             script : "./Views/evaclue-landingPage/index.js",
+            watch: true,
             env: {
+                "domain": domain,
                 "PORT": landPort,
                 "not_PORT": notPort,
                 "rev_PORT": revPort,
-                "user_PORT": userPort
+                "user_PORT": userPort,
+                "mainPage_PORT": mainPlatformPort,
+                "loginPage_PORT": loginPagePort,
+                "adminPage_PORT": adminPlatformPort
             }
         },
 
         {
             name   : "MainPlatform",
-            cwd    : "./Views/MapsView/app",
+            cwd    : "./Views/MainPlatform/app",
             script : "npm",
-            args   : "start"
+            args   : "start",
+            watch  : true,
         },
 
         {
             name   : "authPage",
             cwd    : "./Views/userclient",
             script : "npm",
-            args   : "run serve"
+            args   : "run serve",
+            watch  : true,
         },
 
         {
             name   : "AdminPlatform",
             cwd    : "./Views/Admin",
             script : "npm",
-            args   : "run dev"
+            args   : "run dev",
+            watch  : true
         },
 
     ]

@@ -126,16 +126,27 @@ module.exports = {
 
 ```
 
-const notPort = 8002;
-const landPort = 80;
+const domain = "http://localhost";
+
+/* 
+if VIEWS ports are changed here, you also need 
+to change it on the correct location.
+*/
+const mainPlatformPort = 8010;
+const loginPagePort = 8011;
+const adminPlatformPort = 8012;
+
 const revPort = 8000;
 const userPort = 8001;
+const notPort = 8002;
+const landPort = 80;
 
 module.exports = {
   apps: [
     {
       name: "NotService",
       script: "./Services/NotificationService/index.js",
+      watch: true,
       env: {
         PORT: notPort,
         SMTP_EMAIL: "supp.evaclue@gmail.com",
@@ -180,34 +191,41 @@ module.exports = {
       name: "landPage",
       cwd: "./Views/evaclue-landingPage/",
       script: "startscript.js",
+      watch: true,
       env: {
-        PORT: landPort,
-        not_PORT: notPort,
-        rev_PORT: revPort,
-        user_PORT: userPort,
-      },
+        "domain": domain,
+        "PORT": landPort,
+        "not_PORT": notPort,
+        "rev_PORT": revPort,
+        "user_PORT": userPort,
+        "mainPage_PORT": mainPlatformPort,
+        "loginPage_PORT": loginPagePort,
+        "adminPage_PORT": adminPlatformPort
+    }
     },
 
     {
       name: "MainPlatform",
       cwd: "./Views/MainPlatform/app/",
       script: "startscript.js",
+      watch: true,
     },
 
     {
       name: "authPage",
       cwd: "./Views/userclient/",
       script: "startscript.js",
+      watch: true,
     },
 
     {
       name: "AdminPlatform",
       cwd: "./Views/Admin/",
       script: "startscript.js",
+      watch: true,
     },
   ],
 };
-
 
 ```
 

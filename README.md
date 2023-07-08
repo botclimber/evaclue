@@ -40,6 +40,7 @@ module.exports = {
             watch: true,
             env: {
                 "PORT": revPort,
+                "not_PORT": notPort,
                 "DB_HOST": "localhost",
                 "DB_USER": "root",
                 "DB_PASSWORD": "",
@@ -129,6 +130,7 @@ module.exports = {
       watch: true,
       env: {
         PORT: revPort,
+        not_PORT: notPort,
         DB_HOST: "localhost",
         DB_USER: "root",
         DB_PASSWORD: "admin",

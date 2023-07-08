@@ -54,7 +54,7 @@ export default {
     },
 
     logout(){
-      window.location.href = "http://localhost:8081/"
+      window.location.href = `${domain}:${loginPage_PORT}`
     }
 
   },

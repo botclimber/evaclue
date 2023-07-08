@@ -145,9 +145,10 @@ export class EmailTemplate {
     }
 
     static forNotificationOfAvailableRents(input: AvailableRents): string{
-      const url = "http://localhost:8080"
+      const url = `${process.env.domain}:${process.env.mainPage_PORT}`
 
       const options: available[] = input.available
+      const totOptions = options.length
       const buildTable = options.map(element => {
         return `<tr class="trBootstrap"><td class="tdBootstrap"><a href="${url}/mainPage.html?city=${element.city}">${element.city}</a><p>${element.street}, nr ${element.nr}</p><span>${element.rentPrice} eur/month</span></td></tr>`
       }) 
@@ -470,7 +471,7 @@ export class EmailTemplate {
         <tr>
           <td style="padding:36px 30px 42px 30px;">
             <h2>Evaclue Rent Alerts</h2>
-            <h4>We found 30 available Rents:</h4>
+            <h4>We found ${totOptions} available Rents:</h4>
             <table class="tableBootstrap" role="presentation">
               ${buildTable}
             </table>

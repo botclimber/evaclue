@@ -15,6 +15,11 @@ const NotificationsServer = `http://localhost:${process.env.not_PORT}`;
 const ReviewsServer = `http://localhost:${process.env.rev_PORT}`;
 const UsersServer = `http://localhost:${process.env.user_PORT}`;
 
+//Views
+const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`
+const loginPage = `${process.env.domain}:${process.env.loginPage_PORT}`
+const adminPage = `${process.env.domain}:${process.env.adminPage_PORT}`
+
 const port = process.env.PORT;
 
 app.use(express.static(__dirname + "/static"));
@@ -95,7 +100,7 @@ app.all(
 
 //for dev purposes
 app.get('/', function(req, res) {
-  res.redirect("http://localhost:8080/")
+  res.redirect(mainPlatform)
 })
 
 

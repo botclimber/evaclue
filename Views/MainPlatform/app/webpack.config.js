@@ -24,6 +24,7 @@ const CONFIG = {
     app: './src/app.js'
   },
   devServer: {
+    port: 8010,
     static: path.join(__dirname, 'src')
   }
 };

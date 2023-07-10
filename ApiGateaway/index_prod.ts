@@ -1,24 +1,22 @@
 import proxy from "express-http-proxy";
-import http from "http";
+import https from "https";
 import express, { Express, NextFunction, Request, Response } from 'express';
+import fs from "fs";
+import path from "path";
 
 const app: Express = express();
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/evaclue.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/evaclue.com/cert.pem'),
+}
 
 // Services
 const NotificationsServer = `${process.env.domain}:${process.env.not_PORT}`;
 const ReviewsServer = `${process.env.domain}:${process.env.rev_PORT}`;
 const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
 
-// Views
-const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`
-const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`
-const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`
-
-app.get('/', function(req, res) {
-
-  console.log(mainPlatform)
-  res.redirect(mainPlatform)
-})
+app.use('/', express.static(path.join(__dirname, "../Views/MainPlatform/app/dist/")));
 
 app.all(
   "/notifications/v1/*",
@@ -77,8 +75,8 @@ app.all(
   })
 );
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 443;
 
-http.createServer(app).listen(port, function () {
+https.createServer(options, app).listen(port, function(){
   console.log("Express server listening on port " + port);
 });

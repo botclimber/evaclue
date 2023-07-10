@@ -4,21 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_http_proxy_1 = __importDefault(require("express-http-proxy"));
-const http_1 = __importDefault(require("http"));
+const https_1 = __importDefault(require("https"));
 const express_1 = __importDefault(require("express"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
+const options = {
+    key: fs_1.default.readFileSync('/etc/letsencrypt/live/evaclue.com/privkey.pem'),
+    cert: fs_1.default.readFileSync('/etc/letsencrypt/live/evaclue.com/cert.pem'),
+};
 // Services
 const NotificationsServer = `${process.env.domain}:${process.env.not_PORT}`;
 const ReviewsServer = `${process.env.domain}:${process.env.rev_PORT}`;
 const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
-// Views
-const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`;
-const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`;
-const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`;
-app.get('/', function (req, res) {
-    console.log(mainPlatform);
-    res.redirect(mainPlatform);
-});
+app.use('/', express_1.default.static(path_1.default.join(__dirname, "../Views/MainPlatform/app/dist/")));
 app.all("/notifications/v1/*", (0, express_http_proxy_1.default)(NotificationsServer, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -64,7 +63,7 @@ app.all("/user/*", (0, express_http_proxy_1.default)(UsersServer, {
         }
     },
 }));
-const port = process.env.PORT || 80;
-http_1.default.createServer(app).listen(port, function () {
+const port = process.env.PORT || 443;
+https_1.default.createServer(options, app).listen(port, function () {
     console.log("Express server listening on port " + port);
 });

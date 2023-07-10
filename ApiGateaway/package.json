@@ -4,7 +4,8 @@
   "description": "some middleware service for security reasons and routing before acessing main services",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "dev": "node index.js",
+    "prod": "node index_prod.js",
     "compile": "npx tsc",
     "test": "test"
   },

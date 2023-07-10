@@ -28,10 +28,27 @@ const adminPlatformPort = 8012
 const revPort   = 8000
 const userPort  = 8001
 const notPort   = 8002
-const landPort  = 80
+
+const apiPORT = 80
+
 
 module.exports = {
     apps : [
+        {
+            name   : "ApiGateaway",
+            script : "./ApiGateaway/index.js",
+            watch: true,
+            env: {
+                "domain": domain,
+                "PORT": apiPORT,
+                "not_PORT": notPort,
+                "rev_PORT": revPort,
+                "user_PORT": userPort,
+                "mainPage_PORT": mainPlatformPort,
+                "loginPage_PORT": loginPagePort,
+                "adminPage_PORT": adminPlatformPort
+            }
+        },
         {
             name   : "NotService",
             script : "./Services/NotificationService/index.js",
@@ -56,11 +73,11 @@ module.exports = {
                 "not_PORT": notPort,
                 "DB_HOST": "localhost",
                 "DB_USER": "root",
-                "DB_PASSWORD": "",
+                "DB_PASSWORD": "greedisgood",
                 "DB_NAME": "evaclue_db",
                 "APIKEY": "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ",
                 "SECRET": "greedisgood",
-                "DIRNAME": ""
+                "DIRNAME": "/Users/danielsilva/Documents/evaclue/Views/Admin/src/assets/images/resProofFiles/"
             }
         },
         {
@@ -71,26 +88,10 @@ module.exports = {
                 "SERVER_PORT": userPort,
                 "DB_HOST": "localhost",
                 "DB_USER": "root",
-                "DB_PASSWORD": "",
+                "DB_PASSWORD": "greedisgood",
                 "DB_NAME": "evaclue_db",
                 "JWT_SECRET": "greedisgood",
-                "DIRNAME": ""
-            }
-        },
-
-        {
-            name   : "landPage",
-            script : "./Views/evaclue-landingPage/index.js",
-            watch: true,
-            env: {
-                "domain": domain,
-                "PORT": landPort,
-                "not_PORT": notPort,
-                "rev_PORT": revPort,
-                "user_PORT": userPort,
-                "mainPage_PORT": mainPlatformPort,
-                "loginPage_PORT": loginPagePort,
-                "adminPage_PORT": adminPlatformPort
+                "DIRNAME": "/Users/danielsilva/Documents/evaclue/Views/MainPlatform/src/images/userImages/"
             }
         },
 

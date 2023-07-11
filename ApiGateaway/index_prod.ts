@@ -16,6 +16,7 @@ const NotificationsServer = `${process.env.domain}:${process.env.not_PORT}`;
 const ReviewsServer = `${process.env.domain}:${process.env.rev_PORT}`;
 const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
 
+// TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
 app.use('/', express.static(path.join(__dirname, "../Views/MainPlatform/app/dist/")));
 
 app.all(

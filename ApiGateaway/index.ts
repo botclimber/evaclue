@@ -14,6 +14,7 @@ const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`
 const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`
 const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`
 
+// TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
 app.get('/', function(req, res) {
 
   console.log(mainPlatform)

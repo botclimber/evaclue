@@ -1,13 +1,13 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 
-const domain = "http://localhost"
-const loginPage_PORT = "/login"
-const mainPage_PORT = "/"
+const domain = "http://www.evaclue.com"
+const authPage = "/login"
+const mainPage = "/"
 
 const apis = {
-  loginPage: `${domain}:${loginPage_PORT}`,
-  mainPlatform: `${domain}:${mainPage_PORT}`,
+  loginPage: `${domain}${authPage}`,
+  mainPlatform: `${domain}${mainPage}`,
   reviewsApi: `${domain}/reviews/v1`,
   usersApi: domain
 }

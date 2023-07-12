@@ -83,7 +83,7 @@ export default {
                                 </template>
                             </SimpleModal>
                             <td class="py-1">
-                              <button @click="callModal(row.rev.id)"><img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /></button>
+                              <button @click="callModal(row.rev.id)"><img src="../../../public/assets/images/faces-clipart/pic-1.png" alt="image" /></button>
                             </td>
                             <td> {{ row.rev.review }} </td>
                             <td>

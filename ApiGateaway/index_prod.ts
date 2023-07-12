@@ -16,8 +16,33 @@ const NotificationsServer = `${process.env.domain}:${process.env.not_PORT}`;
 const ReviewsServer = `${process.env.domain}:${process.env.rev_PORT}`;
 const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
 
-// TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
-app.use('/', express.static(path.join(__dirname, "../Views/MainPlatform/app/dist/")));
+// Views
+const mainPage: string = "../Views/MainPlatform/app/dist/"
+const adminPage: string = "../Views/Admin/dist/"
+//const authPage: string = "../Views/userclient/dist/"
+
+app.get('/', function(req: Request, res: Response) {
+
+  app.use(express.static(path.join(__dirname, mainPage)));
+
+  res.sendFile(path.join(__dirname, `${mainPage}`))
+})
+
+app.get('/admin', function(req: Request, res: Response) {
+
+  app.use(express.static(path.join(__dirname, adminPage)));
+
+  console.log(req.url)
+  res.sendFile(path.join(__dirname, `${adminPage}`))
+})
+
+/*app.get('/login', function(req: Request, res: Response) {
+
+  app.use(express.static(path.join(__dirname, authPage)));
+
+  console.log(req.url)
+  res.sendFile(path.join(__dirname, `${authPage}`))
+})*/
 
 app.all(
   "/notifications/v1/*",

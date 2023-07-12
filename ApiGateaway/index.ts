@@ -29,7 +29,7 @@ app.get('/login*', function(req: Request, res: Response) {
   res.redirect(`${authPlatform}${url}`)
 })
 
-app.get('/Admin*', function(req: Request, res: Response) {
+app.get('/admin*', function(req: Request, res: Response) {
 
   console.log("serving admin page")
   const url = req.url.substring(6)

@@ -15,10 +15,25 @@ const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`
 const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`
 
 // TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
-app.get('/', function(req, res) {
+app.get('/', function(req: Request, res: Response) {
 
-  console.log(mainPlatform)
-  res.redirect(mainPlatform)
+  console.log("serving to main Platform")
+  const url = req.url
+  res.redirect(`${mainPlatform}${url}`)
+})
+
+app.get('/login*', function(req: Request, res: Response) {
+
+  console.log("serving auth Platform")
+  const url = req.url.substring(6)
+  res.redirect(`${authPlatform}${url}`)
+})
+
+app.get('/Admin*', function(req: Request, res: Response) {
+
+  console.log("serving admin page")
+  const url = req.url.substring(6)
+  res.redirect(`${adminPlatform}${url}`)
 })
 
 app.all(

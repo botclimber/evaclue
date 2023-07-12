@@ -2,8 +2,8 @@ import {createApp} from 'vue'
 import App from './App.vue'
 
 const domain = "http://localhost"
-const loginPage_PORT = 8011
-const mainPage_PORT = 8010
+const loginPage_PORT = "/login"
+const mainPage_PORT = "/"
 
 const apis = {
   loginPage: `${domain}:${loginPage_PORT}`,
@@ -37,7 +37,7 @@ async function authVerification (){
 
       .mount('#app')
 
-    }else window.location.href = `${domain}:${loginPage_PORT}`
+    }else window.location.href = apis.loginPage
 }
 
 authVerification()

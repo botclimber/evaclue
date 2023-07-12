@@ -15,9 +15,21 @@ const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
 const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`;
 const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`;
 const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`;
+// TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
 app.get('/', function (req, res) {
-    console.log(mainPlatform);
-    res.redirect(mainPlatform);
+    console.log("serving to main Platform");
+    const url = req.url;
+    res.redirect(`${mainPlatform}${url}`);
+});
+app.get('/login*', function (req, res) {
+    console.log("serving auth Platform");
+    const url = req.url.substring(6);
+    res.redirect(`${authPlatform}${url}`);
+});
+app.get('/Admin*', function (req, res) {
+    console.log("serving admin page");
+    const url = req.url.substring(6);
+    res.redirect(`${adminPlatform}${url}`);
 });
 app.all("/notifications/v1/*", (0, express_http_proxy_1.default)(NotificationsServer, {
     proxyErrorHandler: function (err, res, next) {

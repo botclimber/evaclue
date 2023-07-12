@@ -4,9 +4,8 @@
    * global http values
    */
 const domain = "http://localhost"
-const loginPage_PORT = 8011
 
-const authPage = `${domain}:${loginPage_PORT}`
+const authPage = `${domain}/login`
 console.log(authPage)
 const reviewsService = `${domain}/reviews/v1`
 const userService = domain

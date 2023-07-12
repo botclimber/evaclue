@@ -2,7 +2,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 
 const domain = "http://www.evaclue.com"
-const authPage = "/auth"
+const authPage = "/login"
 const mainPage = "/"
 
 const apis = {
@@ -37,7 +37,7 @@ async function authVerification (){
 
       .mount('#app')
 
-    }else window.location.href = `${domain}:${loginPage_PORT}`
+    }else window.location.href = apis.loginPage
 }
 
 authVerification()

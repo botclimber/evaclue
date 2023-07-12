@@ -2,9 +2,9 @@
    * global http values
    */
 const domain = "http://localhost"
-const loginPagePath = "auth/"
+const loginPagePath = "/login"
 
-const authPage = `${domain}/${loginPagePath}`
+const authPage = `${domain}${loginPagePath}`
 
 console.log(authPage)
 

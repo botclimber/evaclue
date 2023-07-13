@@ -98,12 +98,13 @@ Create Table Users(
     email varchar(60) not null,
     username varchar(30) not null,
     firstName varchar(30) not null,
-    image varchar(120) not null,
+    image varchar(120),
     lastName varchar(30) not null,
     password varchar(128) not null,
     type varchar(30) not null,
     blocked boolean DEFAULT false,
     verified boolean DEFAULT false,
+    createdAt datetime,
     PRIMARY KEY (id)
 );
 

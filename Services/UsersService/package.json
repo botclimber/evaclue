@@ -2,12 +2,12 @@
   "name": "users",
   "version": "1.0.0",
   "description": "hello world",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "compile": "npx tsc",
-    "start": "node ./src/server.js",
+    "start": "node ./src/app.js",
     "typeorm": "typeorm-ts-node-commonjs",
-    "dev": "nodemon --exec ts-node ./src/server.ts"
+    "dev": "nodemon --exec ts-node ./src/app.ts"
   },
   "author": "",
   "license": "ISC",

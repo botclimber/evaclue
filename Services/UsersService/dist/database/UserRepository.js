@@ -56,7 +56,7 @@ class UserRepository {
     static async Update(user) {
         return new Promise((resolve, reject) => {
             const connection = mysql2_1.default.createConnection(Database_1.Database.Access);
-            connection.query("UPDATE users SET email = ?, password = ?, admin = ? WHERE id = ?", [user.email, user.password, user.admin, user.id], (err, res) => {
+            connection.query("UPDATE users SET email = ?, password = ?, verified = ?, WHERE id = ?", [user.email, user.password, user.verified, user.id], (err, res) => {
                 if (err)
                     reject(err);
                 else

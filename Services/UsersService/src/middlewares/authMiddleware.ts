@@ -30,15 +30,16 @@ export const authMiddleware = async (
   const token = authorization.split(" ")[1];
 
   const { userId, userEmail, userType } = deToken(token)
+
+  if (!userId) {
+    throw new Unauthorized(ErrorMessages.USER_NOT_AUTHORIZED);
+  }
+
   const user = await UserRepository.FindOneById(userId);
 
   if (!user) {
     throw new Unauthorized(ErrorMessages.USER_NOT_AUTHORIZED);
   }
-
-  const { password: _, ...loggedUser } = user;
-
-  //req.user = loggedUser;
 
   next();
 };

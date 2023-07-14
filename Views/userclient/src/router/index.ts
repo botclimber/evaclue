@@ -17,12 +17,12 @@ const routes: Array<RouteRecordRaw> = [
     component: register,
   },
   {
-    path: "/changePassword/:id/:passwordToken",
+    path: "/change-password/:userId/",
     name: "ChangePassword-Form",
     component: changePassword,
   },
   {
-    path: "/recoverPassword",
+    path: "/recover-password/:userId/",
     name: "RecoverPassword-Form",
     component: recoverPassword,
   },

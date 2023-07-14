@@ -1,18 +1,7 @@
 import { NextFunction, Response, Request } from "express";
-import { UploadedFile } from "express-fileupload";
-import dat from "date-and-time"
-import { ErrorMessages } from "../helpers/Constants";
-import { BadRequest, Unauthorized } from "../helpers/ErrorTypes";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import "dotenv/config";
-import { EmailHelper } from "../helpers/EmailHelper";
-import { error } from "console";
-import { UserControllerHelper } from "../helpers/UserControllerHelper";
-import { UserRepository } from "../database/UserRepository";
 import UserService from "../services/UserService";
 import { IUser } from "../models/User";
-import { EmailService } from "../services/EmailService";
 
 type JwtPayload = {
   userId: number,
@@ -42,14 +31,16 @@ export class UserController {
 
   // token in the url is a huge mistake, for now i will just workaround it
   async VerifyUser(req: Request, res: Response, next: NextFunction) {
-    const { authorization } = req.headers;
+    //const { authorization } = req.headers;
+    let { userId ,token } = req.params;
 
-    const token = await UserService.VerifyUser(authorization as string);
+
+    token = await UserService.VerifyUser(userId, token);
     return res.status(200).json(token);
   }
 
   // // TODO: have a proper look on this method
-  async ForgotUserPasswordRequest(req: Request, res: Response, next: NextFunction) {
+  async RecoverPasswordEmail(req: Request, res: Response, next: NextFunction) {
     let { email } = req.params;
 
     const user = UserService.ForgotUserPasswordRequest(email);
@@ -60,14 +51,22 @@ export class UserController {
   // // - have look on this method and adapt it (add try catch scope for token verification)
   async ChangePassword(req: Request, res: Response, next: NextFunction) {
 
-    let { userId, emailToken } = req.params;
+    let { userId } = req.params;
+    
     let { password, oldPassword } = req.body;
+    UserService.ChangePassword(userId, oldPassword, password);
 
-    if (emailToken) {
-      UserService.ChangePasswordWithToken(userId, emailToken, password);
-    } else {
-      UserService.ChangePassword(userId, oldPassword, password);
-    }
+    return res.status(200).json({ msg: "updated  " });
+  }
+
+  // // TODO:
+  // // - have look on this method and adapt it (add try catch scope for token verification)
+  async RecoverPassword(req: Request, res: Response, next: NextFunction) {
+
+    let { userId, emailToken } = req.params;
+    let { password } = req.body;
+
+    UserService.ChangePasswordWithToken(userId, emailToken, password);
 
     return res.status(200).json({ msg: "updated  " });
   }

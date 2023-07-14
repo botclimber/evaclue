@@ -6,7 +6,7 @@ const routes = Router();
 
 routes.get(
     "/changePassword/:email",
-    new UserController().ForgotUserPasswordRequest
+    new UserController().RecoverPasswordEmail
 );
 
 

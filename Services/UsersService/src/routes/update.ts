@@ -4,6 +4,5 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 
 const routes = Router();
 
-routes.put("/verify/:userId/:token", new UserController().VerifyUser);
 
 // routes.put("/profileImg/:userId", authMiddleware, new UserController().updateProfileImg);

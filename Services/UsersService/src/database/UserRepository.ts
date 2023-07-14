@@ -62,8 +62,8 @@ export class UserRepository {
         return new Promise((resolve, reject) => {
             const connection = mysql.createConnection(Database.Access);
             connection.query<OkPacket>(
-                "UPDATE users SET email = ?, password = ?, admin = ?, verified = ?, WHERE id = ?",
-                [user.email, user.password, user.admin, user.verified],
+                "UPDATE users SET email = ?, password = ?, verified = ? WHERE id = ?",
+                [user.email, user.password, user.verified, user.id],
                 (err, res) => {
                     if (err) reject(err)
                     else

@@ -7,7 +7,7 @@ exports.transporter = void 0;
 require("express-async-errors");
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
-const post_1 = __importDefault(require("./routes/post"));
+const Post_1 = __importDefault(require("./routes/Post"));
 const errorMiddleware_1 = require("./middlewares/errorMiddleware");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 require("dotenv/config");
@@ -35,7 +35,7 @@ const corsOptions = {
 app.use(express_1.default.json());
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.use((0, express_fileupload_1.default)());
-app.use("/user", post_1.default);
+app.use("/user", Post_1.default);
 app.use(errorMiddleware_1.errorMiddleware);
 const port = process.env.SERVER_PORT || 7000;
 app.listen(port, () => {

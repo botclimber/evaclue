@@ -4,7 +4,7 @@ const baseURL = "user";
 
 export default {
   login(email: string, password: string) {
-    return Api().post(`${baseURL}/login/platform`, { email, password });
+    return Api().post(`${baseURL}/login`, { email, password });
   },
 
   loginAdmin(email: string, password: string) {
@@ -18,7 +18,7 @@ export default {
     email: string,
     password: string
   ) {
-    return Api().post(`${baseURL}/register/common`, {
+    return Api().post(`${baseURL}/register`, {
       firstName,
       lastName,
       username,
@@ -27,13 +27,13 @@ export default {
     });
   },
 
-  updatePassword(id: number, password: string, token: string) {
-    return Api().post(`${baseURL}/updatePassword/${id}/${token}`, {
+  updatePassword(id: number, password: string) {
+    return Api().post(`${baseURL}/change-password/${id}`, {
       password,
     });
   },
 
-  changePasswordRequest(email: string) {
-    return Api().get(`${baseURL}/changePassword/${email}`);
+  changePasswordRequest(id: string) {
+    return Api().get(`${baseURL}/recover-password/${id}`);
   },
 };

@@ -3,12 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const UserController_1 = require("../controllers/UserController");
 const routes = (0, express_1.Router)();
-routes.post("/register/user", new UserController_1.UserController().registUser);
-routes.post("/login/user", new UserController_1.UserController().loginUser);
+routes.post("/register", new UserController_1.UserController().RegistUser);
+routes.post("/login", new UserController_1.UserController().LoginUser);
+routes.post("/change-password/:userId", new UserController_1.UserController().ChangePassword);
+routes.post("/recover-password/:userId", new UserController_1.UserController().ChangePassword);
+routes.get("/verify/:userId/:token", new UserController_1.UserController().VerifyUser);
 // routes.post("/register/admin", new UserController().registAdmin);
 // routes.post("/login/admin", new UserController().loginAdmin);
-// routes.post(
-//   "/updatePassword/:userId/:emailToken",
-//   new UserController().updateUserPassword
-// );
 exports.default = routes;

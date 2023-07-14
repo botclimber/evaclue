@@ -54,20 +54,22 @@ export default class UserService {
     return token;
   }
 
-  static async VerifyUser(token: string) {
+  static async VerifyUser(userId: string , token: string) {
 
-    const { userId } = await UserService.ParseToken(token)
+    //const { userId } = await UserService.ParseToken(token)
 
     console.log(`verifyUser Request for userId: ${userId}`);
 
-    const user = await UserRepository.FindOneById(userId);
+    const user = await UserRepository.FindOneById(+userId);
+
+    //maybe have a token value in the user table
 
     if (!user) {
       throw new BadRequest("User does not exist");
     }
 
     try {
-      const decodedToken = jwt.verify(token.replaceAll("=", ''), "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"); // if token wrong then triggers the catch exception
+      const decodedToken = jwt.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"); // if token wrong then triggers the catch exception
 
       console.log(decodedToken)
       user.verified = true;

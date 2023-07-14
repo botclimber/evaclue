@@ -44,7 +44,6 @@ export default defineComponent({
       await UserService.updatePassword(
         +this.$route.params.id,
         this.password,
-        this.$route.params.passwordToken as string
       )
         .then((response) => {
           console.log(response.data);

@@ -1,7 +1,7 @@
 import "express-async-errors";
 import express from "express";
 import fileUpload from "express-fileupload";
-import routes from "./routes/post";
+import routes from "./routes/Post";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
 import nodemailer from "nodemailer";

@@ -25,9 +25,8 @@ class EmailService {
         app_1.transporter.sendMail(mailOptions);
     }
     static async SendChangePasswordEmail(user) {
-        var _a;
-        const currentURL = `${process.env.HOST}${process.env.CLIENT_PORT}`;
-        const passwordToken = jsonwebtoken_1.default.sign({ id: user.id }, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "", {
+        const currentURL = `localhost:8011`;
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
             expiresIn: "2h",
         });
         const mailOptions = {
@@ -36,7 +35,7 @@ class EmailService {
             subject: "Change password",
             html: `<p>Hello ${user.firstName} ${user.lastName}! To change your password click on the link below.</p>
           <p>Link expires in 1 hour</p>
-          <p>Click<a href="${currentURL}/changePassword/${user.id}/${passwordToken}" here</a> to change password.</p>`,
+          <p>Click<a href="http://${currentURL}/user/recover-password/confirmation/${token}" here</a> to change password.</p>`,
         };
         app_1.transporter.sendMail(mailOptions);
     }

@@ -88,7 +88,9 @@ export default class UserService {
       "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo") as JwtPayload
   }
 
-  static async ChangePasswordWithToken(userId: string, emailToken: string, password: any) {
+  static async ChangePasswordWithToken(token: string, password: any) {
+
+    const { userId } = await UserService.ParseToken(token)
 
     console.log(`updateUserPassword Request for userId: ${userId}`);
 
@@ -97,8 +99,6 @@ export default class UserService {
     if (!user) {
       throw new BadRequest("User does not exist");
     }
-
-    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "") as JwtPayload; // whats the purpose of this line ? R.:Check if token exists to see if the request is valid
 
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
@@ -132,7 +132,7 @@ export default class UserService {
     await UserRepository.Update(user);
   }
 
-  static async ForgotUserPasswordRequest(email: string) {
+  static async RecoverUserPasswordEmailRequest(email: string) {
     console.log(`changePasswordRequest Request for email: ${email}`);
 
     const user = await UserRepository.FindOneByEmail(email);

@@ -2,8 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import login from "../components/Login.vue";
 import loginAdmin from "../components/LoginAdmin.vue";
 import register from "../components/Register.vue";
-import changePassword from "../components/ChangePassword.vue";
-import recoverPassword from "../components/RecoverPassword.vue";
+import recoverPasswordConfirmation from "../components/RecoverPasswordConfirmation.vue";
+import recoverPasswordRequest from "../components/RecoverPasswordRequest.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,14 +17,14 @@ const routes: Array<RouteRecordRaw> = [
     component: register,
   },
   {
-    path: "/change-password/:userId/",
-    name: "ChangePassword-Form",
-    component: changePassword,
+    path: "/user/recover-password/confirmation/:token",
+    name: "RecoverPasswordConfirmation-Form",
+    component: recoverPasswordConfirmation,
   },
   {
-    path: "/recover-password/:userId/",
-    name: "RecoverPassword-Form",
-    component: recoverPassword,
+    path: "/user/recover-password/request",
+    name: "RecoverPasswordRequest-Form",
+    component: recoverPasswordRequest,
   },
   {
     path: "/user/loginAdmin",

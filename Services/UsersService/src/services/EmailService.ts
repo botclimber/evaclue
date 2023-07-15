@@ -25,11 +25,12 @@ export class EmailService {
   }
 
   static async SendChangePasswordEmail(user: IUser) {
-    const currentURL = `${process.env.HOST}${process.env.CLIENT_PORT}`;
+    const currentURL = `localhost:8011`;
 
-    const passwordToken = jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET ?? "",
+    const token = jwt.sign(
+      { userId: user.id },
+      "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"
+      ,
       {
         expiresIn: "2h",
       }
@@ -41,7 +42,7 @@ export class EmailService {
       subject: "Change password",
       html: `<p>Hello ${user.firstName} ${user.lastName}! To change your password click on the link below.</p>
           <p>Link expires in 1 hour</p>
-          <p>Click<a href="${currentURL}/changePassword/${user.id}/${passwordToken}" here</a> to change password.</p>`,
+          <p>Click<a href="http://${currentURL}/user/recover-password/confirmation/${token}" here</a> to change password.</p>`,
     };
 
     transporter.sendMail(mailOptions);

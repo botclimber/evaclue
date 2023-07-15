@@ -27,9 +27,9 @@ class UserController {
         return res.status(200).json(token);
     }
     // // TODO: have a proper look on this method
-    async RecoverPasswordEmail(req, res, next) {
+    async RecoverUserPasswordEmailRequest(req, res, next) {
         let { email } = req.params;
-        const user = UserService_1.default.ForgotUserPasswordRequest(email);
+        const user = UserService_1.default.RecoverUserPasswordEmailRequest(email);
         return res.status(200).json(user);
     }
     // // TODO:
@@ -42,10 +42,9 @@ class UserController {
     }
     // // TODO:
     // // - have look on this method and adapt it (add try catch scope for token verification)
-    async RecoverPassword(req, res, next) {
-        let { userId, emailToken } = req.params;
-        let { password } = req.body;
-        UserService_1.default.ChangePasswordWithToken(userId, emailToken, password);
+    async RecoverPasswordConfirmation(req, res, next) {
+        let { password, token } = req.body;
+        UserService_1.default.ChangePasswordWithToken(token, password);
         return res.status(200).json({ msg: "updated  " });
     }
 }

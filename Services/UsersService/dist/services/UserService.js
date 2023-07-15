@@ -65,14 +65,13 @@ class UserService {
     static async ParseToken(token) {
         return jsonwebtoken_1.default.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo");
     }
-    static async ChangePasswordWithToken(userId, emailToken, password) {
-        var _a;
+    static async ChangePasswordWithToken(token, password) {
+        const { userId } = await UserService.ParseToken(token);
         console.log(`updateUserPassword Request for userId: ${userId}`);
         const user = await UserRepository_1.UserRepository.FindOneById(+userId);
         if (!user) {
             throw new ErrorTypes_1.BadRequest("User does not exist");
         }
-        const decode = jsonwebtoken_1.default.verify(emailToken, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : ""); // whats the purpose of this line ? R.:Check if token exists to see if the request is valid
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
         user.password = hashedPassword;
         console.log("Sucessfully updated password");
@@ -95,7 +94,7 @@ class UserService {
         console.log("Sucessfully updated password");
         await UserRepository_1.UserRepository.Update(user);
     }
-    static async ForgotUserPasswordRequest(email) {
+    static async RecoverUserPasswordEmailRequest(email) {
         console.log(`changePasswordRequest Request for email: ${email}`);
         const user = await UserRepository_1.UserRepository.FindOneByEmail(email);
         if (!user) {

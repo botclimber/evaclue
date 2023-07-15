@@ -27,13 +27,14 @@ export default {
     });
   },
 
-  updatePassword(id: number, password: string) {
-    return Api().post(`${baseURL}/change-password/${id}`, {
-      password,
+  recoverUserPasswordConfirmation(token: string, password: string) {
+    return Api().post(`${baseURL}/recover-password/confirmation`, {
+      token,
+      password
     });
   },
 
-  changePasswordRequest(id: string) {
-    return Api().get(`${baseURL}/recover-password/${id}`);
+  recoverUserPasswordEmailRequest(email: string) {
+    return Api().get(`${baseURL}/recover-password/request/${email}`);
   },
 };

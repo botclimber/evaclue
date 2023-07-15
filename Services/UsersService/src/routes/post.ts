@@ -6,8 +6,15 @@ const routes = Router();
 
 routes.post("/register", new UserController().RegistUser);
 routes.post("/login", new UserController().LoginUser);
-routes.post("/change-password/:userId", new UserController().ChangePassword);
-routes.post("/recover-password/:userId", new UserController().ChangePassword);
+
+routes.get(
+    "/recover-password/request/:email",
+    new UserController().RecoverUserPasswordEmailRequest
+);
+
+//routes.post("/change-password/:userId", new UserController().ChangePassword);
+routes.post("/recover-password/confirmation", new UserController().RecoverPasswordConfirmation);
+
 routes.get("/verify/:userId/:token", new UserController().VerifyUser);
 
 // routes.post("/register/admin", new UserController().registAdmin);

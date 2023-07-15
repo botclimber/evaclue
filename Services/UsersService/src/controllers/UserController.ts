@@ -32,7 +32,7 @@ export class UserController {
   // token in the url is a huge mistake, for now i will just workaround it
   async VerifyUser(req: Request, res: Response, next: NextFunction) {
     //const { authorization } = req.headers;
-    let { userId ,token } = req.params;
+    let { userId, token } = req.params;
 
 
     token = await UserService.VerifyUser(userId, token);
@@ -40,10 +40,10 @@ export class UserController {
   }
 
   // // TODO: have a proper look on this method
-  async RecoverPasswordEmail(req: Request, res: Response, next: NextFunction) {
+  async RecoverUserPasswordEmailRequest(req: Request, res: Response, next: NextFunction) {
     let { email } = req.params;
 
-    const user = UserService.ForgotUserPasswordRequest(email);
+    const user = UserService.RecoverUserPasswordEmailRequest(email);
     return res.status(200).json(user);
   }
 
@@ -52,7 +52,7 @@ export class UserController {
   async ChangePassword(req: Request, res: Response, next: NextFunction) {
 
     let { userId } = req.params;
-    
+
     let { password, oldPassword } = req.body;
     UserService.ChangePassword(userId, oldPassword, password);
 
@@ -61,12 +61,11 @@ export class UserController {
 
   // // TODO:
   // // - have look on this method and adapt it (add try catch scope for token verification)
-  async RecoverPassword(req: Request, res: Response, next: NextFunction) {
+  async RecoverPasswordConfirmation(req: Request, res: Response, next: NextFunction) {
 
-    let { userId, emailToken } = req.params;
-    let { password } = req.body;
+    let { password, token } = req.body;
 
-    UserService.ChangePasswordWithToken(userId, emailToken, password);
+    UserService.ChangePasswordWithToken(token, password);
 
     return res.status(200).json({ msg: "updated  " });
   }

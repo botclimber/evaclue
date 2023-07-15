@@ -31,7 +31,7 @@
             class="form-control"
             v-model="password"
             placeholder="Password"
-            :rules="passwordRule"
+            :rules="isRequired"
           />
           <ErrorMessage as="div" name="password" v-slot="{ message }">
             <small id="passwordHelpBlock" class="form-text text-muted">
@@ -60,7 +60,7 @@
 
           <div class="col">
             <!-- Simple link -->
-            <a href="#!" @click="changePasswordRequest">Forgot password?</a>
+            <a href="#!" @click="recoverPassword">Forgot password?</a>
           </div>
         </div>
 
@@ -94,20 +94,17 @@ import { Yup } from "../helpers/constants";
 export default defineComponent({
   name: "Login-Form",
   components: { Form, Field, ErrorMessage },
-  //setup() {
-  //  return {
-  //    passwordRule: Yup.password,
-  //    emailRule: Yup.email,
-  //  };
-  //},
+  setup() {
+   return {
+     isRequired: Yup.required,
+   };
+  },
   data() {
     return {
       email: "",
       password: "",
       isLogged: false,
       isShow: false,
-      modalHeader: "",
-      modalBody: "",
       qResponse: ""
     };
   },
@@ -131,8 +128,8 @@ export default defineComponent({
     register() {
       this.$router.push({ name: "Register-Form" });
     },
-    async changePasswordRequest() {
-      this.$router.push({ name: "RecoverPassword-Form" });
+    async recoverPassword() {
+      this.$router.push({ name: "RecoverPasswordRequest-Form" });
     },
   },
 });

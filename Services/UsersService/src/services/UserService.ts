@@ -8,6 +8,9 @@ import "dotenv/config";
 import { EmailService } from "../services/EmailService";
 import { UserRepository } from "../database/UserRepository";
 import { IUser } from "../models/User";
+import { EmailVerificationTokensRepository } from "../database/EmailVerificationTokensRepository";
+import { UserSessionTokensRepository } from "../database/UserSessionTokensRepository";
+import { IUserSessionTokens } from "../models/UserSessionTokens";
 
 export default class UserService {
 
@@ -19,7 +22,7 @@ export default class UserService {
     const userExists = await UserRepository.FindOneByEmail(user.email);
     if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
 
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await bcrypt.hash(user.password as string, 10);
     user.password = hashedPassword
 
     user = await UserRepository.Create(user);
@@ -38,31 +41,38 @@ export default class UserService {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
-    const verifyPassword = await bcrypt.compare(user.password, userFound.password);
+    const verifyPassword = await bcrypt.compare(user.password as string, userFound.password as string);
 
     if (!verifyPassword) {
       console.log("WRONG PASSWORD")
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
-    const token = jwt.sign({ userId: userFound.id, userEmail: userFound.email, userType: userFound.type }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
-      expiresIn: "24h",
-    });
+    delete userFound.password;
+
+
+    // const accessToken = jwt.sign({ userFound }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
+    //   expiresIn: "5s",
+    // });
+
+    // const refreshToken = jwt.sign({ userId: userFound.id}, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
+    //   expiresIn: "1y",
+    // });
+
+    // const userSessionToken = {token: accessToken, userId: userFound.id}
+
+    // await UserSessionTokensRepository.Create(userSessionToken as IUserSessionTokens);
 
     console.log(`Login Successful for email: ${userFound.email} `);
 
-    return token;
+    return userFound;
   }
 
-  static async VerifyUser(userId: string , token: string) {
-
-    //const { userId } = await UserService.ParseToken(token)
+  static async VerifyUser(userId: string, token: string) {
 
     console.log(`verifyUser Request for userId: ${userId}`);
 
     const user = await UserRepository.FindOneById(+userId);
-
-    //maybe have a token value in the user table
 
     if (!user) {
       throw new BadRequest("User does not exist");
@@ -71,11 +81,22 @@ export default class UserService {
     try {
       const decodedToken = jwt.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"); // if token wrong then triggers the catch exception
 
+      const emailVerificationToken = await EmailVerificationTokensRepository.FindLast();
+
+      // Should only verify last token since user can click multiple times to resend email
+      if (!emailVerificationToken || emailVerificationToken.token != decodedToken) {
+        throw new BadRequest("Token does not exist");
+      }
+
       console.log(decodedToken)
       user.verified = true;
       await UserRepository.Update(user);
       console.log(`User with ID ${userId} verified`);
-      return token;
+
+      // After verification, remove all email verification tokens generated for that user
+      await EmailVerificationTokensRepository.Remove(+userId);
+
+      return decodedToken;
 
     } catch (e) {
       console.log("Exception: " + e)
@@ -118,7 +139,7 @@ export default class UserService {
       throw new BadRequest("User does not exist");
     }
 
-    const verifyPassword = await bcrypt.compare(user.password, oldPassword);
+    const verifyPassword = await bcrypt.compare(user.password as string, oldPassword);
 
     if (!verifyPassword) {
       console.log("WRONG PASSWORD")

@@ -4,7 +4,7 @@ const baseURL = "user";
 
 export default {
   login(email: string, password: string) {
-    return Api().post(`${baseURL}/login`, { email, password });
+    return Api().post(`${baseURL}/login`, { email, password }, { withCredentials: true });
   },
 
   loginAdmin(email: string, password: string) {
@@ -24,11 +24,11 @@ export default {
       username,
       email,
       password,
-    });
+    }, { withCredentials: true });
   },
 
   recoverUserPasswordConfirmation(token: string, password: string) {
-    return Api().post(`${baseURL}/recover-password/confirmation`, {
+    return Api().post(`${baseURL}//recover-password/confirmation`, {
       token,
       password
     });

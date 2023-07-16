@@ -3,6 +3,7 @@ import "dotenv/config";
 import UserService from "../services/UserService";
 import { IUser } from "../models/User";
 
+
 type JwtPayload = {
   userId: number,
   userEmail: string,
@@ -14,6 +15,7 @@ export class UserController {
   async RegistUser(req: Request, res: Response, next: NextFunction) {
 
     const user = req.body as IUser;
+    console.log(req.session.authorized)
 
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
@@ -23,10 +25,16 @@ export class UserController {
   }
 
   async LoginUser(req: Request, res: Response, next: NextFunction) {
-    const user = req.body as IUser;
-    const token = await UserService.Login(user);
+    let user = req.body as IUser;
 
-    return res.status(200).json(token);
+    user = await UserService.Login(user);
+
+    req.session.user = user;
+    req.session.authorized = true;
+    req.session.save();
+    console.log(req.session.authorized)
+
+    return res.status(200).json({ message: "Logged in successfully" });
   }
 
   // token in the url is a huge mistake, for now i will just workaround it

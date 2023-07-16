@@ -22,4 +22,11 @@ export class Unauthorized extends ErrorHandler {
   constructor(message: string) {
     super(message, 401);
   }
+
+}
+
+export class Forbidden extends ErrorHandler {
+  constructor(message: string) {
+    super(message, 403);
+  }
 }

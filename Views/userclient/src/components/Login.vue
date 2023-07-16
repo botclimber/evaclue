@@ -2,7 +2,6 @@
   <div class="container" style="margin-top: 60px; width: 30%">
     <div v-if="isLogged">Login successful for user with email {{ email }}</div>
     <div v-else>
-    <p>{{qResponse}}</p>
       <Form @submit="login">
         <!-- Email input -->
         <div class="form-outline mb-4">
@@ -13,7 +12,6 @@
             class="form-control"
             v-model="email"
             placeholder="Email"
-            :rules="emailRule"
           />
           <ErrorMessage as="div" name="email" v-slot="{ message }">
             <small id="passwordHelpBlock" class="form-text text-muted">
@@ -105,7 +103,6 @@ export default defineComponent({
       password: "",
       isLogged: false,
       isShow: false,
-      qResponse: ""
     };
   },
   methods: {
@@ -118,10 +115,9 @@ export default defineComponent({
           // redirect to rentify home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost:8080/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
+          //window.location.href = "http://localhost:8080/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
         })
         .catch((error) => {
-          this.qResponse = error["response"].data.message
           console.error(error);
         });
     },

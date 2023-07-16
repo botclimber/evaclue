@@ -1,5 +1,12 @@
 import { RowDataPacket } from "mysql2"
+import session from 'express-session';
 
+// declare module 'express-session' {
+//   export interface SessionData {
+//     user: { [key: string]: any };
+//     authorized: boolean
+//   }
+// }
 export interface IUser extends RowDataPacket {
   id?: number
   email: string
@@ -7,9 +14,10 @@ export interface IUser extends RowDataPacket {
   firstName: string
   lastName: string
   image: string
-  password: string
+  password?: string
   created_at: Date
   blocked: boolean
   verified: boolean
   type: string
 }
+

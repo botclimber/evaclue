@@ -7,13 +7,15 @@ exports.EmailService = void 0;
 const app_1 = require("../app");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
+const EmailVerificationTokensRepository_1 = require("../database/EmailVerificationTokensRepository");
 class EmailService {
     static async SendVerifyEmail(user) {
         const currentURL = `localhost:7000`;
-        // process.env.JWT_SECRET ?? "" can lead to security breach
         const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
             expiresIn: "1h",
         });
+        let emailVerificationTokensInstance = { token: token, userId: user.id };
+        await EmailVerificationTokensRepository_1.EmailVerificationTokensRepository.Create(emailVerificationTokensInstance);
         const mailOptions = {
             from: "supp.evaclue@gmail.com",
             to: user.email,

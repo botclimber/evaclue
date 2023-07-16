@@ -9,15 +9,24 @@ const UserService_1 = __importDefault(require("../services/UserService"));
 class UserController {
     async RegistUser(req, res, next) {
         const user = req.body;
+        console.log(req.session.authorized);
         // Call to service layer.
         // Abstraction on how to access the data layer and the business logic.
         await UserService_1.default.Register(user, "common");
         return res.status(201); // return token ? or just regist status ?
     }
     async LoginUser(req, res, next) {
-        const user = req.body;
-        const token = await UserService_1.default.Login(user);
-        return res.status(200).json(token);
+        let user = req.body;
+        console.log(req.session.authorized);
+        if (req.session.authorized) {
+            return res.status(200).json({ message: "Logged in successfully" });
+        }
+        user = await UserService_1.default.Login(user);
+        req.session.user = user;
+        req.session.authorized = true;
+        req.session.save();
+        console.log(req.session.authorized);
+        return res.status(200).json({ message: "Logged in successfully" });
     }
     // token in the url is a huge mistake, for now i will just workaround it
     async VerifyUser(req, res, next) {

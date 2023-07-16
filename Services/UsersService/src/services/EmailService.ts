@@ -2,15 +2,20 @@ import { transporter } from "../app";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { IUser } from "../models/User";
+import { IEmailVerificationTokens } from "../models/EmailVerificationTokens";
+import { EmailVerificationTokensRepository } from "../database/EmailVerificationTokensRepository";
 
 export class EmailService {
   static async SendVerifyEmail(user: IUser) {
     const currentURL = `localhost:7000`;
 
-    // process.env.JWT_SECRET ?? "" can lead to security breach
     const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
       expiresIn: "1h",
-    });
+    })
+
+    let emailVerificationTokensInstance = { token: token, userId: user.id };
+
+    await EmailVerificationTokensRepository.Create(emailVerificationTokensInstance as IEmailVerificationTokens);
 
     const mailOptions = {
       from: "supp.evaclue@gmail.com",

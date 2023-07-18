@@ -23,6 +23,7 @@ app.get(`${revPath}/`, (req, res) => {
   res.sendFile(__dirname+'/index.html')
 })
 
+// to be transported to a GeoLocation Service
 app.get(`${revPath}/search`, (req, res) => {
 
   console.log("Search:")
@@ -47,6 +48,7 @@ app.post(`${revPath}/create`, (req, res) => {
 
 })
 
+// to be transported to the UsersService
 app.post(`${revPath}/setFilter`, (req, res) => {
 
   th.tokenHandler(req)
@@ -58,11 +60,11 @@ app.post(`${revPath}/setFilter`, (req, res) => {
  
  })
 
+ // to be transported to the UsersService
  app.get(`${revPath}/getFilter/:userId`, (req, res) => {
   actions.actions(res).getFilter(req.params.userId)
  })
 
-// TODO: check if userType is col,admin or superAdmin
 app.patch(`${revPath}/updateReview/:revId`, (req, res) => {
 
   th.tokenHandler(req)
@@ -79,6 +81,8 @@ app.patch(`${revPath}/updateReview/:revId`, (req, res) => {
  * | RESIDENCE OWNER |
  * +-----------------+
  */
+
+// TODO: Transport these endpoints to the ResidenceOwner Service
 app.post(`${revPath}/resOwner/createResOwner`, (req, res) => {
 
   th.tokenHandler(req)

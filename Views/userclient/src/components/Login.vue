@@ -94,12 +94,12 @@ import { Yup } from "../helpers/constants";
 export default defineComponent({
   name: "Login-Form",
   components: { Form, Field, ErrorMessage },
-  //setup() {
-  //  return {
-  //    passwordRule: Yup.password,
-  //    emailRule: Yup.email,
-  //  };
-  //},
+  setup() {
+    return {
+      passwordRule: Yup.password,
+      emailRule: Yup.email,
+    };
+  },
   data() {
     return {
       email: "",
@@ -118,10 +118,10 @@ export default defineComponent({
           console.log(response.data);
           // if true
           // regist token in localStorage
-          // redirect to rentify home page
+          // redirect to evaclue home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost:8080/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
+          window.location.href = "http://localhost/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
         })
         .catch((error) => {
           this.qResponse = error["response"].data.message

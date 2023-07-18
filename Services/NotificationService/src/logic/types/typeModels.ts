@@ -8,6 +8,16 @@ export interface User {
     type: ofType
 }
 
+export type Users = User & {
+    username: string,
+    firstName: string,
+    lastName: string,
+    image: string,
+    password: string,
+    blocked: boolean,
+    verified: boolean
+}
+
 export interface ContactResOwner {
     cId?: number,
     resOwnerId: number,
@@ -34,3 +44,20 @@ export interface EmailForm {
 }
 
 export type CROPlusUser = ContactResOwner & User
+
+export interface available {    
+    resOwnerId: number,
+    city: string,
+    street: string,
+    nr: number,
+    flat: string,
+    floor: string,
+    rentPrice: number,
+    lat: number,
+    lng: number
+}
+
+export interface AvailableRents {
+    toEmail: string,
+    available: Array<available>
+}

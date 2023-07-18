@@ -1,4 +1,5 @@
 const schedule = require("node-schedule")
+const axios = require("axios")
 const act = require("../../actions.js")
 
 /**
@@ -12,8 +13,8 @@ sendNotOnFilter = async () => {
     const resOwners = await act.actions().getResOwners()
     const usersFilters = await act.actions().getUserFilters()
 
-    console.log("filtering on free residences ...")
-    const filteredByFreeResOwners = resOwners.filter(r => r.free == 1)
+    console.log("filtering on free and approved residences ...")
+    const filteredByFreeResOwners = resOwners.filter(r => r.free && r.approved)
 
     const mapResToAddress = (res) => {
        const city = addresses.find(r => r.id == res.addressId)
@@ -24,36 +25,49 @@ sendNotOnFilter = async () => {
     const resOwnerPlusCity = filteredByFreeResOwners.map(mapResToAddress)
 
     console.log("Prepare data to be sent within the request ...")
-    const usersToBeNotified = usersFilters.filter( r => r.enable == 1).map( r => {
-        const cities = r.byCities.split(",")
+    console.log(usersFilters)
+    const usersToBeNotified = usersFilters.filter( r => r.enable).map( r => {
+        const cities = r.byCities.toUpperCase()
         const rent = [r.byRentPriceMin, r.byRentPriceMax]
 
-        const byCity = (cities.length > 0)? resOwnerPlusCity.filter(resData => cities.includes(resData.city)) : resOwnerPlusCity
-
-        if(byCity.length > 0){
-            const regardinglessCity = (resData) => (rent[1] > 0)? resData.rentPrice > rent[0] && resData.rentPrice < rent[1] : true
+        const byCity = (cities.length > 0)? resOwnerPlusCity.filter(resData => cities.includes(resData.city.city.toUpperCase())) : resOwnerPlusCity
         
-            const byRent = byCity.filter(regardinglessCity)
+        const regardinglessCity = (resData) => (rent[1] > 0)? resData.rentPrice > rent[0] && resData.rentPrice < rent[1] : true
+        const byRent = byCity.filter(regardinglessCity)
 
-            return {toEmail: r.userEmail, cities: byRent.reduce( (left, next) => `${left.city},${next.city}`),lat: byRent.map(data => data.cityLat), lng: byRent.map(data => data.cityLng) }
-        
-        }
+        /*
+        [{userId, city, flat (optional), floor (optional), lat, lng}]
+        */
+
+        return { toEmail: r.userEmail, available: byRent.map(data => {
+            return {resOwnerId: data.userId, city: data.city.city, street: data.city.street, nr: data.city.nr, flat: data.flatOwner, floor: data.floorOwner, rentPrice: data.rentPrice, lat: data.cityLat, lng: data.cityLng} 
+           }) }
     })
 
     console.log("Data preparation finished:")
-    console.log(`\t\t ${usersToBeNotified}`)
+    console.log(usersToBeNotified)
 
     console.log("\n sending request to Notification Service ...")
-    // TODO: make the request to the notification services with the already prepared data, then on the notification services create the message template and massive sent it to users
-    
-
+    await axios
+        .post(`http://localhost:${process.env.not_PORT}/notifications/v1/notifyUsers`, {data: usersToBeNotified}, { headers: {"Content-Type": "application/json"}} )
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
 }
 
-sendNotOnFilter()
+const rule = new schedule.RecurrenceRule();
 
-/*const rule = new schedule.RecurrenceRule();
+/**
+ * runs on monday, wednesday and saturday
+ */
 rule.dayOfWeek = [1,3,6];
 rule.hour = 20;
 rule.minute = 0;
 
-schedule.scheduleJob(rule, async function(){ await sendNotOnFilter() });*/
+/* For test purposes
+
+rule.dayOfWeek = [0, new schedule.Range(4, 6)];
+rule.hour = 18;
+rule.minute = 45;
+*/
+
+schedule.scheduleJob(rule, async function(){ await sendNotOnFilter() });

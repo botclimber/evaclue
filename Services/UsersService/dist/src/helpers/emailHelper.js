@@ -16,10 +16,10 @@ class EmailHelper {
             expiresIn: "1h",
         });
         const mailOptions = {
-            from: "rentifyWD@gmail.com",
+            from: "supp.evaclue@gmail.com",
             to: user.email,
-            subject: "Welcome to Rentify",
-            html: `<p>Welcome to Rentify, ${user.firstName} ${user.lastName}! Please confirm your email address clicking on the link below.</p>
+            subject: "Welcome to Evaclue",
+            html: `<p>Welcome to Evaclue, ${user.firstName} ${user.lastName}! Please confirm your email address clicking on the link below.</p>
           <p>Link expirers in 6 hours</p>
           <p>Click<a href="${currentURL}/user/verify/${user.id}/${token}"> here to verify.</a></p>`,
         };
@@ -32,7 +32,7 @@ class EmailHelper {
             expiresIn: "2h",
         });
         const mailOptions = {
-            from: "rentifyWD@gmail.com",
+            from: "supp.evaclue@gmail.com",
             to: user.email,
             subject: "Change password",
             html: `<p>Hello ${user.firstName} ${user.lastName}! To change your password click on the link below.</p>

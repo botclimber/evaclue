@@ -15,6 +15,9 @@ module.exports = class Locations {
     else{
 
       this.reviews = "<ul id='revContent"+(this.lat+this.lng)+"' class='list-group list-group-flush'>"+this.reviews.map(  comment => {
+        const userImage = (comment.anonymous)? "default.gif" : comment.userImage
+        const userName  = (comment.anonymous)? "Anonymous" : comment.userName
+        
         const rev = (comment.review.length > 20)? "<p>&emsp;"+comment.review.substring(0,20) +"<span id=\"dots"+comment.id+"\">...</span><span style=\"display:none\" id=\"more"+comment.id+"\">"+comment.review.substring(20, comment.review.length)+"</span></p><a href=\"javascript:void(0)\" onclick=\"readMore("+comment.id+")\" id=\"readMore"+comment.id+"\">Read more</a>" :  "<p>&emsp;"+comment.review +"</p>"   
 
         return "<li class='list-group-item'>"
@@ -23,7 +26,7 @@ module.exports = class Locations {
         +(this.getResidenceForRev(comment.residenceId) || '')
         +"</div>"
         +"<div class='col-md-12'>"
-        +"<img class='float-left p-2' style='border-radius: 30%;width:50px;height:50px' src='images/userImages/"+comment.userImage+"'><p class='float-left' style='font-weight:normal;margin-top:16px'>"+comment.userName+": </p>"
+        +"<img class='float-left p-2' style='border-radius: 30%;width:50px;height:50px' src='images/userImages/"+userImage+"'><p class='float-left' style='font-weight:normal;margin-top:16px'>"+userName+": </p>"
         +this.getStars(comment.rating)
         +"</div>"
         +"</div>"

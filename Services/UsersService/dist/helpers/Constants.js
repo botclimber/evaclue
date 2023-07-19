@@ -4,6 +4,7 @@ exports.ErrorMessages = void 0;
 exports.ErrorMessages = {
     USERNAME_REQUIRED: "Username is required",
     USER_ALREADY_EXISTS: "User already exists",
+    USER_DOES_NOT_EXIST: "User does not exist",
     INVALID_EMAIL_OR_PASSWORD: "Invalid email or password",
     USER_NOT_AUTHORIZED: "User is not authorized",
     TOKEN_REQUIRED: "Token required",

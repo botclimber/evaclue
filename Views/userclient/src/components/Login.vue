@@ -1,6 +1,10 @@
 <template>
   <div class="container" style="margin-top: 60px; width: 30%">
-    <div v-if="isLogged">Login successful for user with email {{ email }}</div>
+    <div v-if="isLogged">
+      Login successful for user with email {{ email }}
+
+      <button @click="teste">Add 1</button>
+    </div>
     <div v-else>
       <Form @submit="login">
         <!-- Email input -->
@@ -66,7 +70,7 @@
           <!-- Submit button -->
           <button
             title="Login"
-            style="backgroundColor: rgb(221 131 92); color:white"
+            style="backgroundcolor: rgb(51, 24, 127); color: rgb(202, 84, 84)"
             class="btn btn-default"
             type="submit"
           >
@@ -88,14 +92,16 @@ import { defineComponent } from "vue";
 import UserService from "../services/UserService";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { Yup } from "../helpers/constants";
+import axios from "axios";
+
 
 export default defineComponent({
   name: "Login-Form",
   components: { Form, Field, ErrorMessage },
   setup() {
-   return {
-     isRequired: Yup.required,
-   };
+    return {
+      isRequired: Yup.required,
+    };
   },
   data() {
     return {
@@ -107,19 +113,23 @@ export default defineComponent({
   },
   methods: {
     async login() {
-      await UserService.login(this.email, this.password)
-        .then((response) => {
-          console.log(response.data);
-          // if true
-          // regist token in localStorage
-          // redirect to rentify home page
-          console.log(response.data)
-          this.isLogged = true;
-          //window.location.href = "http://localhost:8080/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      try {
+        const data = await UserService.login(this.email, this.password);
+        console.log(data);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
+        this.isLogged = true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async teste() {
+      try {
+        const data = await UserService.teste();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
     register() {
       this.$router.push({ name: "Register-Form" });

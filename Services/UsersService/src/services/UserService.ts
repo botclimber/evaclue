@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { UploadedFile } from "express-fileupload";
 import { ErrorMessages } from "../helpers/Constants";
-import { BadRequest } from "../helpers/ErrorTypes";
+import { BadRequest, Forbidden, Unauthorized } from "../helpers/ErrorTypes";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
@@ -11,11 +11,14 @@ import { IUser } from "../models/User";
 import { EmailVerificationTokensRepository } from "../database/EmailVerificationTokensRepository";
 import { UserSessionTokensRepository } from "../database/UserSessionTokensRepository";
 import { IUserSessionTokens } from "../models/UserSessionTokens";
+import {
+  generateAcessToken,
+  generateRefreshToken,
+  verifyToken,
+} from "../utils/jwtUtilities";
 
 export default class UserService {
-
   static async Register(user: IUser, type: string) {
-
     user.type = type;
     console.log(`Registration Request for email: ${user.email}`);
 
@@ -23,7 +26,7 @@ export default class UserService {
     if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
 
     const hashedPassword = await bcrypt.hash(user.password as string, 10);
-    user.password = hashedPassword
+    user.password = hashedPassword;
 
     user = await UserRepository.Create(user);
 
@@ -37,39 +40,49 @@ export default class UserService {
     const userFound = await UserRepository.FindOneByEmail(user.email);
 
     if (!userFound) {
-      console.log("INVALID EMAIL")
+      console.log("INVALID EMAIL");
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
-    const verifyPassword = await bcrypt.compare(user.password as string, userFound.password as string);
+    const verifyPassword = await bcrypt.compare(
+      user.password as string,
+      userFound.password as string
+    );
 
     if (!verifyPassword) {
-      console.log("WRONG PASSWORD")
+      console.log("WRONG PASSWORD");
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
     delete userFound.password;
 
-
-    // const accessToken = jwt.sign({ userFound }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
-    //   expiresIn: "5s",
-    // });
-
-    // const refreshToken = jwt.sign({ userId: userFound.id}, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
-    //   expiresIn: "1y",
-    // });
-
-    // const userSessionToken = {token: accessToken, userId: userFound.id}
-
-    // await UserSessionTokensRepository.Create(userSessionToken as IUserSessionTokens);
-
     console.log(`Login Successful for email: ${userFound.email} `);
 
-    return userFound;
+    const acessToken = generateAcessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    return { acessToken, refreshToken };
+  }
+
+  static async RefreshToken(refreshToken: string) {
+    if (refreshToken == null)
+      throw new Forbidden(ErrorMessages.INVALID_TOKEN);
+
+    let user = verifyToken(refreshToken) as IUser;
+
+    if (!user) {
+      throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST);
+    }
+
+    user = (await UserRepository.FindOneByEmail(user.email)) as IUser;
+
+    delete user.password;
+    const accessToken = generateAcessToken(user);
+
+    return accessToken;
   }
 
   static async VerifyUser(userId: string, token: string) {
-
     console.log(`verifyUser Request for userId: ${userId}`);
 
     const user = await UserRepository.FindOneById(+userId);
@@ -79,16 +92,20 @@ export default class UserService {
     }
 
     try {
-      const decodedToken = jwt.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"); // if token wrong then triggers the catch exception
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string); // if token wrong then triggers the catch exception
 
-      const emailVerificationToken = await EmailVerificationTokensRepository.FindLast();
+      const emailVerificationToken =
+        await EmailVerificationTokensRepository.FindLast();
 
       // Should only verify last token since user can click multiple times to resend email
-      if (!emailVerificationToken || emailVerificationToken.token != decodedToken) {
+      if (
+        !emailVerificationToken ||
+        emailVerificationToken.token != decodedToken
+      ) {
         throw new BadRequest("Token does not exist");
       }
 
-      console.log(decodedToken)
+      console.log(decodedToken);
       user.verified = true;
       await UserRepository.Update(user);
       console.log(`User with ID ${userId} verified`);
@@ -97,21 +114,18 @@ export default class UserService {
       await EmailVerificationTokensRepository.Remove(+userId);
 
       return decodedToken;
-
     } catch (e) {
-      console.log("Exception: " + e)
-      throw new BadRequest(ErrorMessages.INVALID_TOKEN)
+      console.log("Exception: " + e);
+      throw new BadRequest(ErrorMessages.INVALID_TOKEN);
     }
   }
 
   static async ParseToken(token: string): Promise<jwt.JwtPayload> {
-    return jwt.verify(token,
-      "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo") as JwtPayload
+    return jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
   }
 
   static async ChangePasswordWithToken(token: string, password: any) {
-
-    const { userId } = await UserService.ParseToken(token)
+    const { userId } = await UserService.ParseToken(token);
 
     console.log(`updateUserPassword Request for userId: ${userId}`);
 
@@ -126,10 +140,13 @@ export default class UserService {
     console.log("Sucessfully updated password");
 
     await UserRepository.Update(user);
-
   }
 
-  static async ChangePassword(userId: string, oldPassword: string, password: string) {
+  static async ChangePassword(
+    userId: string,
+    oldPassword: string,
+    password: string
+  ) {
     console.log(`updateUserPassword Request for userId: ${userId}`);
 
     // Check if this is needed (dont let user see if email exists or not)
@@ -139,10 +156,13 @@ export default class UserService {
       throw new BadRequest("User does not exist");
     }
 
-    const verifyPassword = await bcrypt.compare(user.password as string, oldPassword);
+    const verifyPassword = await bcrypt.compare(
+      user.password as string,
+      oldPassword
+    );
 
     if (!verifyPassword) {
-      console.log("WRONG PASSWORD")
+      console.log("WRONG PASSWORD");
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
@@ -167,7 +187,6 @@ export default class UserService {
 
     return user;
   }
-
 
   // static async Register() {
 
@@ -219,4 +238,3 @@ export default class UserService {
   //   }
   // }
 }
-

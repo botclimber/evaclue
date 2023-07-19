@@ -3,8 +3,26 @@ import Api from "./Api";
 const baseURL = "user";
 
 export default {
-  login(email: string, password: string) {
-    return Api().post(`${baseURL}/login`, { email, password }, { withCredentials: true });
+  async login(email: string, password: string) {
+    const { data } = await Api().post(`${baseURL}/login`, { email, password });
+  
+    console.log(data);
+
+    return data;
+  },
+
+  async teste() {
+    const { data } = await Api().get(`${baseURL}/teste`);
+  
+    return data;
+  },
+
+  async refreshToken() {
+    const api =  await Api();
+    api.defaults.withCredentials = true;
+    const { data } = await api.post(`${baseURL}/refreshToken`, { withCredentials: true });
+  
+    return data;
   },
 
   loginAdmin(email: string, password: string) {

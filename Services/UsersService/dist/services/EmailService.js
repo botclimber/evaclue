@@ -1,19 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailService = void 0;
 const app_1 = require("../app");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
 const EmailVerificationTokensRepository_1 = require("../database/EmailVerificationTokensRepository");
+const jwtUtilities_1 = require("../utils/jwtUtilities");
 class EmailService {
     static async SendVerifyEmail(user) {
         const currentURL = `localhost:7000`;
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
-            expiresIn: "1h",
-        });
+        const token = (0, jwtUtilities_1.generateAcessToken)(user);
         let emailVerificationTokensInstance = { token: token, userId: user.id };
         await EmailVerificationTokensRepository_1.EmailVerificationTokensRepository.Create(emailVerificationTokensInstance);
         const mailOptions = {
@@ -28,9 +23,7 @@ class EmailService {
     }
     static async SendChangePasswordEmail(user) {
         const currentURL = `localhost:8011`;
-        const token = jsonwebtoken_1.default.sign({ userId: user.id }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
-            expiresIn: "2h",
-        });
+        const token = (0, jwtUtilities_1.generateAcessToken)(user);
         const mailOptions = {
             from: "supp.evaclue@gmail.com",
             to: user.email,

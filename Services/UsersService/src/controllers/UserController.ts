@@ -3,19 +3,15 @@ import "dotenv/config";
 import UserService from "../services/UserService";
 import { IUser } from "../models/User";
 
-
 type JwtPayload = {
-  userId: number,
-  userEmail: string,
-  userType: string
+  userId: number;
+  userEmail: string;
+  userType: string;
 };
 
 export class UserController {
-
   async RegistUser(req: Request, res: Response, next: NextFunction) {
-
     const user = req.body as IUser;
-    console.log(req.session.authorized)
 
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
@@ -24,41 +20,52 @@ export class UserController {
     return res.status(201); // return token ? or just regist status ?
   }
 
-  async LoginUser(req: Request, res: Response, next: NextFunction) {
-    let user = req.body as IUser;
-
-    user = await UserService.Login(user);
-
-    req.session.user = user;
-    req.session.authorized = true;
-    req.session.save();
-    console.log(req.session.authorized)
-
-    return res.status(200).json({ message: "Logged in successfully" });
+  async Teste(req: Request, res: Response, next: NextFunction) {
+    console.log(req.user);
+    console.log("teste");
+    return res.status(200).json({ msg: "updated  " });
   }
 
-  // token in the url is a huge mistake, for now i will just workaround it
+  async RefreshToken(req: Request, res: Response, next: NextFunction) {
+    const { refreshToken } = req.cookies;
+    console.log("refreshing token: " + refreshToken);
+
+    const accessToken = await UserService.RefreshToken(refreshToken);
+
+    return res.status(200).json({ access_token: accessToken});
+  }
+
+  async LoginUser(req: Request, res: Response, next: NextFunction) {
+    const user: IUser = req.body;
+
+    const { acessToken, refreshToken } = await UserService.Login(user);
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 3.123e10,
+      httpOnly: true,
+    });
+
+    return res.status(200).json(acessToken);
+  }
+
   async VerifyUser(req: Request, res: Response, next: NextFunction) {
-    //const { authorization } = req.headers;
     let { userId, token } = req.params;
-
-
     token = await UserService.VerifyUser(userId, token);
     return res.status(200).json(token);
   }
 
-  // // TODO: have a proper look on this method
-  async RecoverUserPasswordEmailRequest(req: Request, res: Response, next: NextFunction) {
+  async RecoverUserPasswordEmailRequest(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     let { email } = req.params;
 
     const user = UserService.RecoverUserPasswordEmailRequest(email);
     return res.status(200).json(user);
   }
 
-  // // TODO:
-  // // - have look on this method and adapt it (add try catch scope for token verification)
   async ChangePassword(req: Request, res: Response, next: NextFunction) {
-
     let { userId } = req.params;
 
     let { password, oldPassword } = req.body;
@@ -67,10 +74,11 @@ export class UserController {
     return res.status(200).json({ msg: "updated  " });
   }
 
-  // // TODO:
-  // // - have look on this method and adapt it (add try catch scope for token verification)
-  async RecoverPasswordConfirmation(req: Request, res: Response, next: NextFunction) {
-
+  async RecoverPasswordConfirmation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     let { password, token } = req.body;
 
     UserService.ChangePasswordWithToken(token, password);
@@ -171,18 +179,17 @@ export class UserController {
 
   // /**
   //  * Method that updates user profile image
-  //  * 
-  //  * @param req 
-  //  * @param res 
-  //  * @param next 
-  //  * @returns 
+  //  *
+  //  * @param req
+  //  * @param res
+  //  * @param next
+  //  * @returns
   //  */
   // async updateProfileImg(req: Request, res: Response, next: NextFunction) {
 
   //   if (!req.files || Object.keys(req.files).length === 0) {
   //     return res.status(400).json({ message: "No file sent!" })
   //   }
-
 
   //   console.log("file received!")
   //   const recFile: UploadedFile = req.files.userImg as UploadedFile

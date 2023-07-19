@@ -4,14 +4,13 @@ import "dotenv/config";
 import { IUser } from "../models/User";
 import { IEmailVerificationTokens } from "../models/EmailVerificationTokens";
 import { EmailVerificationTokensRepository } from "../database/EmailVerificationTokensRepository";
+import { generateAcessToken, generateRefreshToken } from "../utils/jwtUtilities";
 
 export class EmailService {
   static async SendVerifyEmail(user: IUser) {
     const currentURL = `localhost:7000`;
 
-    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo", {
-      expiresIn: "1h",
-    })
+    const token = generateAcessToken(user);
 
     let emailVerificationTokensInstance = { token: token, userId: user.id };
 
@@ -32,14 +31,7 @@ export class EmailService {
   static async SendChangePasswordEmail(user: IUser) {
     const currentURL = `localhost:8011`;
 
-    const token = jwt.sign(
-      { userId: user.id },
-      "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"
-      ,
-      {
-        expiresIn: "2h",
-      }
-    );
+    const token = generateAcessToken(user);
 
     const mailOptions = {
       from: "supp.evaclue@gmail.com",

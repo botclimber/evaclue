@@ -11,6 +11,7 @@ require("dotenv/config");
 const EmailService_1 = require("../services/EmailService");
 const UserRepository_1 = require("../database/UserRepository");
 const EmailVerificationTokensRepository_1 = require("../database/EmailVerificationTokensRepository");
+const jwtUtilities_1 = require("../utils/jwtUtilities");
 class UserService {
     static async Register(user, type) {
         user.type = type;
@@ -37,16 +38,22 @@ class UserService {
             throw new ErrorTypes_1.BadRequest(Constants_1.ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
         }
         delete userFound.password;
-        // const accessToken = jwt.sign({ userFound }, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
-        //   expiresIn: "5s",
-        // });
-        // const refreshToken = jwt.sign({ userId: userFound.id}, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE4Mjk3NiwiaWF0IjoxNjg5MTgyOTc2fQ.GUGr_MNFADIZZUG8CPb0BIPArnz_Mw4W_Mzjz2bU-v4", {
-        //   expiresIn: "1y",
-        // });
-        // const userSessionToken = {token: accessToken, userId: userFound.id}
-        // await UserSessionTokensRepository.Create(userSessionToken as IUserSessionTokens);
         console.log(`Login Successful for email: ${userFound.email} `);
-        return userFound;
+        const acessToken = (0, jwtUtilities_1.generateAcessToken)(user);
+        const refreshToken = (0, jwtUtilities_1.generateRefreshToken)(user);
+        return { acessToken, refreshToken };
+    }
+    static async RefreshToken(refreshToken) {
+        if (refreshToken == null)
+            throw new ErrorTypes_1.Unauthorized(Constants_1.ErrorMessages.INVALID_TOKEN);
+        let user = (0, jwtUtilities_1.verifyToken)(refreshToken);
+        if (!user) {
+            throw new ErrorTypes_1.Unauthorized(Constants_1.ErrorMessages.USER_DOES_NOT_EXIST);
+        }
+        user = (await UserRepository_1.UserRepository.FindOneByEmail(user.email));
+        delete user.password;
+        const accessToken = (0, jwtUtilities_1.generateAcessToken)(user);
+        return accessToken;
     }
     static async VerifyUser(userId, token) {
         console.log(`verifyUser Request for userId: ${userId}`);
@@ -55,10 +62,11 @@ class UserService {
             throw new ErrorTypes_1.BadRequest("User does not exist");
         }
         try {
-            const decodedToken = jsonwebtoken_1.default.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo"); // if token wrong then triggers the catch exception
+            const decodedToken = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET); // if token wrong then triggers the catch exception
             const emailVerificationToken = await EmailVerificationTokensRepository_1.EmailVerificationTokensRepository.FindLast();
             // Should only verify last token since user can click multiple times to resend email
-            if (!emailVerificationToken || emailVerificationToken.token != decodedToken) {
+            if (!emailVerificationToken ||
+                emailVerificationToken.token != decodedToken) {
                 throw new ErrorTypes_1.BadRequest("Token does not exist");
             }
             console.log(decodedToken);
@@ -75,7 +83,7 @@ class UserService {
         }
     }
     static async ParseToken(token) {
-        return jsonwebtoken_1.default.verify(token, "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4OTE5Njk5MywiaWF0IjoxNjg5MTk2OTkzfQ.NamGkAvyYvvfFHTG-PGvKFZtJFnR5lTWXmYcV_1covo");
+        return jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
     }
     static async ChangePasswordWithToken(token, password) {
         const { userId } = await UserService.ParseToken(token);

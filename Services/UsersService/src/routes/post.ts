@@ -12,6 +12,11 @@ routes.get(
     new UserController().RecoverUserPasswordEmailRequest
 );
 
+routes.get('/teste', authMiddleware, new UserController().Teste);
+
+routes.post('/refreshToken', new UserController().RefreshToken);
+
+
 //routes.post("/change-password/:userId", new UserController().ChangePassword);
 routes.post("/recover-password/confirmation", new UserController().RecoverPasswordConfirmation);
 

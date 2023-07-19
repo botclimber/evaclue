@@ -78,7 +78,7 @@ app.patch(`${revPath}/updateReview/:revId`, (req, res) => {
 /**
  * 
  * +-----------------+
- * | RESIDENCE OWNER |
+ * | RESIDENCE OWNER |d
  * +-----------------+
  */
 

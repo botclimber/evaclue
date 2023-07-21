@@ -1,6 +1,5 @@
-import express, {Express, Request, Response} from "express";
+import express, {Express} from "express";
 import cors from "cors";
-import fileUpload from "express-fileupload";
 import bodyParser from "body-parser";
 
 import getRoutes from "./routes/get/getRequests";

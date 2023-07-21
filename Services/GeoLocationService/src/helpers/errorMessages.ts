@@ -1,4 +1,4 @@
 export const errorMessages = {
-    CONST_NAME: {status: 200, text: ""},
+    INVALID_LOCATION: {status: 401, text: "Address mentioned is not valid"},
   } as const;
   

@@ -4,6 +4,7 @@ import { LocationHandler } from "./LocationHandler"
 
 import { Address } from "../models/Address"
 import { Residence } from "../models/Residence"
+import { errorMessages as err } from "../helpers/errorMessages"
 
 export class GeoLocation {
     db: Db
@@ -55,10 +56,26 @@ export class GeoLocation {
      * @param next 
      */
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-        const addrId = await this.newAddress(req.body.address as Address)
-        const resId = await this.newResidence(addrId, req.body.residence as Residence)
+        const createSendResponse = async (addr: Address) => {
+            const addrId = await this.newAddress(addr)
+            const resId = await this.newResidence(addrId, req.body.residence as Residence)
 
-        res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
+            res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
+        }
+
+        const addr = req.body.address as Address
+
+        if(addr.lat === undefined && addr.lng === undefined){
+            const locInstance = new LocationHandler({city: addr.city, street: addr.street, buildingNr: addr.nr})
+            const latLng: locationFormats.latLng = await locInstance.getLatLng()
+
+            if(latLng.lat !== undefined && latLng.lng !== undefined) createSendResponse({...latLng, ...addr});
+            else{
+                res.status(err.INVALID_LOCATION.status).json({msg: err.INVALID_LOCATION.text})
+                throw Error(err.INVALID_LOCATION.text);
+            }
+        
+        }else createSendResponse(addr);
 
     }
 

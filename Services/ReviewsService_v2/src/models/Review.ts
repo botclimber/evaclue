@@ -1,4 +1,5 @@
 export class Review {
+    id?: number;
     userId: number;
     userName: string;
     adminId: number;

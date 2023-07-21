@@ -1,4 +1,4 @@
 export const errorMessages = {
-    CONST_NAME: {status: 200, text: ""},
+    ADDRESS_SEGMENT_FAULT: {status: 500, text: "Residence Owner without Address"},
   } as const;
   

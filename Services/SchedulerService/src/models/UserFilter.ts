@@ -1,4 +1,5 @@
 export class UserFilter {
+    id?: number
     userName: string;
     userId: number;
     userEmail: string;
@@ -8,7 +9,6 @@ export class UserFilter {
     enable: boolean;
 
     constructor(userName: string, userId: number, userEmail: string, byCities: string, byRentPriceMin: number, byRentPriceMax: number, enable: boolean){
-
         this.userName = userName;
         this.userId = userId;
         this.userEmail = userEmail;

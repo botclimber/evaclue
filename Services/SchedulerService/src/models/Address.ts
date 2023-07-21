@@ -1,5 +1,6 @@
 
 export class Address {
+    id?: number;
     lat: number;
     lng: number;
     city: string;

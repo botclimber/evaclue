@@ -1,5 +1,6 @@
 declare namespace formatTypes{
     type dateFormat = `${number}-${number}-${number} ${number}:${number}:${number}`
+    type postalCodeFormat = `${number}-${number}`
 }
 
 declare namespace DbParams{

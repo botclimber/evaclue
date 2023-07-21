@@ -7,11 +7,12 @@ export default (requiresAuth = false) => {
   });
 
   if (requiresAuth) {
-    instance.defaults.withCredentials = true;
     const access_Token = localStorage.getItem("Access_token") as string;
-    instance.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${access_Token}`;
+    if(access_Token){
+      instance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${access_Token}`;
+    }
   }
 
   // Response interceptor for API calls
@@ -27,11 +28,7 @@ export default (requiresAuth = false) => {
         if (!data.access_token) {
           return Promise.reject(error);
         }
-        console.log("new acces token" + data.access_token);
-        localStorage.setItem('Access_token', data as string)
-        instance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${data.access_token}`;
+        localStorage.setItem('Access_token', data.access_token as string)
         originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
         return instance(originalRequest);
       }

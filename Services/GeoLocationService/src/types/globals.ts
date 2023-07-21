@@ -12,3 +12,16 @@ declare namespace DbParams{
         values: any[]
     }
 }
+
+declare namespace locationFormats{
+    type latLng = {
+        lat: number | undefined,
+        lng: number | undefined
+    }
+
+    type location = {
+        city: string,
+        street?: string,
+        buildingNr?: string,
+    }
+}

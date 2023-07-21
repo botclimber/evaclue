@@ -1,4 +1,5 @@
 export class ResidenceOwner {
+    id?: number;
     userId: number;
     userName: string;
     userImg: string;

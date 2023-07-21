@@ -1,4 +1,5 @@
 export class Residence {
+    id?: number;
     addressId: number;
     floor: string;
     direction: string;

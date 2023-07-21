@@ -23,7 +23,7 @@
     "express-fileupload": "^1.4.0",
     "fs": "0.0.1-security",
     "jsonwebtoken": "^9.0.0",
-    "mysql2": "^3.2.4",
+    "mysql2": "3.2.4",
     "node-geocoder": "^4.2.0",
     "node-schedule": "^2.1.1",
     "rxjs": "^7.8.0"

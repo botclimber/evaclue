@@ -1,4 +1,4 @@
-import {createPool, Pool, Query} from "mysql2";
+import {createPool, Pool} from "mysql2";
 
 type DbConfig = {
     host: string,
@@ -52,7 +52,6 @@ export class Db {
 
         try
         {
-            // TODO: name of object not being detected
             const columnNames: string = Object.keys(object).join(',')
             const values: string = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',')
 

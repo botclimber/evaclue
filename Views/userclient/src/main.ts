@@ -20,8 +20,5 @@ import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 createApp(App)
   .use(store)
   .use(router)
-  .use(VueUniversalModal, {
-    teleportTarget: "#modals",
-  })
   .use(BootstrapVue3)
   .mount("#app");

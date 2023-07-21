@@ -4,7 +4,8 @@ const baseURL = "user";
 
 export default {
   async login(email: string, password: string) {
-    const { data } = await Api().post(`${baseURL}/login`, { email, password });
+
+    const { data } = await Api(true).post(`${baseURL}/login`, { email, password });
   
     console.log(data);
 
@@ -12,15 +13,13 @@ export default {
   },
 
   async teste() {
-    const { data } = await Api().get(`${baseURL}/teste`);
+    const { data } = await Api(true).get(`${baseURL}/teste`);
   
     return data;
   },
 
   async refreshToken() {
-    const api =  await Api();
-    api.defaults.withCredentials = true;
-    const { data } = await api.post(`${baseURL}/refreshToken`, { withCredentials: true });
+    const { data } = await Api(true).post(`${baseURL}/refreshToken`);
   
     return data;
   },
@@ -42,7 +41,7 @@ export default {
       username,
       email,
       password,
-    }, { withCredentials: true });
+    });
   },
 
   recoverUserPasswordConfirmation(token: string, password: string) {

@@ -116,7 +116,7 @@ export default defineComponent({
       try {
         const data = await UserService.login(this.email, this.password);
         console.log(data);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
+        localStorage.setItem('Access_token', data as string)
         this.isLogged = true;
       } catch (error) {
         console.log(error);

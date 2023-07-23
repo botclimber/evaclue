@@ -35,6 +35,13 @@ export class UserController {
     return res.status(200).json({ access_token: accessToken});
   }
 
+  async Logout(req: Request, res: Response, next: NextFunction) {
+    console.log(req.cookies);
+    res.clearCookie("refreshToken");
+    res.end()
+    return res.status(200);
+  }
+
   async LoginUser(req: Request, res: Response, next: NextFunction) {
     const user: IUser = req.body;
 

@@ -4,6 +4,8 @@ import loginAdmin from "../components/LoginAdmin.vue";
 import register from "../components/Register.vue";
 import recoverPasswordConfirmation from "../components/RecoverPasswordConfirmation.vue";
 import recoverPasswordRequest from "../components/RecoverPasswordRequest.vue";
+import authTest from "../components/AuthTest.vue";
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user/loginAdmin",
     name: "Login-Admin",
     component: loginAdmin,
+  },
+  {
+    path: "/user/authTest",
+    name: "Auth-teste",
+    component: authTest,
   },
 ];
 

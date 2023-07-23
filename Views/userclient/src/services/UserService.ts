@@ -21,8 +21,19 @@ export default {
     return data;
   },
 
+  async logout() {
+
+    const { data } = await Api().post(`${baseURL}/logout`, null, {
+      withCredentials: true,
+    });
+
+    localStorage.removeItem("Access_token");
+  },
+
   async refreshToken() {
-    const { data } = await Api(true).post(`${baseURL}/refreshToken`, null, { withCredentials: true });
+    const { data } = await Api(true).post(`${baseURL}/refreshToken`, null, {
+      withCredentials: true,
+    });
 
     return data;
   },

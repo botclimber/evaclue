@@ -16,6 +16,8 @@ routes.get('/teste', authMiddleware, new UserController().Teste);
 
 routes.post('/refreshToken', new UserController().RefreshToken);
 
+routes.post('/logout', new UserController().Logout);
+
 
 //routes.post("/change-password/:userId", new UserController().ChangePassword);
 routes.post("/recover-password/confirmation", new UserController().RecoverPasswordConfirmation);

@@ -5,6 +5,6 @@ import { authMiddleware } from "../../middlewares/authMiddleware";
 const geoInstance: GeoLocation = new GeoLocation();
 const postRoutes = Router();
 
-postRoutes.post("/create", authMiddleware,geoInstance.create)
+postRoutes.post("/create", geoInstance.create)
 
 export default postRoutes

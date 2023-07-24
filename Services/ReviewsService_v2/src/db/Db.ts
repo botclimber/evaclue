@@ -28,7 +28,7 @@ export class Db {
         return connection;
     }
 
-    async selectAll<T>(table: string, conditions: string | undefined = undefined): Promise<T[]>  {
+    async selectAll<T>(table: string, conditions: string | undefined = undefined): Promise<Required<T>[]>  {
         const con = await this.openConnection()
 
         try{

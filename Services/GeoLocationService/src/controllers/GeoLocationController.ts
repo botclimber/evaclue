@@ -36,7 +36,9 @@ export class GeoLocation {
     async newResidence(addrId: number, res: Residence): Promise<number>{
 
         try{
-            const newResidence = new Residence(addrId, res.floor, res.direction)
+            const floor = (res.floor) ? res.floor : "";
+            const direction = (res.direction) ? res.direction : "";
+            const newResidence = new Residence(addrId, floor, direction)
             const id: number = await this.db.insert(newResidence)
 
             return id

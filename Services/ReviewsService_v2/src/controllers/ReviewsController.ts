@@ -1,7 +1,11 @@
 import {Request, Response, NextFunction} from "express"
 import axios from "axios"
 import { Review } from "../models/Review"
-//import Db from "../db/Db"
+import { Address } from "../models/Address"
+import { Residence } from "../models/Residence"
+import { ReviewValidator } from "../middlewares/ReviewValidator"
+import { Db } from "../db/Db"
+import { genNewDate } from "../helpers/DateFormat"
 
 /**
  * reviews - get all reviews | parameters?
@@ -9,16 +13,59 @@ import { Review } from "../models/Review"
  * update - e.g. when admin wants to approve a review | needs to check userType
  */
 
+type flag ={ flag: "fromMapClick" | undefined }
+
 export class ReviewsController {
+    db: Db;
+
+    constructor(){
+        this.db = new Db()
+    }
+
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
         return res.status(200).json()
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+        const data: Partial<Review & Address & Residence> & Required<middlewareTypes.JwtPayload> & flag = req.body
 
+        const address: Partial<Address> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
 
-        return res.status(200).json()
+        const residence: Partial<Residence> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
+
+        try{
+            console.log("Request creation of Address and Residence if not already existing and as response the IDs")
+            console.log(address)
+            console.log(residence)
+
+            await axios
+                .post(`http://localhost:${process.env.not_PORT}/v1/geoLocation/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
+                .then( async (response) => {
+                    console.log("Start validation | check if user already reviewed this Property")
+                    const revValidator = new ReviewValidator(this.db)
+                    const reviewLimit = await revValidator.reviewLimit(data.userId, response.data.addrId)
+                    
+                    if(!reviewLimit){
+                        const appr: number = (data.flag !== "fromMapClick")? 1: 0;
+                        const rev = new Review(data.userId, data.userName, data.userImage, 0, response.data.resId, data.review || "", data.rating || 5, genNewDate(), genNewDate(), data.anonymous || false, appr )
+                    
+                        // TODO: asign insertId to const and send as a paremeter together with images to the fileHandler service
+                        await this.db.insert<Review>(rev)
+
+                        return res.status(200).json({msg: "New Review created, i guess!"})
+
+                    }else
+                        return res.status(403).json({msg: "You already made a review for this location. Wait until you are able to review it again."})
+                    
+                })
+                .catch(err => {console.log(err); throw err})
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+
     }
 
     /**

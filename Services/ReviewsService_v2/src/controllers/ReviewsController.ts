@@ -6,6 +6,8 @@ import { Residence } from "../models/Residence"
 import { ReviewValidator } from "../middlewares/ReviewValidator"
 import { Db } from "../db/Db"
 import { genNewDate } from "../helpers/DateFormat"
+import { isAuthz } from "../middlewares/authorization"
+import { errorMessages as err } from "../helpers/errorMessages"
 
 /**
  * reviews - get all reviews | parameters?
@@ -13,6 +15,7 @@ import { genNewDate } from "../helpers/DateFormat"
  * update - e.g. when admin wants to approve a review | needs to check userType
  */
 
+type updateReviewState = {adminId: number, decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
 
 export class ReviewsController {
@@ -50,7 +53,7 @@ export class ReviewsController {
                         const appr: number = (data.flag !== "fromMapClick")? 1: 0;
                         const rev = new Review(data.userId, data.userName, data.userImage, 0, response.data.resId, data.review || "", data.rating || 5, genNewDate(), genNewDate(), data.anonymous || false, appr )
                     
-                        // TODO: asign insertId to const and send as a paremeter together with images to the fileHandler service
+                        // TODO: assign insertId to const and send as a paremeter together with images to the fileHandler service
                         await this.db.insert<Review>(rev)
 
                         return res.status(200).json({msg: "New Review created, i guess!"})
@@ -78,7 +81,23 @@ export class ReviewsController {
      * @returns 
      */
     async update(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+        const revId  = parseInt(req.params.revId)
+        const data: Required<middlewareTypes.JwtPayload & updateReviewState> = req.body
 
-        return res.status(200).json()
+        if(isAuthz(data.userType)){
+
+            try{
+
+            const chgConfig: DbParams.updateParams = {table: "Reviews", id: revId, columns: ["adminId", "approved", "approvedOn"], values: [data.adminId, data.decision, genNewDate()]}
+            await this.db.update(chgConfig)
+
+            return res.status(200).json({msg: "Row updated!"})
+            
+            }catch(e){
+                console.log(e)
+                throw e
+            }
+        
+        }else return res.status(err.NO_PERMISSION.status).json({msg: err.NO_PERMISSION.text})
     }
 }

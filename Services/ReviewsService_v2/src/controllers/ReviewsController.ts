@@ -21,7 +21,29 @@ export class ReviewsController {
 
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
-        return res.status(200).json()
+        try{
+            const reviews: Review[] = await this.db.selectAll<Review>("Reviews")
+
+            console.log("All reviews:")
+            console.log(reviews)
+            const filteredReviews = reviews.map(r => { 
+                if(r.anonymous){
+                    r.userName = "Anonymous"
+                    r.userImage = "default.gif"
+                }
+
+                return r
+            })
+
+            console.log("filteredReviews: ")
+            console.log(filteredReviews)
+
+            return res.status(200).json({reviews: filteredReviews})
+        
+        }catch(e){
+            console.log(e)
+            throw e
+        }
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{

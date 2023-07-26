@@ -9,12 +9,6 @@ import { genNewDate } from "../helpers/DateFormat"
 import { isAuthz } from "../middlewares/authorization"
 import { errorMessages as err } from "../helpers/errorMessages"
 
-/**
- * reviews - get all reviews | parameters?
- * create
- * update - e.g. when admin wants to approve a review | needs to check userType
- */
-
 type updateReviewState = {adminId: number, decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
 

@@ -4,6 +4,10 @@ import { LocationHandler } from "./LocationHandler"
 
 import { Address } from "../models/Address"
 import { Residence } from "../models/Residence"
+
+import { AddressActions } from "./AddressActions"
+import { ResidenceActions } from "./ResidenceActions"
+
 import { errorMessages as err } from "../helpers/errorMessages"
 
 export class GeoLocation {
@@ -11,44 +15,6 @@ export class GeoLocation {
     constructor(){
         this.db = new Db();
     }
-
-    async newAddress(addr: Address): Promise<number> {
-        const exists: Required<Address>[] | undefined = await this.db.selectAll<Address>("Addresses", `lat=${addr.lat} and lng=${addr.lng}`)
-
-        try{
-            if(exists !== undefined){
-                return exists[0].id
-
-            }else{
-                const newAddr = new Address(addr.lat, addr.lng, addr.city, addr.street, addr.nr, addr.postalCode, addr.country)
-                const id: number =  await this.db.insert<Address>(newAddr)
-
-                return id
-            }
-            
-        }catch(e){
-
-            console.log(e)
-            throw e
-        }
-    }
-
-    async newResidence(addrId: number, res: Residence): Promise<number>{
-
-        try{
-            const floor = (res.floor) ? res.floor : "";
-            const direction = (res.direction) ? res.direction : "";
-            const newResidence = new Residence(addrId, floor, direction)
-            const id: number = await this.db.insert(newResidence)
-
-            return id
-
-        }catch(e){
-            console.log(e)
-            throw e
-        }
-    }
-
 
     /**
      * Create Location (Address and Residence) return address and residence ids
@@ -59,8 +25,8 @@ export class GeoLocation {
      */
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         const createSendResponse = async (addr: Address) => {
-            const addrId = await this.newAddress(addr)
-            const resId = await this.newResidence(addrId, req.body.residence as Residence)
+            const addrId = await new AddressActions().newAddress(addr)
+            const resId = await new ResidenceActions().newResidence(addrId, req.body.residence as Residence)
 
             res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
         }

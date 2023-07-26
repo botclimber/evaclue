@@ -3,13 +3,7 @@ import { errorMessages as err} from "../helpers/errorMessages";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-type JwtPayload = {
-  userId: number,
-  userEmail: string,
-  userType: string
-};
-
-function deToken(token: string): JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload}
+function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as middlewareTypes.JwtPayload}
 
 export const authMiddleware = async (
   req: Request,

@@ -34,7 +34,7 @@ export class Db {
         try{
 
             const conds: string = (conditions)? conditions : "";
-            const sql = `SELECT * FROM ${table}${conds}`
+            const sql = `SELECT * FROM ${table} WHERE ${conds}`
 
             const res: any = await con.promise().execute(sql)
             return res[0]

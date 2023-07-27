@@ -26,8 +26,6 @@ Create Table ResidenceAddresses (
 Create Table Reviews (
   id int auto_increment,
   userId int not null,
-  userName varchar(120) not null,
-  userImage varchar(120) not null,
   adminId int not null,
   residenceId int not null,
   review text not null,
@@ -43,8 +41,6 @@ Create Table Reviews (
 Create Table ResidenceOwners (
   id int auto_increment,
   userId int not null,
-  userName varchar(120) not null,
-  userImg varchar(120) not null,
   adminId int not null,
   addressId int not null,
   cityLat double not null,
@@ -111,9 +107,7 @@ Create Table Users(
 -- NBOFilters = Notification Based On Filters
 Create Table NBOFilters(
     id int auto_increment,
-    userName varchar(120) not null,
     userId int not null,
-    userEmail varchar(60) not null,
     byCities varchar(60) not null,
     byRentPriceMin float(7,2),
     byRentPriceMax float(7,2),

@@ -29,7 +29,7 @@ export class ResOwnerController {
 
     async getByCity(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
-        const city: Uppercase<string> | undefined = req.body.toUpperCase()
+        const city: string | undefined = (req.query.city)? req.query.city.toString().toUpperCase() : undefined
 
         if(city){
     
@@ -55,7 +55,12 @@ export class ResOwnerController {
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+        const data: Partial<ResidenceOwner> = req.body
 
+        // Request to fileHandler service - send fileProof
+        const fileName = `userProofOfRes-${data.userId}.pdf`
+
+        const 
     }
 
     /**

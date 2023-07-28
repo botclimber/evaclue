@@ -1,4 +1,4 @@
-import {createPool, Pool, Query} from "mysql2";
+import {createPool, Pool} from "mysql2";
 
 type DbConfig = {
     host: string,
@@ -28,14 +28,14 @@ export class Db {
         return connection;
     }
 
-    // selectAll
-    //TODO: teste result and add proper generic type
-    async selectAll<T>(table: string): Promise<T[]>  {
+    async selectAll<T>(table: string, conditions: string | undefined = undefined): Promise<Required<T>[]>  {
         const con = await this.openConnection()
 
         try{
-            
-            const sql = `SELECT * FROM ${table}`
+
+            const conds: string = (conditions)? conditions : "";
+            const sql = `SELECT * FROM ${table} WHERE ${conds}`
+
             const res: any = await con.promise().execute(sql)
             return res[0]
 
@@ -47,16 +47,15 @@ export class Db {
         }
     }
 
-    async insert(object: Object, table: string): Promise<number> { 
+    async insert<T extends {}>(object: T): Promise<number> { 
         const con = await this.openConnection()
 
         try
         {
-            // TODO: name of object not being detected
             const columnNames: string = Object.keys(object).join(',')
             const values: string = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',')
 
-            const sql: string = `INSERT INTO ${table} (${columnNames}) VALUES (${values})`;
+            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
 
             console.log("[SQL - INSERT]: "+sql)
             const res = await con.promise().execute(sql);
@@ -70,30 +69,27 @@ export class Db {
         }
     }
 
-    // selectOne
-    // maybe some rework in order to make this even more generic
-    // for now it search relying only on one field/column
-    async selectOne<A>(object: Partial<A>, table: string): Promise<A[]> {
-        const con = await this.openConnection()
-
+    // update
+    async update(params: DbParams.updateParams): Promise<void> {
+        const con = await this.openConnection();
+        
         try{
-            
-            const sql = `SELECT * FROM ${table} WHERE ${Object.keys(object)[0]} = ${this.sqlTypeSafer(Object.values(object)[0])}`
-            console.log(sql)
-            const res: any = await con.promise().execute(sql)
-            return res[0]
+            const toBeUpdated: string = params.columns.map( (value, key) =>  value+'='+this.sqlTypeSafer(params.values[key])).join();
+            const sql: string = `UPDATE ${params.table} SET ${toBeUpdated} WHERE id = ${params.id}`;
 
-        }catch (e){
+            const res = await con.promise().execute(sql);
+            console.log("i guess it worked!")
+            console.log(res)
+
+        }catch(e){
             console.log(e)
             throw e
         }finally{
-            con.end(() => {/* close connection */})
+            con.end(() => {/** close connection */})
         }
     }
 
-    // insert
 
-    // update
-
+    //TODO: maybe we should create an exists method for performance reasons
     // delete
 }

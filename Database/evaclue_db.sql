@@ -14,20 +14,17 @@ Create Table Addresses (
   PRIMARY KEY (id)
 );
 
-Create Table ResidenceAddresses (
+Create Table Residences (
   id int auto_increment,
   addressId int not null,
   floor varchar(50) not null,
   direction varchar(50) not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (addressId) REFERENCES Addresses(Id)
+  PRIMARY KEY (id)
 );
 
 Create Table Reviews (
   id int auto_increment,
   userId int not null,
-  userName varchar(120) not null,
-  userImage varchar(120) not null,
   adminId int not null,
   residenceId int not null,
   review text not null,
@@ -36,21 +33,15 @@ Create Table Reviews (
   approvedOn datetime,
   anonymous boolean not null,
   approved int not null, -- 0 - pending, 1 - approved, 3 - rejected
-  PRIMARY KEY (id),
-  FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
+  PRIMARY KEY (id)
 );
 
 Create Table ResidenceOwners (
   id int auto_increment,
   userId int not null,
-  userName varchar(120) not null,
-  userImg varchar(120) not null,
   adminId int not null,
   addressId int not null,
-  cityLat double not null,
-  cityLng double not null,
-  floorOwner varchar(25) not null,
-  flatOwner varchar(25) not null,
+  resId int not null,
   rentPrice float(7,2),
   free int not null, -- 0 false, 1 true
   createdOn datetime,
@@ -58,8 +49,7 @@ Create Table ResidenceOwners (
   approved int not null,
   hide int,
   fileProof varchar(120) not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (addressId) REFERENCES Addresses(Id)
+  PRIMARY KEY (id)
 );
 
 -- TODO: to be implemented in ReviewsService
@@ -111,9 +101,7 @@ Create Table Users(
 -- NBOFilters = Notification Based On Filters
 Create Table NBOFilters(
     id int auto_increment,
-    userName varchar(120) not null,
     userId int not null,
-    userEmail varchar(60) not null,
     byCities varchar(60) not null,
     byRentPriceMin float(7,2),
     byRentPriceMax float(7,2),

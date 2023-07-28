@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Evaclue | API - 2.0.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+  <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/css/prettify.css" rel="stylesheet" media="screen">
+  <link href="/css/style.css" rel="stylesheet" media="screen, print">
+  <link href="https://apidocjs.com/example_basic/img/favicon.ico" rel="icon" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/css">
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div id="sidenav" class="span2">
+        <nav id="scrollingNav">
+          <ul class="sidenav nav nav-list">
+            <li class="nav-header" data-group="Auth"><a href="#auth">Auth/Authz</a></li>
+            <li data-group="Auth" data-name="token" data-version="0.0.0">
+              <a href="#token">Token based</a>
+            </li>
+            <li class="nav-header" data-group="Reviews"><a href="#reviews">Reviews</a></li>
+            <li data-group="Reviews" data-name="GetReviews" data-version="0.0.0">
+              <a href="#get_all_reviews">Get All Reviews</a>
+            </li>
+            <li data-group="Reviews" data-name="SearchLocation" data-version="0.0.0">
+              <a href="#search_location">Search</a>
+            </li>
+            <li data-group="Reviews" data-name="CreateReview" data-version="0.0.0">
+              <a href="#create_review">Create</a>
+            </li>
+            <li data-group="Reviews" data-name="UpdateReview" data-version="0.0.0">
+              <a href="#update_review">Update</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div id="content">
+        <div id="project">
+          <div class="pull-left">
+            <h1>Evaclue</h1>
+            <h2>Reviews Service</h2>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div id="header"></div>
+        <div id="sections">
+          <section id="auth">
+            <div id="token">
+              <div class="pull-left">
+                <h1>Token based</h1>
+                For some requests a token is mandatory and so in the header the following parameter must exist. In this documentation token mandatory requests are mention as <p>Token required</p>
+                <br/><br/> 
+              </div>
+              
+              <div class="clearfix"></div>
+                <h2>Header and required keys</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Header Name</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">r-access-token</td>
+                      <td>
+                        token goes as value of this parameter
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Keys</th>
+                      <th style="width: 70%">type</th>
+                      <th style="width: 70%">description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">userId</td>
+                      <td>
+                        number
+                      </td>
+                      <td>
+                        User unique Id
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">userType</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        user type for authorization purposes
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">email</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        User personal email for whatever purposes
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </section>
+          <section id="reviews">
+            <div id="get_all_reviews">
+
+              <article data-group="Reviews" data-name="get_all_reviews" data-version="0.0.0">
+                <div class="pull-left">
+                  <h1>Get All Reviews</h1>
+                </div>
+                <div class="clearfix"></div>
+                <pre class="prettyprint language-html prettyprinted" data-type="get"
+                  style=""><code><span class="pln">api/v1/reviews</span></code></pre>
+
+                <h2>Parameter</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">empty</td>
+                      <td>
+                        empty
+                      </td>
+                      <td>
+                        <p>empty</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <h2>Success 200</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">rev</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>reviews</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">res</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>residence for specific review</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">addr</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>address for specific review and residence</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#success-examples-User-GetUser-0_0_0-0">Success-Response:</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active" id="success-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK
+    </span>
+    {
+      "rev": {
+          "id": 1,
+          "userId": 0,
+          "adminId": 0,
+          "residenceId": 1,
+          "review": "test 1 for residenceId 1",
+          "rating": 5,
+          "createdOn": "1000-01-01T00:36:45.000Z",
+          "approvedOn": "1000-01-01T00:36:45.000Z",
+          "anonymous": 0,
+          "approved": 0
+      },
+      "res": {
+          "id": 1,
+          "addressId": 1,
+          "floor": "5",
+          "direction": "left"
+      },
+      "addr": {
+          "id": 1,
+          "lat": 1,
+          "lng": 1,
+          "city": "city 1",
+          "street": "street 1",
+          "nr": "000",
+          "postalCode": "0000-000",
+          "country": "Portugal"
+      }
+    }
+  </code>
+</pre>
+                  </div>
+                </div>
+
+               <!-- <h2>Error 4xx</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">UserNotFound</td>
+                      <td>
+                        <p>The <code>id</code> of the User was not found.</p>
+
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#error-examples-User-GetUser-0_0_0-0">Error-Response:</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active" id="error-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">404</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> </span><span class="typ">Found</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"error"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"UserNotFound"</span><span class="pln">
+    </span><span class="pun">}</span></code></pre>
+                  </div>
+                </div>-->
+              </article>
+            </div>
+<hr/>
+            <div id="search_location">
+              <article data-group="Reviews" data-name="search_location" data-version="0.0.0">
+                <div class="pull-left">
+                  <h1>Search</h1>
+                </div>
+                <div class="clearfix"></div>
+                <pre class="prettyprint language-html prettyprinted" data-type="get"
+                  style=""><code><span class="pln">/api/v1/search</span></code></pre>
+
+                <h2>Parameter</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">city</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>Some City</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">street</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>some Street</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nr</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>Some building number</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h2>Success 200</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">address</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>lat, lng of searched location</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">locations</td>
+                      <td>
+                        array[dictionaries]
+                      </td>
+                      <td>
+                        <p>Contains lat,lng of location in maps followed by residences and reviews, for a specific location</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#success-examples-User-GetUser-0_0_0-0">Success-Response:</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="success-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK
+    </span>
+    {
+      "address": {
+          "lat": 38.571431,
+          "lng": -7.913501999999999
+      },
+      "locations": [
+          {
+              "lat": 1,
+              "lng": 1,
+              "residences": [
+                  {
+                      "id": 1,
+                      "addressId": 1,
+                      "floor": "5",
+                      "direction": "left"
+                  },
+                  {
+                      "id": 2,
+                      "addressId": 1,
+                      "floor": "4",
+                      "direction": "left"
+                  },
+                  {
+                      "id": 3,
+                      "addressId": 1,
+                      "floor": "6",
+                      "direction": "right"
+                  }
+              ],
+              "reviews": String
+          },
+      ]
+  }
+  </code></pre>
+                  </div>
+                </div>
+                <!--<h2>Error 4xx</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">UserNotFound</td>
+                      <td>
+                        <p>The <code>id</code> of the User was not found.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#error-examples-User-GetUser-0_0_0-0">Error-Response:</a>
+                  </li>
+                </ul>
+
+                 <div class="tab-content">
+                  <div class="tab-pane active" id="error-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">404</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> </span><span class="typ">Found</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"error"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"UserNotFound"</span><span class="pln">
+    </span><span class="pun">}</span></code></pre>
+                  </div>
+                </div> -->
+              </article>
+
+            </div>
+<hr/>
+            <div id="create_review">
+              <article data-group="Reviews" data-name="update_review" data-version="0.0.0">
+                <div class="pull-left">
+                  <h1>Create</h1>
+                  <p>Token required</p>
+                </div>
+                <div class="clearfix"></div>
+                <pre class="prettyprint language-html prettyprinted" data-type="post"
+                  style=""><code><span class="pln">/api/v1/create</span></code></pre>
+
+                <h2>Parameter</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                      <th style="width: 70%">Required</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">lat</td>
+                      <td>
+                        double
+                      </td>
+                      <td>
+                        <p>latitude</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">lng</td>
+                      <td>
+                        double
+                      </td>
+                      <td>
+                        <p>longitude</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">city</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>City</p>
+                      </td>
+                      <td>
+                        <p>true</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">street</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>Street</p>
+                      </td>
+                      <td>
+                        <p>true</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">buildingNumber</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>Building Number</p>
+                      </td>
+                      <td>
+                        <p>true</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nrFloor</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>Building floor</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nrSide</td>
+                      <td>
+                        string
+                      </td>
+                      <td>
+                        <p>door side (e.g. letf, right, front or back ...))</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nrRating</td>
+                      <td>
+                        number
+                      </td>
+                      <td>
+                        <p>Qualitative rating</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nrAnon</td>
+                      <td>
+                        number
+                      </td>
+                      <td>
+                        <p>anonymous review</p>
+                      </td>
+                      <td>
+                        <p>false</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">nrReview</td>
+                      <td>
+                        string/text
+                      </td>
+                      <td>
+                        <p>Review</p>
+                      </td>
+                      <td>
+                        <p>true</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h2>Success 200</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">address</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>lat, lng of searched location</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">locations</td>
+                      <td>
+                        array[dictionaries]
+                      </td>
+                      <td>
+                        <p>Contains lat,lng of location in maps followed by residences and reviews, for a specific location</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#success-examples-User-GetUser-0_0_0-0">Success-Response:</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="success-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK
+    </span>
+    {
+      "address": {
+          "lat": 38.571431,
+          "lng": -7.913501999999999
+      },
+      "locations": [
+          {
+              "lat": 1,
+              "lng": 1,
+              "residences": [
+                  {
+                      "id": 1,
+                      "addressId": 1,
+                      "floor": "5",
+                      "direction": "left"
+                  },
+                  {
+                      "id": 2,
+                      "addressId": 1,
+                      "floor": "4",
+                      "direction": "left"
+                  },
+                  {
+                      "id": 3,
+                      "addressId": 1,
+                      "floor": "6",
+                      "direction": "right"
+                  }
+              ],
+              "reviews": String
+          },
+      ]
+  }
+  </code></pre>
+                  </div>
+                </div>
+                <!--<h2>Error 4xx</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">UserNotFound</td>
+                      <td>
+                        <p>The <code>id</code> of the User was not found.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#error-examples-User-GetUser-0_0_0-0">Error-Response:</a>
+                  </li>
+                </ul>
+
+                 <div class="tab-content">
+                  <div class="tab-pane active" id="error-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">404</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> </span><span class="typ">Found</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"error"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"UserNotFound"</span><span class="pln">
+    </span><span class="pun">}</span></code></pre>
+                  </div>
+                </div> -->
+              </article>
+
+            </div>
+<hr />
+            <div id="update_review">
+              <article data-group="Reviews" data-name="update_review" data-version="0.0.0">
+                <div class="pull-left">
+                  <h1>Update</h1>
+                  <p>Token required</p>
+                </div>
+                <div class="clearfix"></div>
+                <pre class="prettyprint language-html prettyprinted" data-type="patch"
+                  style=""><code><span class="pln">/api/v1/updateReview/:revId</span></code></pre>
+
+                <h2>Parameter</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">decision</td>
+                      <td>
+                        number
+                      </td>
+                      <td>
+                        <p>0 -> pending | 1 -> approved | 2 -> rejected</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <h2>Success 200</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+                      <th style="width: 10%">Type</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">rev</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>reviews</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">res</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>residence for specific review</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="code">addr</td>
+                      <td>
+                        dictionary
+                      </td>
+                      <td>
+                        <p>address for specific review and residence</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#success-examples-User-GetUser-0_0_0-0">Success-Response:</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active" id="success-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">200</span><span class="pln"> OK
+    </span>
+    {
+      "rev": {
+          "id": 1,
+          "userId": 0,
+          "adminId": 0,
+          "residenceId": 1,
+          "review": "test 1 for residenceId 1",
+          "rating": 5,
+          "createdOn": "1000-01-01T00:36:45.000Z",
+          "approvedOn": "1000-01-01T00:36:45.000Z",
+          "anonymous": 0,
+          "approved": 0
+      },
+      "res": {
+          "id": 1,
+          "addressId": 1,
+          "floor": "5",
+          "direction": "left"
+      },
+      "addr": {
+          "id": 1,
+          "lat": 1,
+          "lng": 1,
+          "city": "city 1",
+          "street": "street 1",
+          "nr": "000",
+          "postalCode": "0000-000",
+          "country": "Portugal"
+      }
+    }
+  </code>
+</pre>
+                  </div>
+                </div>
+                <!--<h2>Error 4xx</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Field</th>
+
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">UserNotFound</td>
+                      <td>
+                        <p>The <code>id</code> of the User was not found.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="nav nav-tabs nav-tabs-examples">
+                  <li class="active">
+                    <a
+                      href="https://apidocjs.com/example_basic/#error-examples-User-GetUser-0_0_0-0">Error-Response:</a>
+                  </li>
+                </ul>
+
+                 <div class="tab-content">
+                  <div class="tab-pane active" id="error-examples-User-GetUser-0_0_0-0">
+                    <pre class="prettyprint language-json prettyprinted" data-type="json" style=""><code><span class="pln">    HTTP</span><span class="pun">/</span><span class="lit">1.1</span><span class="pln"> </span><span class="lit">404</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> </span><span class="typ">Found</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"error"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"UserNotFound"</span><span class="pln">
+    </span><span class="pun">}</span></code></pre>
+                  </div>
+                </div> -->
+              </article>
+
+            </div>
+          </section>
+        </div>
+        <div id="footer"></div>
+        <div id="generator">
+          <div class="content">
+            Evaclue 2023
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

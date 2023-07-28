@@ -4,13 +4,11 @@ import { AddressActions } from "../../controllers/AddressActions";
 import { ResidenceActions } from "../../controllers/ResidenceActions";
 
 const geoInstance: GeoLocation = new GeoLocation();
-const addressActionsClass = new AddressActions();
-const residenceActionsClass = new ResidenceActions();
 
 const getRoutes = Router();
 
 getRoutes.get("/search", geoInstance.search)
-getRoutes.get("/addresses", addressActionsClass.getAddresses)
-getRoutes.get("/residences", residenceActionsClass.getResidences)
+getRoutes.get("/addresses", geoInstance.getAddresses)
+getRoutes.get("/residences", geoInstance.getResidences)
 
 export default getRoutes

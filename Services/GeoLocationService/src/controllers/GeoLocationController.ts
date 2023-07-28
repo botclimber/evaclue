@@ -2,8 +2,8 @@ import {Request, Response, NextFunction} from "express"
 import { Db } from "../db/Db"
 import { LocationHandler } from "./LocationHandler"
 
-import { Address } from "../models/Address"
-import { Residence } from "../models/Residence"
+import { Addresses } from "../models/Addresses"
+import { Residences } from "../models/Residences"
 
 import { AddressActions } from "./AddressActions"
 import { ResidenceActions } from "./ResidenceActions"
@@ -24,14 +24,15 @@ export class GeoLocation {
      * @param next 
      */
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-        const createSendResponse = async (addr: Address) => {
+        const createSendResponse = async (addr: Addresses) => {
             const addrId = await new AddressActions().newAddress(addr)
-            const resId = await new ResidenceActions().newResidence(addrId, req.body.residence as Residence)
+            const residence: Residences = {addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction }
+            const resId = await new ResidenceActions().newResidence(residence)
 
             res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
         }
 
-        const addr = req.body.address as Address
+        const addr = req.body.address as Addresses
 
         if(addr.lat === undefined && addr.lng === undefined){
             const locInstance = new LocationHandler({city: addr.city, street: addr.street, buildingNr: addr.nr})
@@ -62,4 +63,42 @@ export class GeoLocation {
 
         res.status(200).json({lat: latLng.lat, lng: latLng.lng })
     }   
+
+    /**
+     * 
+     * @param req 
+     * @param res 
+     * @param next 
+     * @returns 
+     */
+    async getAddresses(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+        try{
+            const addresses: Addresses[] = await new AddressActions().getAddresses()
+            return res.status(200).json({addresses: addresses})
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+        
+    }
+
+    /**
+     * 
+     * @param req 
+     * @param res 
+     * @param next 
+     * @returns 
+     */
+    async getResidences(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+        try{
+            const residences: Residences[] = await new ResidenceActions().getResidences()
+            return res.status(200).json({residences: residences})
+            
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+        
+    }
 }

@@ -14,13 +14,12 @@ Create Table Addresses (
   PRIMARY KEY (id)
 );
 
-Create Table ResidenceAddresses (
+Create Table Residences (
   id int auto_increment,
   addressId int not null,
   floor varchar(50) not null,
   direction varchar(50) not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (addressId) REFERENCES Addresses(Id)
+  PRIMARY KEY (id)
 );
 
 Create Table Reviews (
@@ -34,8 +33,7 @@ Create Table Reviews (
   approvedOn datetime,
   anonymous boolean not null,
   approved int not null, -- 0 - pending, 1 - approved, 3 - rejected
-  PRIMARY KEY (id),
-  FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
+  PRIMARY KEY (id)
 );
 
 Create Table ResidenceOwners (
@@ -51,8 +49,7 @@ Create Table ResidenceOwners (
   approved int not null,
   hide int,
   fileProof varchar(120) not null,
-  PRIMARY KEY (id),
-  FOREIGN KEY (addressId) REFERENCES Addresses(Id)
+  PRIMARY KEY (id)
 );
 
 -- TODO: to be implemented in ReviewsService

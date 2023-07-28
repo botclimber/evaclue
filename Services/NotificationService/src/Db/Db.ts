@@ -28,11 +28,12 @@ export class Db {
         return connection;
     }
 
-    async selectAll<T>(table: string, conditions: string = ""): Promise<Required<T>[]>  {
+    async selectAll<T>(table: string, conditions: string | undefined = undefined): Promise<Required<T>[]>  {
         const con = await this.openConnection()
 
         try{
-            const sql = `SELECT * FROM ${table} WHERE ${conditions}`
+            const cond = (conditions)? ` WHERE ${conditions}` : ""
+            const sql = `SELECT * FROM ${table}${cond}`
 
             const res: any = await con.promise().execute(sql)
             return res[0]

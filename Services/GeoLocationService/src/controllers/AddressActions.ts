@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express"
 import { Db } from "../db/Db";
 
-import { Address } from "../models/Address";
+import { Addresses } from "../models/Addresses";
 
 export class AddressActions{
     db: Db
@@ -9,16 +9,16 @@ export class AddressActions{
         this.db = new Db();
     }
 
-    async newAddress(addr: Address): Promise<number> {
-        const exists: Required<Address>[] | undefined = await this.db.selectAll<Address>("Addresses", `lat=${addr.lat} and lng=${addr.lng}`)
+    async newAddress(addr: Addresses): Promise<number> {
+        const exists: Required<Addresses>[] | undefined = await this.db.selectAll<Addresses>("Addresses", `lat=${addr.lat} and lng=${addr.lng}`)
 
         try{
-            if(exists !== undefined){
+            if(exists.length){
                 return exists[0].id
 
             }else{
-                const newAddr = new Address(addr.lat, addr.lng, addr.city, addr.street, addr.nr, addr.postalCode, addr.country)
-                const id: number =  await this.db.insert<Address>(newAddr)
+                const newAddr = new Addresses(addr.lat, addr.lng, addr.city, addr.street, addr.nr, addr.postalCode, addr.country)
+                const id: number =  await this.db.insert<Addresses>(newAddr)
 
                 return id
             }
@@ -30,10 +30,10 @@ export class AddressActions{
         }
     }
 
-    async getAddresses(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    async getAddresses(): Promise<Addresses[]> {
         try{
-            const addresses: Address[] = await this.db.selectAll<Address>("Addresses")
-            return res.status(200).json({addresses: addresses})
+            const addresses: Addresses[] = await this.db.selectAll<Addresses>("Addresses")
+            return addresses
         
         }catch(e){
             console.log(e)

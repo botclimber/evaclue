@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express"
 import { Db } from "../db/Db";
 
-import { Residence } from "../models/Residence";
+import { Residences } from "../models/Residences";
 
 export class ResidenceActions{
     db: Db
@@ -9,12 +9,12 @@ export class ResidenceActions{
         this.db = new Db();
     }
 
-    async newResidence(addrId: number, res: Residence): Promise<number>{
+    async newResidence(res: Residences): Promise<number>{
 
         try{
             const floor = (res.floor) ? res.floor : "";
             const direction = (res.direction) ? res.direction : "";
-            const newResidence = new Residence(addrId, floor, direction)
+            const newResidence = new Residences(res.addressId, floor, direction)
             const id: number = await this.db.insert(newResidence)
 
             return id
@@ -25,10 +25,10 @@ export class ResidenceActions{
         }
     }
 
-    async getResidences(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    async getResidences(): Promise<Residences[]> {
         try{
-            const residences: Residence[] = await this.db.selectAll<Residence>("Residences")
-            return res.status(200).json({residences: residences})
+            const residences: Residences[] = await this.db.selectAll<Residences>("Residences")
+            return residences
         
         }catch(e){
             console.log(e)

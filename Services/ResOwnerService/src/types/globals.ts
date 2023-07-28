@@ -35,3 +35,9 @@ declare namespace middlewareTypes {
         userType: string
       };
 }
+
+declare namespace globalTypes { 
+    type updateResOwnerState = {
+        state?: number
+    } & middlewareTypes.JwtPayload
+}

@@ -1,4 +1,4 @@
-export class ResidenceOwner {
+export class ResidenceOwners {
     id?: number;
     userId: number;
     adminId: number;

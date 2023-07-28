@@ -1,5 +1,4 @@
 import {Request, Response, NextFunction} from "express"
-import { Db } from "../db/Db"
 import { LocationHandler } from "./LocationHandler"
 
 import { Addresses } from "../models/Addresses"
@@ -11,10 +10,6 @@ import { ResidenceActions } from "./ResidenceActions"
 import { errorMessages as err } from "../helpers/errorMessages"
 
 export class GeoLocation {
-    db: Db
-    constructor(){
-        this.db = new Db();
-    }
 
     /**
      * Create Location (Address and Residence) return address and residence ids

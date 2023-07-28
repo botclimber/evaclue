@@ -43,10 +43,7 @@ Create Table ResidenceOwners (
   userId int not null,
   adminId int not null,
   addressId int not null,
-  cityLat double not null,
-  cityLng double not null,
-  floorOwner varchar(25) not null,
-  flatOwner varchar(25) not null,
+  resId int not null,
   rentPrice float(7,2),
   free int not null, -- 0 false, 1 true
   createdOn datetime,

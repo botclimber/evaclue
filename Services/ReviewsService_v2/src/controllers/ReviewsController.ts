@@ -9,7 +9,7 @@ import { genNewDate } from "../helpers/DateFormat"
 import { isAuthz } from "../middlewares/authorization"
 import { errorMessages as err } from "../helpers/errorMessages"
 
-type updateReviewState = {adminId: number, decision: number}
+type updateReviewState = {decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
 
 export class ReviewsController {
@@ -48,9 +48,7 @@ export class ReviewsController {
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
         const data: Partial<Review & Address & Residence> & Required<middlewareTypes.JwtPayload> & flag = req.body
-
         const address: Partial<Address> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
-
         const residence: Partial<Residence> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
 
         try{
@@ -59,7 +57,7 @@ export class ReviewsController {
             console.log(residence)
 
             await axios
-                .post(`http://localhost:${process.env.not_PORT}/v1/geoLocation/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
+                .post(`http://localhost:${process.env.geo_PORT}/v1/geoLocation/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
                 .then( async (response) => {
                     console.log("Start validation | check if user already reviewed this Property")
                     const revValidator = new ReviewValidator(this.db)
@@ -75,7 +73,7 @@ export class ReviewsController {
                         return res.status(200).json({msg: "New Review created, i guess!"})
 
                     }else
-                        return res.status(403).json({msg: "You already made a review for this location. Wait until you are able to review it again."})
+                        return res.status(err.REPEATED_REVIEW.status).json({msg: err.REPEATED_REVIEW.text})
                     
                 })
                 .catch(err => {console.log(err); throw err})
@@ -97,17 +95,19 @@ export class ReviewsController {
      * @returns 
      */
     async update(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
-        const revId  = parseInt(req.params.revId)
+        const revId: number | undefined  = parseInt(req.params.revId)
         const data: Required<middlewareTypes.JwtPayload & updateReviewState> = req.body
+
+        if(!revId) return res.status(err.MISSING_PARAMS.status).json({msg: err.MISSING_PARAMS.text})
 
         if(isAuthz(data.userType)){
 
             try{
 
-            const chgConfig: DbParams.updateParams = {table: "Reviews", id: revId, columns: ["adminId", "approved", "approvedOn"], values: [data.adminId, data.decision, genNewDate()]}
-            await this.db.update(chgConfig)
+                const chgConfig: DbParams.updateParams = {table: "Reviews", id: revId, columns: ["adminId", "approved", "approvedOn"], values: [data.userId, data.decision || 0, genNewDate()]}
+                await this.db.update(chgConfig)
 
-            return res.status(200).json({msg: "Row updated!"})
+                return res.status(200).json({msg: "Row updated!"})
             
             }catch(e){
                 console.log(e)

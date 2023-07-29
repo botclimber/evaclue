@@ -31,6 +31,8 @@ import { ResidenceOwners } from '../../src/models/ResidenceOwners';
 
 describe("ResOwnersActions class", () => {
 
+    const resActions = new ResOwnerActions()
+
     test("Create new Residence Owner", async () => {
 
     })

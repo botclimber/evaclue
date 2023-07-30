@@ -68,7 +68,7 @@ export class ResOwnerController {
             console.log(response)
             
             // check there are empty parameters
-            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), genNewDate(), 0, true, fileName)
+            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), "0000-00-00 00:00:00", 0, true, fileName)
             
             const resOwnerId = await this.resOwnerActions.create(newResidenceOwner)
             

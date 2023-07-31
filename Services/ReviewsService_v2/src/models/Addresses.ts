@@ -1,5 +1,5 @@
 
-export class Address {
+export class Addresses {
     id?: number;
     lat: number;
     lng: number;

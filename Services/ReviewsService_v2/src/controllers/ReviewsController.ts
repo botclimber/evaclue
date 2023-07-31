@@ -1,44 +1,27 @@
 import {Request, Response, NextFunction} from "express"
 import axios from "axios"
-import { Review } from "../models/Review"
-import { Address } from "../models/Address"
-import { Residence } from "../models/Residence"
+import { Reviews } from "../models/Reviews"
+import { Addresses } from "../models/Addresses"
+import { Residences } from "../models/Residences"
 import { ReviewValidator } from "../middlewares/ReviewValidator"
-import { Db } from "../db/Db"
 import { genNewDate } from "../helpers/DateFormat"
 import { isAuthz } from "../middlewares/authorization"
 import { errorMessages as err } from "../helpers/errorMessages"
+import { ReviewActions } from "./ReviewActions"
 
 type updateReviewState = {decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
 
 export class ReviewsController {
-    db: Db;
 
-    constructor(){
-        this.db = new Db()
-    }
+    reviewActions: ReviewActions
+    constructor(){ this.reviewActions = new ReviewActions() }
 
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
         try{
-            const reviews: Review[] = await this.db.selectAll<Review>("Reviews")
-
-            console.log("All reviews:")
-            console.log(reviews)
-            const filteredReviews = reviews.map(r => { 
-                if(r.anonymous){
-                    r.userName = "Anonymous"
-                    r.userImage = "default.gif"
-                }
-
-                return r
-            })
-
-            console.log("filteredReviews: ")
-            console.log(filteredReviews)
-
-            return res.status(200).json({reviews: filteredReviews})
+            const reviews: Reviews[] = await this.reviewActions.getReviews()
+            return res.status(200).json({reviews: reviews})
         
         }catch(e){
             console.log(e)
@@ -47,9 +30,9 @@ export class ReviewsController {
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
-        const data: Partial<Review & Address & Residence> & Required<middlewareTypes.JwtPayload> & flag = req.body
-        const address: Partial<Address> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
-        const residence: Partial<Residence> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
+        const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & flag = req.body
+        const address: Partial<Addresses> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
+        const residence: Partial<Residences> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
 
         try{
             console.log("Request creation of Address and Residence if not already existing and as response the IDs")
@@ -59,18 +42,18 @@ export class ReviewsController {
             await axios
                 .post(`http://localhost:${process.env.geo_PORT}/v1/geoLocation/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
                 .then( async (response) => {
+                    
                     console.log("Start validation | check if user already reviewed this Property")
-                    const revValidator = new ReviewValidator(this.db)
+                    const revValidator = new ReviewValidator()
                     const reviewLimit = await revValidator.reviewLimit(data.userId, response.data.addrId)
                     
                     if(!reviewLimit){
                         const appr: number = (data.flag !== "fromMapClick")? 1: 0;
-                        const rev = new Review(data.userId, data.userName, data.userImage, 0, response.data.resId, data.review || "", data.rating || 5, genNewDate(), genNewDate(), data.anonymous || false, appr )
+                        const rev = new Reviews(data.userId, 0, response.data.resId, data.review || "", data.rating || 5, genNewDate(), "1000-01-01 00:00:00", data.anonymous || false, appr)
                     
                         // TODO: assign insertId to const and send as a paremeter together with images to the fileHandler service
-                        await this.db.insert<Review>(rev)
-
-                        return res.status(200).json({msg: "New Review created, i guess!"})
+                        await this.reviewActions.create(rev)
+                        return res.status(200).json({msg: "New Review created!"})
 
                     }else
                         return res.status(err.REPEATED_REVIEW.status).json({msg: err.REPEATED_REVIEW.text})
@@ -104,9 +87,7 @@ export class ReviewsController {
 
             try{
 
-                const chgConfig: DbParams.updateParams = {table: "Reviews", id: revId, columns: ["adminId", "approved", "approvedOn"], values: [data.userId, data.decision || 0, genNewDate()]}
-                await this.db.update(chgConfig)
-
+                await this.reviewActions.update(revId, data.decision, data.userId)
                 return res.status(200).json({msg: "Row updated!"})
             
             }catch(e){

@@ -2,7 +2,6 @@ import {Request, Response, NextFunction} from "express"
 import { errorMessages as err } from "../helpers/errorMessages"
 import { ResidenceOwners } from "../models/ResidenceOwners"
 import { isAuthz } from "../middlewares/authorization"
-import { Db } from "../db/Db"
 import { Addresses } from "../models/Addresses"
 import { Residences } from "../models/Residences"
 import axios from "axios"
@@ -10,12 +9,9 @@ import { genNewDate } from "../helpers/DateFormat"
 import { ResOwnerActions } from "./ResOwnerActions"
 
 export class ResOwnerController {
+    
     resOwnerActions: ResOwnerActions
-    db: Db
-    constructor(){
-        this.db = new Db();
-        this.resOwnerActions = new ResOwnerActions()
-    }
+    constructor(){ this.resOwnerActions = new ResOwnerActions() }
 
     async resOwners(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 

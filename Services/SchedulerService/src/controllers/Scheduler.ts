@@ -3,9 +3,9 @@ import { errorMessages as err } from "../helpers/errorMessages"
 
 import { Db } from "../db/Db"
 
-import { UserFilter } from "../models/UserFilter"
-import { Address } from "../models/Address"
-import { ResidenceOwner } from "../models/ResidenceOwner"
+import { UserFilters } from "../models/UserFilters"
+import { Addresses } from "../models/Addresses"
+import { ResidenceOwners } from "../models/ResidenceOwners"
 
 type availableResidences = {
     resOwnerId: number,
@@ -30,16 +30,16 @@ export class Scheduler{
     private mountData = async (): Promise<availableForRentByUserFilter[]>  => {
         const db: Db = new Db()
 
-        const addresses: Address[] = await db.selectAll<Address>("Addresses")
-        const resOwners: ResidenceOwner[] = await db.selectAll<ResidenceOwner>("ResidenceOwners")
-        const usersFilters: UserFilter[] = await db.selectAll<UserFilter>("NBOFilters")
+        const addresses: Addresses[] = await db.selectAll<Addresses>("Addresses")
+        const resOwners: ResidenceOwners[] = await db.selectAll<ResidenceOwners>("ResidenceOwners")
+        const usersFilters: UserFilters[] = await db.selectAll<UserFilters>("NBOFilters")
 
         console.log("filtering on free and approved residences ...")
-        const filteredByFreeResOwners: ResidenceOwner[] = resOwners.filter(r => r.free && r.approved)
+        const filteredByFreeResOwners: ResidenceOwners[] = resOwners.filter(r => r.free && r.approved)
 
-        type resOwnerPlusAddress = ResidenceOwner & {address: Address}
-        const mapResToAddress = (res: ResidenceOwner): resOwnerPlusAddress => {
-            const city: Address | undefined = addresses.find(r => r.id == res.addressId)
+        type resOwnerPlusAddress = ResidenceOwners & {address: Addresses}
+        const mapResToAddress = (res: ResidenceOwners): resOwnerPlusAddress => {
+            const city: Addresses | undefined = addresses.find(r => r.id == res.addressId)
 
             if(city === undefined) throw Error(err.ADDRESS_SEGMENT_FAULT.text);
             

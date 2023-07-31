@@ -99,7 +99,7 @@ Create Table Users(
 
 -- Notification of available residences on Users defined filters
 -- NBOFilters = Notification Based On Filters
-Create Table NBOFilters(
+Create Table UserFilters(
     id int auto_increment,
     userId int not null,
     byCities varchar(60) not null,

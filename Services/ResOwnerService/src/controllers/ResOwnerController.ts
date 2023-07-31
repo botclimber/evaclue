@@ -2,7 +2,6 @@ import {Request, Response, NextFunction} from "express"
 import { errorMessages as err } from "../helpers/errorMessages"
 import { ResidenceOwners } from "../models/ResidenceOwners"
 import { isAuthz } from "../middlewares/authorization"
-import { Db } from "../db/Db"
 import { Addresses } from "../models/Addresses"
 import { Residences } from "../models/Residences"
 import axios from "axios"
@@ -10,12 +9,9 @@ import { genNewDate } from "../helpers/DateFormat"
 import { ResOwnerActions } from "./ResOwnerActions"
 
 export class ResOwnerController {
+    
     resOwnerActions: ResOwnerActions
-    db: Db
-    constructor(){
-        this.db = new Db();
-        this.resOwnerActions = new ResOwnerActions()
-    }
+    constructor(){ this.resOwnerActions = new ResOwnerActions() }
 
     async resOwners(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 
@@ -68,7 +64,7 @@ export class ResOwnerController {
             console.log(response)
             
             // check there are empty parameters
-            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), genNewDate(), 0, true, fileName)
+            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), "0000-00-00 00:00:00", 0, true, fileName)
             
             const resOwnerId = await this.resOwnerActions.create(newResidenceOwner)
             

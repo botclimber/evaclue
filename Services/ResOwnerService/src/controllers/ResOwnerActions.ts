@@ -28,7 +28,7 @@ export class ResOwnerActions {
     async getByCity(city: string | undefined): Promise<Partial<ResidenceOwners & Addresses>[]>{
     
         try{
-            const addresses: Required<Addresses>[] = await this.db.selectAll<Addresses>("Addresses", `uppe(city) = ${city}`)
+            const addresses: Required<Addresses>[] = await this.db.selectAll<Addresses>("Addresses", `upper(city) = "${city}"`)
             const addressesMap = new Map<number, Addresses>()
             addresses.forEach(r => addressesMap.set(r.id, r))
 
@@ -65,7 +65,7 @@ export class ResOwnerActions {
 
     async exists(userId: number): Promise<boolean> {
 
-        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwner", `userId = ${userId}`)
+        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId}`)
         if(exists.length){
             return true
 

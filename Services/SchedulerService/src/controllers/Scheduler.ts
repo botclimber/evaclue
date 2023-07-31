@@ -3,17 +3,19 @@ import { errorMessages as err } from "../helpers/errorMessages"
 
 import { Db } from "../db/Db"
 
-import { UserFilter } from "../models/UserFilter"
-import { Address } from "../models/Address"
-import { ResidenceOwner } from "../models/ResidenceOwner"
+import { UserFilters } from "../models/UserFilters"
+import { Addresses } from "../models/Addresses"
+import { ResidenceOwners } from "../models/ResidenceOwners"
+import { Users } from "../models/Users"
+import { Residences } from "../models/Residences"
 
 type availableResidences = {
     resOwnerId: number,
     city: string,
     street: string,
     nr: string,
-    flat: string,
     floor: string,
+    direction: string,
     rentPrice: number,
     lat: number,
     lng: number
@@ -30,16 +32,29 @@ export class Scheduler{
     private mountData = async (): Promise<availableForRentByUserFilter[]>  => {
         const db: Db = new Db()
 
-        const addresses: Address[] = await db.selectAll<Address>("Addresses")
-        const resOwners: ResidenceOwner[] = await db.selectAll<ResidenceOwner>("ResidenceOwners")
-        const usersFilters: UserFilter[] = await db.selectAll<UserFilter>("NBOFilters")
+        const addresses: Addresses[] = await db.selectAll<Addresses>("Addresses")
+        const resOwners: ResidenceOwners[] = await db.selectAll<ResidenceOwners>("ResidenceOwners")
+        const usersFilters: UserFilters[] = await db.selectAll<UserFilters>("NBOFilters")
+        const users: Users[] = await db.selectAll<Users>("Users")
+        const residences: Residences[] = await db.selectAll<Residences>("Residences")
+
+        const usersMap = new Map<number, Users>()
+        const residencesMap = new Map<number, Residences>()
+
+        users.forEach( user => {
+            if(user.id) usersMap.set(user.id, user)
+        })
+
+        residences.map(residence => {
+            if(residence.id) residencesMap.set(residence.id, residence)
+        })
 
         console.log("filtering on free and approved residences ...")
-        const filteredByFreeResOwners: ResidenceOwner[] = resOwners.filter(r => r.free && r.approved)
+        const filteredByFreeResOwners: ResidenceOwners[] = resOwners.filter(r => r.free && r.approved)
 
-        type resOwnerPlusAddress = ResidenceOwner & {address: Address}
-        const mapResToAddress = (res: ResidenceOwner): resOwnerPlusAddress => {
-            const city: Address | undefined = addresses.find(r => r.id == res.addressId)
+        type resOwnerPlusAddress = ResidenceOwners & {address: Addresses}
+        const mapResToAddress = (res: ResidenceOwners): resOwnerPlusAddress => {
+            const city: Addresses | undefined = addresses.find(r => r.id == res.addressId)
 
             if(city === undefined) throw Error(err.ADDRESS_SEGMENT_FAULT.text);
             
@@ -53,24 +68,28 @@ export class Scheduler{
         console.log(usersFilters)
         const usersToBeNotified: availableForRentByUserFilter[] = usersFilters.filter( r => r.enable).map( r => {
             
-            const cities = r.byCities.toUpperCase()
-            const rent = [r.byRentPriceMin, r.byRentPriceMax]
-
-            const byCity: resOwnerPlusAddress[] = (cities.length > 0)? resOwnerPlusCity.filter(resData => cities.includes(resData.address.city.toUpperCase())) : resOwnerPlusCity
+            const email = usersMap.get(r.userId)?.email
+            if(email){ 
             
-            const regardinglessCity = (resData: resOwnerPlusAddress) => (rent[1] > 0)? resData.rentPrice > rent[0] && resData.rentPrice < rent[1] : true
-            const byRent = byCity.filter(regardinglessCity)
+                const cities = r.byCities.toUpperCase()
+                const rent = [r.byRentPriceMin, r.byRentPriceMax]
 
-            return { 
-                toEmail: r.userEmail, 
-                available: byRent.map(data => {
-                    return {resOwnerId: data.userId, city: data.address.city, street: data.address.street, nr: data.address.nr, flat: data.flatOwner, floor: data.floorOwner, rentPrice: data.rentPrice, lat: data.cityLat, lng: data.cityLng} 
-                }) 
-            }
+                const byCity: resOwnerPlusAddress[] = (cities.length > 0)? resOwnerPlusCity.filter(resData => cities.includes(resData.address.city.toUpperCase())) : resOwnerPlusCity
+                
+                const regardinglessCity = (resData: resOwnerPlusAddress) => (rent[1] > 0)? resData.rentPrice > rent[0] && resData.rentPrice < rent[1] : true
+                const byRent = byCity.filter(regardinglessCity)
+
+                return { 
+                    toEmail: email, 
+                    available: byRent.map(data => {
+                        return {resOwnerId: data.userId, city: data.address.city, street: data.address.street, nr: data.address.nr, floor: residencesMap.get(data.resId)?.floor || "???", direction: residencesMap.get(data.resId)?.direction || "???", rentPrice: data.rentPrice, lat: data.address.lat, lng: data.address.lng} 
+                    }) 
+                }
+            
+            }else throw Error(err.EMAIL_SEGMENT_FAULT.text)
         })
 
         return usersToBeNotified
-        
     }
 
     async sendAvailableResidencesByFilter(): Promise<void>  {

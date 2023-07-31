@@ -1,17 +1,13 @@
-export class UserFilter {
+export class UserFilters {
     id?: number
-    userName: string;
     userId: number;
-    userEmail: string;
     byCities: string;
     byRentPriceMin: number;
     byRentPriceMax: number;
     enable: boolean;
 
-    constructor(userName: string, userId: number, userEmail: string, byCities: string, byRentPriceMin: number, byRentPriceMax: number, enable: boolean){
-        this.userName = userName;
+    constructor(userId: number, byCities: string, byRentPriceMin: number, byRentPriceMax: number, enable: boolean){
         this.userId = userId;
-        this.userEmail = userEmail;
         this.byCities = byCities;
         this.byRentPriceMin = byRentPriceMin;
         this.byRentPriceMax = byRentPriceMax;

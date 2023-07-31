@@ -1,14 +1,13 @@
 import { Db } from "../db/Db";
 import dateAndTime from "date-and-time"
 import { RevChecker } from "../models/RevChecker";
-import { Address } from "../models/Address";
 import { genNewDate } from "../helpers/DateFormat";
 
 export class ReviewValidator {
     db: Db;
 
-    constructor(db: Db){
-        this.db = db;
+    constructor(){
+        this.db = new Db();
     }
 
     async reviewLimit(userId: number, addressId: number): Promise<boolean>{
@@ -51,6 +50,8 @@ export class ReviewValidator {
 
     async createRevCheckerRecord(userId: number, addressId: number): Promise<void>{
         
+        if(addressId === -1) return // for test purposes only
+
         const revChecker = new RevChecker(userId, addressId, 1, genNewDate(), genNewDate())
         console.log("Creating record on RevChecker table ...")
         await this.db.insert(revChecker)

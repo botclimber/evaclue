@@ -1,58 +1,47 @@
 import {describe, expect, test} from '@jest/globals';
 import { ResOwnerActions } from '../../src/controllers/ResOwnerActions'
 import { ResidenceOwners } from '../../src/models/ResidenceOwners';
-
-/*describe("AddressActions Class", () => {
-
-  const addr = new AddressActions()
-
-  const data: Addresses = {lat: 1, lng: 1, city: "Fradelos", street: "Rua do Louseiro", nr: "162", postalCode: "0000-000", country: "Portugal"}
-
-
-  test("create new Address", async () => {
-
-    const result = await addr.newAddress(data)
-    expect(result).not.toBeFalsy()
-  })
-
-  test("Try to create already existing address returns id from existing", async () => {
-
-    const result = await addr.newAddress(data)
-    expect(result).not.toBeFalsy()
-  })
-
-  test("get Addresses", async () => {
-    const addresses: Addresses[] = await addr.getAddresses()
-
-    expect(addresses.length).toBeGreaterThan(0)
-  })
-
-})*/
+import { genNewDate } from '../../src/helpers/DateFormat';
 
 describe("ResOwnersActions class", () => {
 
+    const resActions = new ResOwnerActions()
+
+    const resOwner = new ResidenceOwners(1, 0, 1, 1, 125, true, genNewDate(), "1000-01-01 00:00:00", 0, false, "document.pdf")
+
     test("Create new Residence Owner", async () => {
 
+        const result = await resActions.create(resOwner)
+        expect(result).not.toBeFalsy()
     })
 
     test("Check if Residence Owner Exists, in case of YES", async () => {
 
+        const result = await resActions.exists(1)
+        expect(result).toBe(true)
     })
 
     test("Check if Residence Owner Exists, in case of NO", async () => {
+        const result = await resActions.exists(999)
+        expect(result).toBe(false)
 
     })
 
     test("Get all Residence Owners", async () => {
-
-    })
-
-    test("Get all Available for rent Residences by city", async () => {
+        const result = await resActions.getResOwners()
+        expect(result.length).toBeGreaterThan(0)
 
     })
 
     test("Update Residence Owner approval state", async () => {
+        const result = await resActions.update(1, {state: 1, userName: "teste de teste", userId: 27, userType: "Admin", userEmail: "teste@teste.pt"})
 
+        expect(result).toBeUndefined()
+    })
+
+    test("Get all Available for rent Residences by city", async () => {
+        const result = await resActions.getByCity("Fradelos")
+        expect(result.length).toBeGreaterThan(0)
     })
 
 })

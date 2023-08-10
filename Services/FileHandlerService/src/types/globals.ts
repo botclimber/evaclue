@@ -35,3 +35,9 @@ declare namespace middlewareTypes {
         userType: string
       };
 }
+
+declare namespace requestFormat{
+    type addReviewImgs = {
+        reviewId: number
+    }
+}

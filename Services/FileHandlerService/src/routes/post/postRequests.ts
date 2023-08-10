@@ -1,11 +1,17 @@
 import { Response, Router } from "express";
-import { ReviewsController } from "../../controllers/ReviewsController";
 import { authMiddleware } from "../../middlewares/authMiddleware";
+import { FileHandlerController } from "../../controllers/FileHandlerController";
 
-const RevInstance: ReviewsController = new ReviewsController();
+const FH: FileHandlerController = new FileHandlerController();
 
 const postRoutes = Router();
 
-postRoutes.post("/create", authMiddleware, RevInstance.create)
+/*
+postRoutes.post("/addReviewImgs", authMiddleware, FH.addReviewImgs)
+postRoutes.post("/addResImgs", authMiddleware, FH.addResImgs)
+postRoutes.post("/addResDoc", authMiddleware, FH.addResDoc)
+*/
+
+postRoutes.post("/addReviewImgs", FH.addReviewImgs) // for test purposes
 
 export default postRoutes

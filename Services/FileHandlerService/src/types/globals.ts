@@ -40,4 +40,5 @@ declare namespace requestFormat{
     type addReviewImgs = {
         reviewId: number
     }
+
 }

@@ -22,6 +22,5 @@ const service = "fileHandler";
 app.use(`/${version}/${service}/`, postRequests_1.default); // POST
 //app.use(`/${version}/${service}/`, patchRoutes) // PATCH
 app.listen(port, () => {
-    console.log(__dirname, __filename);
     console.log(`FileHandler Service listening to port: ${port}`);
 });

@@ -27,33 +27,22 @@ exports.FileHandlerActions = void 0;
 const path = __importStar(require("path"));
 const FileHandlerHelper_1 = require("./FileHandlerHelper");
 class FileHandlerActions {
-    constructor() {
-        this.reviewFilePrefix = "review";
-        this.resFilePrefix = "res";
-        this.proofDocFilePrefix = "proofDoc";
-        this.rFolderPath = path.join(__dirname, "../reviewImgs/");
-        this.resFolderPath = path.join(__dirname, "../resImgs/");
-        this.pDocFolderPath = path.join(__dirname, "../proofDocs/");
-        //async addResImgs(){}
-        //async addResDoc(){}
-        //async getAoOReviewImgs(){}
-        //async getAoOResImages(){}
-        //async getAoOResDocs(){}
-    }
-    async saveReviewImgs(reviewId, files) {
+    async saveImgFiles(id, files, limit, prefix, folderPath) {
         try {
             console.log(files);
             const castedFiles = (await FileHandlerHelper_1.fHelper.castFilesType(files)).filter(r => FileHandlerHelper_1.fHelper.onlyAllowedImgs(path.extname(r.name)));
             if (castedFiles.length === 0)
-                return false;
+                return { status: 400, msg: "No files sent or not allowed extension" };
+            if (castedFiles.length > limit)
+                return { status: 400, msg: `We only accept at maximum ${limit} images!` };
             console.log(`Check if path exists if not create it`);
-            await FileHandlerHelper_1.fHelper.orCreateFolder(this.rFolderPath);
+            await FileHandlerHelper_1.fHelper.orCreateFolder(folderPath);
             // create folder for the specific review containing images
-            const newFolderName = `${this.reviewFilePrefix}-${reviewId}/`;
-            const newFolderPath = `${this.rFolderPath}${newFolderName}`;
+            const newFolderName = `${prefix}-${id}/`;
+            const newFolderPath = `${folderPath}${newFolderName}`;
             const folderAlreadyExists = await FileHandlerHelper_1.fHelper.orCreateFolder(newFolderPath);
             if (folderAlreadyExists)
-                return true;
+                return { status: 400, msg: `Folder for that ${prefix} id already existing!` };
             console.log(`Rename images and change its extension`);
             const eFiles = await FileHandlerHelper_1.fHelper.rnExtension(castedFiles, "rImg", "gif");
             console.log(eFiles);
@@ -66,7 +55,7 @@ class FileHandlerActions {
                         return true;
                 });
             });
-            return true;
+            return { status: 200, msg: "Images added!" };
         }
         catch (e) {
             console.log(e);

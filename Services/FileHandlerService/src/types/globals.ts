@@ -41,4 +41,8 @@ declare namespace requestFormat{
         reviewId: number
     }
 
+    type genericResponse = {
+        status: number, 
+        msg: string
+    }
 }

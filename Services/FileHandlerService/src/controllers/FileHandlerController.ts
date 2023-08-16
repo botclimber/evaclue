@@ -1,21 +1,37 @@
-/**
- * 
- * reviews:
- *  - multiple images (max 3)
- * 
- * residences:
- *  - multiple images (max 5)
- * 
- * residenceOwners:
- *  - one document proof
- * 
- * support:
- *  - one attach
- */
-
 import {Request, Response, NextFunction} from "express"
 import { FileHandlerActions } from "./FileHandlerActions"
 import { errorMessages as err } from "../helpers/errorMessages";
+import * as path from "path";
+
+type folderConfig = {
+    prefix: string,
+    path: string,
+    limit: number
+}
+
+const REVIEWS: folderConfig = {
+    prefix: "review",
+    path: path.join(__dirname, "../reviewImgs/"),
+    limit: 3
+}
+
+const RESIDENCES: folderConfig = {
+    prefix: "residence",
+    path: path.join(__dirname, "../resImgs/"),
+    limit: 5
+}
+
+const PROOFDOCS: folderConfig = {
+    prefix: "proofDoc",
+    path: path.join(__dirname, "../proofDocs/"),
+    limit: 1
+}
+
+const TICKETS: folderConfig = {
+    prefix: "ticket",
+    path: path.join(__dirname, "../ticketAttachments/"),
+    limit: 1
+}
 
 const fileHandler = new FileHandlerActions();
 
@@ -31,13 +47,13 @@ export class FileHandlerController {
 
             }else {
                 try{
-                    const response = await fileHandler.saveReviewImgs(data.reviewId, req.files)
+                    const response = await fileHandler.saveImgFiles(data.reviewId, req.files, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path)
                     console.log(response)
                     
-                    if(response)
-                        return res.status(200).json({msg: `Images added!`})
+                    if(response.status === 200)
+                        return res.status(response.status).json({msg: response.msg})
                     else
-                        return res.status(400).json({msg: `Something went wrong, try again!`})
+                        return res.status(response.status).json({msg: response.msg})
 
                 }catch(e){
                     console.log(e)
@@ -54,10 +70,6 @@ export class FileHandlerController {
 
     //async addResDoc(){}
 
-    //async getAoOReviewImgs(){}
+    //async addTicketAttachment(){}
 
-    //async getAoOResImages(){}
-
-    // Only an admin or the file user owner should be able to request a document
-    //async getAoOResDocs(){}
 }

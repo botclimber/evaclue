@@ -1,25 +1,29 @@
 import fileUpload, { UploadedFile } from "express-fileupload";
 import * as path from "path";
-import * as fs from "fs";
 import { fHelper } from "./FileHandlerHelper";
 
 export class FileHandlerActions {
+    reviewFilePrefix: string = "review";
+    resFilePrefix: string = "res";
+    proofDocFilePrefix: string = "proofDoc"
 
     rFolderPath: string = path.join(__dirname, "../reviewImgs/");
     resFolderPath: string = path.join(__dirname, "../resImgs/");
     pDocFolderPath: string = path.join(__dirname, "../proofDocs/");
 
     async saveReviewImgs(reviewId: number, files: fileUpload.FileArray): Promise<boolean>{
-        console.log(files)
-        const castedFiles: UploadedFile[] = await fHelper.castFilesType(files)
 
         try{
+            console.log(files)
+            const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowedImgs(path.extname(r.name)))
+
+            if(castedFiles.length === 0) return false
 
             console.log(`Check if path exists if not create it`)
             await fHelper.orCreateFolder(this.rFolderPath)
             
             // create folder for the specific review containing images
-            const newFolderName = `review-${reviewId}/`
+            const newFolderName = `${this.reviewFilePrefix}-${reviewId}/`
             const newFolderPath = `${this.rFolderPath}${newFolderName}`
             const folderAlreadyExists = await fHelper.orCreateFolder(newFolderPath)
             if(folderAlreadyExists) return true

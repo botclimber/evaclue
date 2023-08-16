@@ -28,6 +28,9 @@ const path = __importStar(require("path"));
 const FileHandlerHelper_1 = require("./FileHandlerHelper");
 class FileHandlerActions {
     constructor() {
+        this.reviewFilePrefix = "review";
+        this.resFilePrefix = "res";
+        this.proofDocFilePrefix = "proofDoc";
         this.rFolderPath = path.join(__dirname, "../reviewImgs/");
         this.resFolderPath = path.join(__dirname, "../resImgs/");
         this.pDocFolderPath = path.join(__dirname, "../proofDocs/");
@@ -38,13 +41,15 @@ class FileHandlerActions {
         //async getAoOResDocs(){}
     }
     async saveReviewImgs(reviewId, files) {
-        console.log(files);
-        const castedFiles = await FileHandlerHelper_1.fHelper.castFilesType(files);
         try {
+            console.log(files);
+            const castedFiles = (await FileHandlerHelper_1.fHelper.castFilesType(files)).filter(r => FileHandlerHelper_1.fHelper.onlyAllowedImgs(path.extname(r.name)));
+            if (castedFiles.length === 0)
+                return false;
             console.log(`Check if path exists if not create it`);
             await FileHandlerHelper_1.fHelper.orCreateFolder(this.rFolderPath);
             // create folder for the specific review containing images
-            const newFolderName = `review-${reviewId}/`;
+            const newFolderName = `${this.reviewFilePrefix}-${reviewId}/`;
             const newFolderPath = `${this.rFolderPath}${newFolderName}`;
             const folderAlreadyExists = await FileHandlerHelper_1.fHelper.orCreateFolder(newFolderPath);
             if (folderAlreadyExists)

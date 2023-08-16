@@ -27,6 +27,8 @@ exports.fHelper = void 0;
 const fs = __importStar(require("fs"));
 var fHelper;
 (function (fHelper) {
+    fHelper.allowedImgExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    fHelper.allowedDocExtensions = [".pdf"];
     fHelper.orCreateFolder = async (path) => {
         if (!fs.existsSync(path)) {
             fs.mkdirSync(path);
@@ -46,5 +48,17 @@ var fHelper;
         if (!Array.isArray(files.reviewImgs))
             return [files.reviewImgs];
         return files.reviewImgs;
+    };
+    fHelper.onlyAllowedImgs = (fExt) => {
+        if (fHelper.allowedImgExtensions.includes(fExt))
+            return true;
+        else
+            return false;
+    };
+    fHelper.onlyAllowedDocs = (fExt) => {
+        if (fHelper.allowedDocExtensions.includes(fExt))
+            return true;
+        else
+            return false;
     };
 })(fHelper || (exports.fHelper = fHelper = {}));

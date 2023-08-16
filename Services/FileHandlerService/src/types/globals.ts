@@ -3,11 +3,6 @@ declare namespace formatTypes{
     type postalCodeFormat = `${number}-${number}`
  }
 
- declare namespace allowedExtensions {
-    type img = "jpg" | "png"
-    type docProof = "pdf"
- }
-
 declare namespace DbParams{
 
     type updateParams = {

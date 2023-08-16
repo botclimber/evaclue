@@ -29,7 +29,10 @@ class FileHandlerController {
                 try {
                     const response = await fileHandler.saveReviewImgs(data.reviewId, req.files);
                     console.log(response);
-                    return res.status(200).json({ msg: `Images added!` });
+                    if (response)
+                        return res.status(200).json({ msg: `Images added!` });
+                    else
+                        return res.status(400).json({ msg: `Something went wrong, try again!` });
                 }
                 catch (e) {
                     console.log(e);

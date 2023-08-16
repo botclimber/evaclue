@@ -1,6 +1,7 @@
 import fileUpload, { UploadedFile } from "express-fileupload";
 import * as path from "path";
 import * as fs from "fs";
+import { fHelper } from "./FileHandlerHelper";
 
 export class FileHandlerActions {
 
@@ -10,25 +11,21 @@ export class FileHandlerActions {
 
     async saveReviewImgs(reviewId: number, files: fileUpload.FileArray): Promise<boolean>{
         console.log(files)
+        const castedFiles: UploadedFile[] = await fHelper.castFilesType(files)
 
         try{
 
             console.log(`Check if path exists if not create it`)
-            if(!fs.existsSync(this.rFolderPath)) fs.mkdirSync(this.rFolderPath)
-
+            await fHelper.orCreateFolder(this.rFolderPath)
+            
             // create folder for the specific review containing images
             const newFolderName = `review-${reviewId}/`
             const newFolderPath = `${this.rFolderPath}${newFolderName}`
+            const folderAlreadyExists = await fHelper.orCreateFolder(newFolderPath)
+            if(folderAlreadyExists) return true
             
-            if(!fs.existsSync(newFolderPath)) fs.mkdirSync(newFolderPath)
-            else return false
-
             console.log(`Rename images and change its extension`)
-            const eFiles = files.reviewImgs as UploadedFile[]
-            for (const x in eFiles){
-                const newFileName = `rImg-${x}.gif`;
-                eFiles[x].name = newFileName;
-            }
+            const eFiles = await fHelper.rnExtension(castedFiles, "rImg", "gif")
 
             console.log(eFiles)
             console.log(`moving file(s) to ${newFolderPath}`)

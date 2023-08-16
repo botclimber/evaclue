@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileHandlerActions = void 0;
 const path = __importStar(require("path"));
-const fs = __importStar(require("fs"));
+const FileHandlerHelper_1 = require("./FileHandlerHelper");
 class FileHandlerActions {
     constructor() {
         this.rFolderPath = path.join(__dirname, "../reviewImgs/");
@@ -39,23 +39,18 @@ class FileHandlerActions {
     }
     async saveReviewImgs(reviewId, files) {
         console.log(files);
+        const castedFiles = await FileHandlerHelper_1.fHelper.castFilesType(files);
         try {
             console.log(`Check if path exists if not create it`);
-            if (!fs.existsSync(this.rFolderPath))
-                fs.mkdirSync(this.rFolderPath);
+            await FileHandlerHelper_1.fHelper.orCreateFolder(this.rFolderPath);
             // create folder for the specific review containing images
             const newFolderName = `review-${reviewId}/`;
             const newFolderPath = `${this.rFolderPath}${newFolderName}`;
-            if (!fs.existsSync(newFolderPath))
-                fs.mkdirSync(newFolderPath);
-            else
-                return false;
+            const folderAlreadyExists = await FileHandlerHelper_1.fHelper.orCreateFolder(newFolderPath);
+            if (folderAlreadyExists)
+                return true;
             console.log(`Rename images and change its extension`);
-            const eFiles = files.reviewImgs;
-            for (const x in eFiles) {
-                const newFileName = `rImg-${x}.gif`;
-                eFiles[x].name = newFileName;
-            }
+            const eFiles = await FileHandlerHelper_1.fHelper.rnExtension(castedFiles, "rImg", "gif");
             console.log(eFiles);
             console.log(`moving file(s) to ${newFolderPath}`);
             eFiles.forEach(file => {

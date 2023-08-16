@@ -8,6 +8,9 @@
  * 
  * residenceOwners:
  *  - one document proof
+ * 
+ * support:
+ *  - one attach
  */
 
 import {Request, Response, NextFunction} from "express"

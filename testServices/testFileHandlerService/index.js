@@ -3,7 +3,7 @@ async function request(){
 
     const data = new FormData()
     
-    data.append("reviewId", 27) // random id 
+    data.append("reviewId", 28) // random id 
     for(const file of mulFiles){ data.append(`reviewImgs`, file) }
     
     console.log(data.getAll("reviewImgs"))

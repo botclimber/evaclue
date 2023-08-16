@@ -9,6 +9,9 @@
  *
  * residenceOwners:
  *  - one document proof
+ *
+ * support:
+ *  - one attach
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileHandlerController = void 0;
@@ -24,7 +27,6 @@ class FileHandlerController {
             }
             else {
                 try {
-                    console.log(req.files.reviewImgs);
                     const response = await fileHandler.saveReviewImgs(data.reviewId, req.files);
                     console.log(response);
                     return res.status(200).json({ msg: `Images added!` });

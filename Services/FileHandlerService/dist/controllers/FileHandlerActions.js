@@ -27,10 +27,21 @@ exports.FileHandlerActions = void 0;
 const path = __importStar(require("path"));
 const FileHandlerHelper_1 = require("./FileHandlerHelper");
 class FileHandlerActions {
-    async saveImgFiles(id, files, limit, prefix, folderPath) {
+    /**
+     *
+     * Generic method to save images
+     *
+     * @param id
+     * @param files
+     * @param limit
+     * @param prefix
+     * @param folderPath
+     * @returns
+     */
+    async saveFiles(id, files, limit, prefix, folderPath, fileType) {
         try {
             console.log(files);
-            const castedFiles = (await FileHandlerHelper_1.fHelper.castFilesType(files)).filter(r => FileHandlerHelper_1.fHelper.onlyAllowedImgs(path.extname(r.name)));
+            const castedFiles = (await FileHandlerHelper_1.fHelper.castFilesType(files)).filter(r => FileHandlerHelper_1.fHelper.onlyAllowed(path.extname(r.name), fileType));
             if (castedFiles.length === 0)
                 return { status: 400, msg: "No files sent or not allowed extension" };
             if (castedFiles.length > limit)

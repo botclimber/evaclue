@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fHelper = void 0;
 const fs = __importStar(require("fs"));
+const enums_1 = require("../helpers/enums");
 var fHelper;
 (function (fHelper) {
     fHelper.allowedImgExtensions = [".jpg", ".jpeg", ".png", ".gif"];
@@ -45,20 +46,18 @@ var fHelper;
         return files;
     };
     fHelper.castFilesType = async (files) => {
-        if (!Array.isArray(files.reviewImgs))
-            return [files.reviewImgs];
-        return files.reviewImgs;
+        const content = (!Array.isArray(files)) ? [files] : files;
+        return content;
     };
-    fHelper.onlyAllowedImgs = (fExt) => {
-        if (fHelper.allowedImgExtensions.includes(fExt))
-            return true;
-        else
-            return false;
-    };
-    fHelper.onlyAllowedDocs = (fExt) => {
-        if (fHelper.allowedDocExtensions.includes(fExt))
-            return true;
-        else
-            return false;
+    fHelper.onlyAllowed = (fExt, fType) => {
+        switch (fType) {
+            case enums_1.fileType.IMG:
+                return fHelper.allowedImgExtensions.includes(fExt);
+            case enums_1.fileType.DOC:
+                return fHelper.allowedDocExtensions.includes(fExt);
+            case enums_1.fileType.ATTACH:
+                return [...fHelper.allowedImgExtensions, ...fHelper.allowedDocExtensions].includes(fExt);
+            default: return false;
+        }
     };
 })(fHelper || (exports.fHelper = fHelper = {}));

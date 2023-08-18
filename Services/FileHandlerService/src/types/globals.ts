@@ -37,8 +37,16 @@ declare namespace middlewareTypes {
 }
 
 declare namespace requestFormat{
-    type addReviewImgs = {
+    type revFiles = {
         reviewId: number
+    }
+
+    type resFiles = {
+        resId: number
+    }
+
+    type ticketFiles = {
+        ticketId: number
     }
 
     type genericResponse = {

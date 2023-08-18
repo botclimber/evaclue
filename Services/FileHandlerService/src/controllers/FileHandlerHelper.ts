@@ -2,6 +2,7 @@
 // u can only use an anon function after declaration
 import fileUpload, { UploadedFile } from "express-fileupload";
 import * as fs from "fs";
+import { fileType, fileTypeStrings } from "../helpers/enums";
 
 export namespace fHelper {
     type allowedExtensions = string[]
@@ -12,9 +13,8 @@ export namespace fHelper {
     // Function signatures
     type orCreateFolder = (path: string) => Promise<boolean>
     type rnExtension = (files: UploadedFile[], name: string, ext: string) => Promise<UploadedFile[]>
-    type castFilesType = (files: fileUpload.FileArray) => Promise<UploadedFile[]>
-    type onlyAllowedImgs = (fExtension: string) => boolean
-    type onlyAllowedDocs = (fExtension: string) => boolean
+    type castFilesType = (files: UploadedFile | UploadedFile[]) => Promise<UploadedFile[]>
+    type onlyAllowed = (fExtension: string, fileType: fileTypeStrings) => boolean
 
     export const orCreateFolder: orCreateFolder =  async (path) => {
         if(!fs.existsSync(path)){ 
@@ -36,18 +36,24 @@ export namespace fHelper {
 
     export const castFilesType: castFilesType = async (files) => {
 
-        if(!Array.isArray(files.reviewImgs)) return [files.reviewImgs]
-    
-        return files.reviewImgs
-    }
-    
-    export const onlyAllowedImgs: onlyAllowedImgs = (fExt) => {
-        if (allowedImgExtensions.includes(fExt)) return true
-        else return false
-    }
+        const content: UploadedFile[] = (!Array.isArray(files))? [files] : files
+        return content
 
-    export const onlyAllowedDocs: onlyAllowedImgs = (fExt) => {
-        if (allowedDocExtensions.includes(fExt)) return true
-        else return false
+    }
+    
+    export const onlyAllowed: onlyAllowed = (fExt, fType) => {
+
+        switch(fType) {
+            case fileType.IMG: 
+                return allowedImgExtensions.includes(fExt); 
+            
+            case fileType.DOC: 
+                return allowedDocExtensions.includes(fExt); 
+
+            case fileType.ATTACH: 
+                return [...allowedImgExtensions, ...allowedDocExtensions].includes(fExt);
+
+            default: return false;
+        }
     }
 }

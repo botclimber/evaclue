@@ -8,6 +8,7 @@ import axios from "axios"
 import { genNewDate } from "../helpers/DateFormat"
 import { ResOwnerActions } from "./ResOwnerActions"
 
+// TODO: on claim residence check if its an already claimed one
 export class ResOwnerController {
     
     resOwnerActions: ResOwnerActions

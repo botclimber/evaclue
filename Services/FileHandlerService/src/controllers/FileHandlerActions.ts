@@ -1,6 +1,7 @@
 import fileUpload, { UploadedFile } from "express-fileupload";
 import * as path from "path";
 import { fHelper } from "./FileHandlerHelper";
+import { fileTypeStrings } from "../helpers/enums";
 
 export class FileHandlerActions {
     
@@ -15,11 +16,12 @@ export class FileHandlerActions {
      * @param folderPath 
      * @returns 
      */
-    async saveImgFiles(id: number, files: fileUpload.FileArray, limit: number, prefix: string, folderPath: string): Promise<requestFormat.genericResponse>{
+    async saveFiles(id: number, files: UploadedFile | UploadedFile[], limit: number, prefix: string, folderPath: string, fileType: fileTypeStrings): Promise<requestFormat.genericResponse>{
 
         try{
             console.log(files)
-            const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowedImgs(path.extname(r.name)))
+
+            const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowed(path.extname(r.name), fileType))
 
             if(castedFiles.length === 0) return {status: 400, msg: "No files sent or not allowed extension"}
 
@@ -53,8 +55,4 @@ export class FileHandlerActions {
             throw e
         }
     }
-
-    // saveDocs(){}
-
-    // saveAttachments(){}
 }

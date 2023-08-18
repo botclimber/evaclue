@@ -1,4 +1,4 @@
-# test cases
+# Test cases
 ## for all existing requests
 
 1. [ ] empty request

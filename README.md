@@ -254,7 +254,7 @@ module.exports = {
     - `pm2 monitor`
 
 ## Architecture:
-![Screenshot](imgs/ev.png)
+![Screenshot](imgs/ev_v2.png)
 
 ## Versioning
 ![Screenshot](imgs/versionFlow.png)

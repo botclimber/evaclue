@@ -11,7 +11,7 @@ async function request(id){
 
         case "resFiles": {
             const url = "http://localhost:8049/v1/fileHandler/addResImgs"
-            const randomId = 27
+            const randomId = 26
             const paramIdName = "resId"
             const paramName = "resImgs"
         
@@ -52,5 +52,7 @@ async function toEndPoint(url, method, id, randomId, paramIdName, paramName) {
         body: data
     })
 
-    console.log(response)
+    const txt = await response.json()
+
+    console.log(txt)
 }

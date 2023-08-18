@@ -55,7 +55,8 @@ class FileHandlerActions {
             if (folderAlreadyExists)
                 return { status: 400, msg: `Folder for that ${prefix} id already existing!` };
             console.log(`Rename images and change its extension`);
-            const eFiles = await FileHandlerHelper_1.fHelper.rnExtension(castedFiles, "rImg", "gif");
+            const ext = await FileHandlerHelper_1.fHelper.alternativeExt(fileType);
+            const eFiles = (ext) ? await FileHandlerHelper_1.fHelper.rnExtension(castedFiles, "rImg", ext) : castedFiles;
             console.log(eFiles);
             console.log(`moving file(s) to ${newFolderPath}`);
             eFiles.forEach(file => {

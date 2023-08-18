@@ -60,4 +60,13 @@ var fHelper;
             default: return false;
         }
     };
+    fHelper.alternativeExt = async (fType) => {
+        switch (fType) {
+            case enums_1.fileType.IMG:
+                return "gif";
+            case enums_1.fileType.DOC:
+                return "pdf";
+            default: return undefined;
+        }
+    };
 })(fHelper || (exports.fHelper = fHelper = {}));

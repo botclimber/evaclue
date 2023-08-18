@@ -13,5 +13,5 @@ postRoutes.post("/addticketAttach", authMiddleware FH.addTicketAttachment)
 postRoutes.post("/addReviewImgs", FH.addReviewImgs); // for test purposes
 postRoutes.post("/addResImgs", FH.addResImgs); // for test purposes
 postRoutes.post("/addResDoc", FH.addResDoc); // for test purposes
-postRoutes.post("/addticketAttach", FH.addTicketAttachment); // for test purposes
+postRoutes.post("/addTicketAttach", FH.addTicketAttachment); // for test purposes
 exports.default = postRoutes;

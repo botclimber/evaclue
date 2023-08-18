@@ -15,6 +15,7 @@ export namespace fHelper {
     type rnExtension = (files: UploadedFile[], name: string, ext: string) => Promise<UploadedFile[]>
     type castFilesType = (files: UploadedFile | UploadedFile[]) => Promise<UploadedFile[]>
     type onlyAllowed = (fExtension: string, fileType: fileTypeStrings) => boolean
+    type alternativeExt = (fType: fileTypeStrings) => Promise<string | undefined>
 
     export const orCreateFolder: orCreateFolder =  async (path) => {
         if(!fs.existsSync(path)){ 
@@ -54,6 +55,18 @@ export namespace fHelper {
                 return [...allowedImgExtensions, ...allowedDocExtensions].includes(fExt);
 
             default: return false;
+        }
+    }
+
+    export const alternativeExt: alternativeExt = async (fType) => {
+        switch(fType) {
+            case fileType.IMG: 
+                return "gif"; 
+            
+            case fileType.DOC: 
+                return "pdf"; 
+
+            default: return undefined;
         }
     }
 }

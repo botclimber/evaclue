@@ -14,6 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
+app.use(fileUpload())
 
 const version: string = "v1"
 const service: string = "resOwners"

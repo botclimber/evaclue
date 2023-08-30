@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import getRoutes from "./routes/get/getRequests";
 import postRoutes from "./routes/post/postRequests";
 import patchRoutes from "./routes/patch/patchRequests";
+import fileUpload from "express-fileupload";
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
@@ -13,6 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
+app.use(fileUpload())
 
 app.use(express.static(__dirname + '/public'));
 

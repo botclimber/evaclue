@@ -1,7 +1,5 @@
 import { Request, Response, Router } from "express";
 import { GeoLocation } from "../../controllers/GeoLocationController";
-import { AddressActions } from "../../controllers/AddressActions";
-import { ResidenceActions } from "../../controllers/ResidenceActions";
 
 const geoInstance: GeoLocation = new GeoLocation();
 

@@ -14,9 +14,9 @@ rule.dayOfWeek = [1,3,6];
 rule.hour = 20;
 rule.minute = 0;
 
-schedule.scheduleJob(rule, async function(){
-  await new Scheduler().sendAvailableResidencesByFilter()
-});
+//schedule.scheduleJob(rule, async function(){
+//  await new Scheduler().sendAvailableResidencesByFilter()
+//});
 
 app.listen(port, () => {
   console.log(`Scheduler Service listening to port: ${port}`)

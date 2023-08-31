@@ -11,8 +11,8 @@ import fileUpload from "express-fileupload"
 import FormData from "form-data"
 
 type docProof = {
-    resId?: number,
-    files?: fileUpload.FileArray
+    resId: number,
+    proofDocFiles: fileUpload.FileArray
 }
 
 const resOwnerActions = new ResOwnerActions()
@@ -50,6 +50,8 @@ export class ResOwnerController {
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         const data: Partial<ResidenceOwners & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & docProof = req.body
 
+        if(!req.files || !Object.keys(req.files).includes("proofDocFiles")) return res.status(err.MISSING_PARAMS.status).json({ msg: "missing proof doc!"})
+
         const exists = await resOwnerActions.exists(data.userId)
         if(exists) return res.status(err.CLAIMED_ALREADY.status).json({msg: err.CLAIMED_ALREADY.text})
 
@@ -60,7 +62,7 @@ export class ResOwnerController {
         try{
             // request addr and residence ids
             const response = await axios
-                .post(`http://localhost:${process.env.geo_PORT}/v1/geoLocation/create`,{address: address, residence:  residence}, { headers: {"Content-Type": "application/json"}} )
+                .post(`http://${process.env.HOST}:${process.env.geo_PORT}/v1/geoLocation/create`,{address: address, residence:  residence}, { headers: {"Content-Type": "application/json"}} )
 
             
             console.log("Request to GeoLocation Response: ")
@@ -76,10 +78,10 @@ export class ResOwnerController {
 
                 const docData = new FormData()
                 docData.append("resId", resOwnerId)
-                docData.append("proofDocFiles", data.files)
+                docData.append("proofDocFiles", req.files.proofDocFiles)
 
                 console.log("Handling document file ...")
-                const result = await axios.post(`http://localhost:${process.env.fileHandler_PORT}/v1/fileHandler/addResDoc`, {body: docData as docProof})
+                const result = await axios.post(`http://${process.env.HOST}:${process.env.fileHandler_PORT}/v1/fileHandler/addResDoc`, {body: docData})
 
                 if(result.status === 200) return res.status(200).json({msg: "Requested, we gonna analise it!"})
                 else return res.status(result.status).json({msg: result.data.msg})

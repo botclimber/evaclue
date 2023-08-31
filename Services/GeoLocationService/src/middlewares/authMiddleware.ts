@@ -9,7 +9,7 @@ type JwtPayload = {
   userType: string
 };
 
-function deToken(token: string): JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload}
+function deToken(token: string): JwtPayload { return jwt.verify(token, process.env.SECRET ?? "") as JwtPayload}
 
 export const authMiddleware = async (
   req: Request,

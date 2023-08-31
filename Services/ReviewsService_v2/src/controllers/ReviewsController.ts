@@ -15,7 +15,7 @@ type updateReviewState = {decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
 type reviewImgs = {
     reviewId?: number,
-    files?: fileUpload.FileArray
+    reviewImgs?: fileUpload.FileArray
 }
 
 const reviewActions: ReviewActions = new ReviewActions();
@@ -57,17 +57,21 @@ export class ReviewsController {
                     
                         const revId = await reviewActions.create(rev)
 
-                        const imgsData = new FormData()
-                        imgsData.append("reviewId", revId)
-                        imgsData.append("reviewImgs", data.files)
+                        if(req.files){
+                            const imgsData = new FormData()
+                            imgsData.append("reviewId", revId)
+                            imgsData.append("reviewImgs", req.files.reviewImgs)
 
-                        console.log("Handling images ...")
-                        const result = await axios.post(`http://localhost:${process.env.fileHandler_PORT}/v1/fileHandler/addReviewImgs`, {body: imgsData as reviewImgs})
+                            console.log("Handling images ...")
+                            const result = await axios.post(`http://localhost:${process.env.fileHandler_PORT}/v1/fileHandler/addReviewImgs`, {body: imgsData as reviewImgs})
 
-                        if(result.status === 200) 
-                            return res.status(200).json({msg: "New Review created!"})
-                        else
-                            return res.status(result.status).json({msg: result.data.msg})
+                            if(result.status === 200) 
+                                console.log("Img(s) added!");
+                            else
+                                console.log(`something went wrong when trying to insert imgs \n(${result.status}, ${result.data.msg})`);
+                        }
+
+                        return res.status(200).json({msg: "New Review created!"})
 
                     }else
                         return res.status(err.REPEATED_REVIEW.status).json({msg: err.REPEATED_REVIEW.text})

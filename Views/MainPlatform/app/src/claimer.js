@@ -41,7 +41,7 @@ claimResidenceBtn.addEventListener("click", async (event) => {
         }
 
         const fileData = new FormData()
-        fileData.append("file", fileProof.files[0])
+        fileData.append("proofDocFiles", fileProof.files[0])
         fileData.append("data", JSON.stringify(data))
         
         await fetch(reviewsService+'/resOwner/createResOwner',{

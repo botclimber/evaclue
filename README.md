@@ -90,7 +90,7 @@ module.exports = {
                 "DB_USER": "root",
                 "DB_PASSWORD": "greedisgood",
                 "DB_NAME": "evaclue_db",
-                "JWT_SECRET": "greedisgood",
+                "SECRET": "greedisgood",
                 "DIRNAME": "/Users/danielsilva/Documents/evaclue/Views/MainPlatform/src/images/userImages/"
             }
         },
@@ -183,7 +183,7 @@ module.exports = {
         DB_USER: "root",
         DB_PASSWORD: "admin",
         DB_NAME: "evaclue_db",
-        JWT_SECRET: "greedisgood",
+        SECRET: "greedisgood",
         DIRNAME: "",
       },
     },

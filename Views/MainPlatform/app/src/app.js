@@ -217,8 +217,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   newReview.addEventListener('click', (event) => {
 
     if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
-  
-      cReview({
+      const data = {
         type: "createReview",
         lat: nrLat.value,
         lng: nrLng.value,
@@ -233,7 +232,15 @@ import MarkerClusterer from '@google/markerclustererplus';
         userName: fName+" "+lName,
         userImage: uImage,
         flag: flag.value
-      })
+      }
+
+      const mulFiles = document.getElementById("reviewImgs").files
+      const dataWithImgs = new FormData()
+
+      for(const file of mulFiles){ data.append("reviewImgs", file) }
+      dataWithImgs.append("data", JSON.stringify(data))
+
+      cReview(dataWithImgs)
   
     }else console.log("Fill required fields!")
   });
@@ -242,10 +249,10 @@ import MarkerClusterer from '@google/markerclustererplus';
     console.log(data)
     await fetch(reviewsService+'/create',{
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           'authorization':'baer '+t,
-          'Content-Type': 'application/json'
+          //'Content-Type': 'application/json'
           // 'Content-Type': 'application/x-www-form-urlencoded',
         }
       })

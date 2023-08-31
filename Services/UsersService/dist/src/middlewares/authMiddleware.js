@@ -9,7 +9,7 @@ const constants_1 = require("../helpers/constants");
 const errorTypes_1 = require("../helpers/errorTypes");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 require("dotenv/config");
-function deToken(token) { var _a; return jsonwebtoken_1.default.verify(token, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : ""); }
+function deToken(token) { var _a; return jsonwebtoken_1.default.verify(token, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : ""); }
 const authMiddleware = async (req, res, next) => {
     console.log(req);
     const { authorization } = req.headers;

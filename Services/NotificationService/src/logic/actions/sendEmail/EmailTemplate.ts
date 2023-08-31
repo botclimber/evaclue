@@ -145,7 +145,7 @@ export class EmailTemplate {
     }
 
     static forNotificationOfAvailableRents(input: AvailableRents): string{
-      const url = `${process.env.domain}:${process.env.mainPage_PORT}`
+      const url = `${process.env.HOST}:${process.env.mainPage_PORT}`
 
       const options: available[] = input.available
       const totOptions = options.length

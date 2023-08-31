@@ -3,7 +3,7 @@ import { Scheduler } from "./controllers/Scheduler";
 import * as schedule from "node-schedule" 
 
 const app: Express = express();
-const port = process.env.PORT || 8000;
+const port = process.env.schedule_PORT || 8000;
 
 const rule = new schedule.RecurrenceRule()
 

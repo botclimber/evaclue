@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { errorMessages as err} from "../helpers/errorMessages";
 import jwt from "jsonwebtoken";
-import "dotenv/config";
 
-function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as middlewareTypes.JwtPayload}
+function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.SECRET ?? "") as middlewareTypes.JwtPayload}
 
 export const authMiddleware = async (
   req: Request,

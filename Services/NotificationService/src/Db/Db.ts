@@ -1,4 +1,5 @@
 import {createPool, Pool} from "mysql2";
+import * as eva from "eva-functional-utils";
 
 type DbConfig = {
     host: string,
@@ -32,7 +33,7 @@ export class Db {
         const con = await this.openConnection()
 
         try{
-            const cond = (conditions)? ` WHERE ${conditions}` : ""
+            const cond = (eva.isEmpty(conditions))? ""  : ` WHERE ${conditions}`
             const sql = `SELECT * FROM ${table}${cond}`
 
             const res: any = await con.promise().execute(sql)
@@ -46,7 +47,7 @@ export class Db {
         }
     }
 
-    async insert<T extends {}>(object: T): Promise<number> { 
+    async insert<T extends {}>(object: T, tableName?: string): Promise<number> { 
         const con = await this.openConnection()
 
         try
@@ -54,7 +55,8 @@ export class Db {
             const columnNames: string = Object.keys(object).join(',')
             const values: string = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',')
 
-            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
+            const table = (eva.isEmpty(tableName))? object.constructor.name : tableName
+            const sql: string = `INSERT INTO ${table} (${columnNames}) VALUES (${values})`;
 
             console.log("[SQL - INSERT]: "+sql)
             const res = await con.promise().execute(sql);

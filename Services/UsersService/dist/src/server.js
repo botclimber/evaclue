@@ -12,6 +12,8 @@ const routes_1 = __importDefault(require("./routes/routes"));
 const errorMiddleware_1 = require("./middlewares/errorMiddleware");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 require("dotenv/config");
+const service = "users";
+const version = "v1";
 const cors = require("cors");
 const SMTP_CONFIG = require("./config/smtp");
 exports.transporter = nodemailer_1.default.createTransport({
@@ -40,9 +42,9 @@ data_source_1.myDataSource
     app.use(express_1.default.json());
     app.use(cors(corsOptions)); // Use this after the variable declaration
     app.use((0, express_fileupload_1.default)());
-    app.use("/user", routes_1.default);
+    app.use(`${version}/${service}/`, routes_1.default);
     app.use(errorMiddleware_1.errorMiddleware);
-    const port = process.env.SERVER_PORT || 7000;
+    const port = process.env.users_PORT || 7000;
     app.listen(port, () => {
         console.log(`${port}`);
     });

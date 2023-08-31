@@ -11,7 +11,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const postRequests_1 = __importDefault(require("./routes/post/postRequests"));
 //import patchRoutes from "./routes/patch/patchRequests";
 const app = (0, express_1.default)();
-const port = process.env.PORT || 8049;
+const port = process.env.fileHandler_PORT || 8049;
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());

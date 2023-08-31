@@ -41,7 +41,7 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=evaclue_db
-JWT_SECRET=greedisgood
+SECRET=greedisgood
 DIRNAME="/Services/UsersService"" > /Services/UsersService/.env
 
 # Create environment files for UserServices/database
@@ -50,7 +50,7 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=evaclue_db
-JWT_SECRET=greedisgood
+SECRET=greedisgood
 DIRNAME="/Services/UsersService/database"" > /Services/UsersService/database/.env
 
 # Create environment files for NotificationServices

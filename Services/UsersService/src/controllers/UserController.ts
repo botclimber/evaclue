@@ -107,7 +107,7 @@ export class UserController extends UserControllerHelper {
     if(!token) throw new BadRequest(ErrorMessages.TOKEN_REQUIRED)
 
     try{
-      const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
+      const decToken: JwtPayload = jwt.verify(token, process.env.SECRET ?? "") as JwtPayload
       const admin: any = await userRepository.findOneBy({id: decToken.userId})
 
       if( (admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked){
@@ -160,7 +160,7 @@ export class UserController extends UserControllerHelper {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
-    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
+    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.SECRET ?? "", {
       expiresIn: "24h",
     });
 
@@ -190,7 +190,7 @@ export class UserController extends UserControllerHelper {
 
     if(user.type == "common") throw new Unauthorized(ErrorMessages.NO_PERMISSION)
 
-    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
+    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.SECRET ?? "", {
       expiresIn: "24h",
     });
 
@@ -218,7 +218,7 @@ export class UserController extends UserControllerHelper {
     }
 
     try{
-      const decodedToken = jwt.verify(token.replaceAll("=",''), process.env.JWT_SECRET ?? ""); // if token wrong then triggers the catch exception
+      const decodedToken = jwt.verify(token.replaceAll("=",''), process.env.SECRET ?? ""); // if token wrong then triggers the catch exception
       console.log(decodedToken)
       user.verified = true;
       await userRepository.save(user);
@@ -263,7 +263,7 @@ export class UserController extends UserControllerHelper {
       throw new BadRequest("User does not exist");
     }
 
-    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
+    const decode = jwt.verify(emailToken, process.env.SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
 
     const { password } = req.body;
 
@@ -288,7 +288,7 @@ export class UserController extends UserControllerHelper {
       throw new BadRequest("User does not exist");
     }
 
-    const decode = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
+    const decode = jwt.verify(token, process.env.SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
 
     const { oldPassword, newPassword } = req.body;
 

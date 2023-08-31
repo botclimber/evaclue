@@ -4,17 +4,15 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 
 const app: Express = express();
 
-// Services
-const NotificationsServer = `${process.env.domain}:${process.env.not_PORT}`;
-const ReviewsServer = `${process.env.domain}:${process.env.rev_PORT}`;
-const UsersServer = `${process.env.domain}:${process.env.user_PORT}`;
-
-// Views
+// Views // only for dev purposes
 const mainPlatform = `${process.env.domain}:${process.env.mainPage_PORT}`
 const authPlatform = `${process.env.domain}:${process.env.loginPage_PORT}`
 const adminPlatform = `${process.env.domain}:${process.env.adminPage_PORT}`
 
-// TODO: also join any params sent with the header url e.g. ?param1=test&param2=test2
+/**
+ * Reverse proxying to serve views
+ * 
+ */
 app.get('/', function(req: Request, res: Response) {
 
   console.log("serving to main Platform")
@@ -36,6 +34,10 @@ app.get('/admin*', function(req: Request, res: Response) {
   res.redirect(`${adminPlatform}${url}`)
 })
 
+/**
+ * Reverse proxying to services
+ * 
+ */
 app.all(
   "/notifications/v1/*",
   proxy(NotificationsServer, {

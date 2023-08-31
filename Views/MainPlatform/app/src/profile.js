@@ -78,6 +78,7 @@ function mountView (data) {
   byRentPriceMax.value = (data.values && data.values.rentMin >= 0)? data.values.rentMax : byRentPriceMax.value
 }
 
+// TODO: point and transport to usersService
 async function setFilters(){
   const enableValue = (enable.checked)? 1 : 0
   
@@ -112,6 +113,7 @@ async function setFilters(){
 
 }
 
+// TODO: point and transport to usersService
 async function getFilters(){
 
   try{

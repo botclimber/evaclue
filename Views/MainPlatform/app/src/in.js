@@ -5,8 +5,10 @@
    */
 const domain = "http://localhost"
 
-const reviewsService = `${domain}/v2/reviews`
-const userService = `${domain}/v1/users`
+const reviewsService = `${domain}/reviews/v2`
+const userService = `${domain}/users/v1`
+const resOwnerService = `${domain}/resowners/v1`
+
 const authPage = `${domain}/login`
 
 const tokenName = 't'

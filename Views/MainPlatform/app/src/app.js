@@ -105,7 +105,7 @@ import MarkerClusterer from '@google/markerclustererplus';
 
                         currentCity.innerHTML = component.long_name+": Available residences"
                         
-                        fetch(reviewsService+'/resOwner/getByCity?city='+component.long_name)
+                        fetch(`${resOwnerService}/getByCity?city=${component.long_name}`)
                         .then(res => res.json())
                         .then((dataFromServer) => {
                           console.log(dataFromServer)

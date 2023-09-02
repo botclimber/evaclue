@@ -42,7 +42,7 @@ data_source_1.myDataSource
     app.use(express_1.default.json());
     app.use(cors(corsOptions)); // Use this after the variable declaration
     app.use((0, express_fileupload_1.default)());
-    app.use(`${version}/${service}/`, routes_1.default);
+    app.use(`/${service}/${version}/`, routes_1.default);
     app.use(errorMiddleware_1.errorMiddleware);
     const port = process.env.users_PORT || 7000;
     app.listen(port, () => {

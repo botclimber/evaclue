@@ -47,6 +47,7 @@ app.get('/', function (req, res) {
 app.get('/login*', function (req, res) {
     console.log("serving auth Platform");
     const url = req.url.substring(6);
+    console.log(authPlatform + url);
     res.redirect(`${authPlatform}${url}`);
 });
 app.get('/admin*', function (req, res) {
@@ -58,6 +59,7 @@ app.get('/admin*', function (req, res) {
  * Reverse proxying to services
  *
  */
+console.log(services.NotificationsService);
 app.all(`/${services.NotificationsService.name}/${services.NotificationsService.version}/*`, (0, express_http_proxy_1.default)(services.NotificationsService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -73,6 +75,7 @@ app.all(`/${services.NotificationsService.name}/${services.NotificationsService.
         }
     },
 }));
+console.log(services.ReviewsService);
 app.all(`/${services.ReviewsService.name}/${services.ReviewsService.version}/*`, (0, express_http_proxy_1.default)(services.ReviewsService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -88,6 +91,7 @@ app.all(`/${services.ReviewsService.name}/${services.ReviewsService.version}/*`,
         }
     },
 }));
+console.log(services.UsersService);
 app.all(`/${services.UsersService.name}/${services.UsersService.version}/*`, (0, express_http_proxy_1.default)(services.UsersService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -103,6 +107,7 @@ app.all(`/${services.UsersService.name}/${services.UsersService.version}/*`, (0,
         }
     },
 }));
+console.log(services.GeoLocationService);
 app.all(`/${services.GeoLocationService.name}/${services.GeoLocationService.version}/*`, (0, express_http_proxy_1.default)(services.GeoLocationService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -118,6 +123,7 @@ app.all(`/${services.GeoLocationService.name}/${services.GeoLocationService.vers
         }
     },
 }));
+console.log(services.ResidenceOwnerService);
 app.all(`/${services.ResidenceOwnerService.name}/${services.ResidenceOwnerService.version}/*`, (0, express_http_proxy_1.default)(services.ResidenceOwnerService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
@@ -134,6 +140,7 @@ app.all(`/${services.ResidenceOwnerService.name}/${services.ResidenceOwnerServic
     },
 }));
 // at the moment not implemented
+console.log(services.SupportService);
 app.all(`/${services.SupportService.name}/${services.SupportService.version}/*`, (0, express_http_proxy_1.default)(services.SupportService.fullPath, {
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {

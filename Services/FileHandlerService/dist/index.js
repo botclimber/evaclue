@@ -19,7 +19,7 @@ app.use((0, express_fileupload_1.default)());
 const version = "v1";
 const service = "fileHandler";
 //app.use(`/${version}/${service}/`, getRoutes)   // GET
-app.use(`/${version}/${service}/`, postRequests_1.default); // POST
+app.use(`/${service}/${version}/`, postRequests_1.default); // POST
 //app.use(`/${version}/${service}/`, patchRoutes) // PATCH
 app.listen(port, () => {
     console.log(`FileHandler Service listening to port: ${port}`);

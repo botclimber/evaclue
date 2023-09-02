@@ -15,7 +15,7 @@ type service = {
 // Services
 const mainDomain: domain = process.env.HOST || "???"
 
-const resPort: port = process.env.resowner_PORT || "???";
+const resPort: port = process.env.resowners_PORT || "???";
 export const ResidenceOwnerService: service = {
     name: "resowners",
     version: "v1",

@@ -19,9 +19,9 @@ app.use((0, express_fileupload_1.default)());
 app.use(express_1.default.static(__dirname + '/public'));
 const version = "v2";
 const service = "reviews";
-app.use(`/${version}/${service}/`, getRequests_1.default); // GET
-app.use(`/${version}/${service}/`, postRequests_1.default); // POST
-app.use(`/${version}/${service}/`, patchRequests_1.default); // PATCH
+app.use(`/${service}/${version}/`, getRequests_1.default); // GET
+app.use(`/${service}/${version}/`, postRequests_1.default); // POST
+app.use(`/${service}/${version}/`, patchRequests_1.default); // PATCH
 app.listen(port, () => {
     console.log(`Reviews Service listening to port: ${port}`);
 });

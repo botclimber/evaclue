@@ -25,6 +25,7 @@ app.get('/login*', function(req: Request, res: Response) {
 
   console.log("serving auth Platform")
   const url = req.url.substring(6)
+  console.log(authPlatform+url)
   res.redirect(`${authPlatform}${url}`)
 })
 
@@ -39,6 +40,7 @@ app.get('/admin*', function(req: Request, res: Response) {
  * Reverse proxying to services
  * 
  */
+console.log(services.NotificationsService)
 app.all(
   `/${services.NotificationsService.name}/${services.NotificationsService.version}/*`,
   proxy(services.NotificationsService.fullPath, {
@@ -58,6 +60,7 @@ app.all(
   })
 );
 
+console.log(services.ReviewsService)
 app.all(
   `/${services.ReviewsService.name}/${services.ReviewsService.version}/*`,
   proxy(services.ReviewsService.fullPath, {
@@ -77,6 +80,7 @@ app.all(
   })
 );
 
+console.log(services.UsersService)
 app.all(
   `/${services.UsersService.name}/${services.UsersService.version}/*`,
   proxy(services.UsersService.fullPath, {
@@ -96,6 +100,7 @@ app.all(
   })
 );
 
+console.log(services.GeoLocationService)
 app.all(
   `/${services.GeoLocationService.name}/${services.GeoLocationService.version}/*`,
   proxy(services.GeoLocationService.fullPath, {
@@ -115,6 +120,7 @@ app.all(
   })
 );
 
+console.log(services.ResidenceOwnerService)
 app.all(
   `/${services.ResidenceOwnerService.name}/${services.ResidenceOwnerService.version}/*`,
   proxy(services.ResidenceOwnerService.fullPath, {
@@ -135,6 +141,7 @@ app.all(
 );
 
 // at the moment not implemented
+console.log(services.SupportService)
 app.all(
   `/${services.SupportService.name}/${services.SupportService.version}/*`,
   proxy(services.SupportService.fullPath, {

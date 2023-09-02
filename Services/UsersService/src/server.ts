@@ -43,7 +43,7 @@ myDataSource
     app.use(express.json());
     app.use(cors(corsOptions)); // Use this after the variable declaration
     app.use(fileUpload())
-    app.use(`${service}/${version}/`, routes);
+    app.use(`/${service}/${version}/`, routes);
     app.use(errorMiddleware);
 
     const port = process.env.users_PORT || 7000;

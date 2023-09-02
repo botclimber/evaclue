@@ -30,6 +30,7 @@ class ResOwnerActions {
                     const addr = addressesMap.get(row.addressId);
                     return { ...row, ...addr };
                 });
+                // TODO: Filter data that is being sent and shown on client side
                 return dataToBeSent;
             }
             else

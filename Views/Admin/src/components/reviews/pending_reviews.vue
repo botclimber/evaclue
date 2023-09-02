@@ -27,7 +27,8 @@ export default{
         })
         const data = await res.json()
 
-        this.allData = data.reviews.filter(row => row.rev.approved == 0)
+        // TODO: if status 200 just remove approved review from allData
+        //this.allData = data.reviews.filter(row => row.rev.approved == 0)
       }
     }
   }
@@ -59,7 +60,7 @@ export default{
                   <td>
                     {{ row.rev.review }}
                   </td>
-                  <td>{{ row.addr.city}}, {{row.addr.street}} {{row.addr.nr }}</td>
+                  <td>{{row.location.addr.city}}, {{row.location.addr.street}} {{row.location.addr.nr}}</td>
                   <td>
                     <iframe style="border-radius:10px"
                       width="200"
@@ -69,9 +70,9 @@ export default{
                       referrerpolicy="no-referrer-when-downgrade"
                       :src="
                         'https://www.google.com/maps/embed/v1/place?key=AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ&q=' +
-                        row.addr.lat +
+                        row.location.addr.lat +
                         ',' +
-                        row.addr.lng +
+                        row.location.addr.lng +
                         '&zoom=19'
                       "
                     >

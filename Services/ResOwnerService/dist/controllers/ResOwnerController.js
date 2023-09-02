@@ -31,6 +31,7 @@ class ResOwnerController {
     }
     async getByCity(req, res, next) {
         const city = (req.query.city) ? req.query.city.toString().toUpperCase() : undefined;
+        console.log(city);
         if (city) {
             const dataToBeSent = await resOwnerActions.getByCity(city);
             return res.status(200).json(dataToBeSent);

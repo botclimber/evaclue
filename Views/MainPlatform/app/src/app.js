@@ -79,7 +79,7 @@ import MarkerClusterer from '@google/markerclustererplus';
     var locations = data.locations
   
     //if(data.type == "address") map = displayMap(data.address);
-    map = displayMap(data.address);
+    map = displayMap(data);
     markers = addMarkers(map, locations, markers[0]);
   
     //clustering marks is a bit buggy so lets remove it for now
@@ -169,7 +169,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   function search(city, street = "", nr = ""){
   
-    fetch(reviewsService+'/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
+    fetch(geoLocation+'/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
     .then(res => res.json())
     .then((data) => {console.log(data); mountPage(data)})
     .catch(err => console.log(err))

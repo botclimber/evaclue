@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SupportService = exports.ReviewsService = exports.NotificationsService = exports.UsersService = exports.GeoLocationService = exports.ResidenceOwnerService = void 0;
 // Services
 const mainDomain = process.env.HOST || "???";
-const resPort = process.env.resowner_PORT || "???";
+const resPort = process.env.resowners_PORT || "???";
 exports.ResidenceOwnerService = {
     name: "resowners",
     version: "v1",

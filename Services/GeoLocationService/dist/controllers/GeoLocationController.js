@@ -43,7 +43,8 @@ class GeoLocation {
      */
     async search(req, res, next) {
         // TODO: check if city, street bNr already exists in database before requesting coords to maps api
-        const locHandler = new LocationHandler_1.LocationHandler(req.body.address);
+        console.log(req.query);
+        const locHandler = new LocationHandler_1.LocationHandler(req.query);
         const latLng = await locHandler.getLatLng();
         res.status(200).json({ lat: latLng.lat, lng: latLng.lng });
     }

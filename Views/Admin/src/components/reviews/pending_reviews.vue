@@ -19,7 +19,7 @@ export default{
 
     async updateReview(revId, dec){
       if(confirm("Are you sure ?")){
-        const res = await fetch(this.apis.reviewsApi+'/updateReview/'+revId,{
+        const res = await fetch(this.apis.reviewsApi+'/update/'+revId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
           'authorization': 'baer '+this.tk},
@@ -27,8 +27,10 @@ export default{
         })
         const data = await res.json()
 
-        // TODO: if status 200 just remove approved review from allData
-        //this.allData = data.reviews.filter(row => row.rev.approved == 0)
+        if(res.status === 200){
+          this.allData = this.allData.filter (e => e.rev.id !== revId)
+
+        }else console.log(data)
       }
     }
   }

@@ -14,8 +14,8 @@ export default{
     }
   },
 
-  created(){
-      this.getAllClaims()
+  async created(){
+      await this.getAllClaims()
   },
 
   methods:{

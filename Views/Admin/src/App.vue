@@ -1,4 +1,5 @@
 <script >
+import * as eva from "eva-functional-utils"
 import Home from './components/Home.vue'
 import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
@@ -29,12 +30,18 @@ export default {
     return {
       apis: this.apis,
       reviews: null,
+      addresses: null,
+      residences: null,
+      aggrData: null,
       currentPath: window.location.hash,
     }
   },
 
-  created(){
-      this.getAllReviews()
+  async created(){
+      await this.getAllAddresses(),
+      await this.getAllResidences(),
+      await this.getAllReviews(),
+      await this.aggrRevsAddrsRes()
   },
 
   computed: {
@@ -44,13 +51,50 @@ export default {
   },
 
   methods: {
+    // TODO: also get addresses and residence then aggregate everything
 
     async getAllReviews(){
       const res = await fetch(this.apis.reviewsApi+'/reviews').catch(err => console.log(err))
       const data = await res.json()
 
+      console.log(data)
       this.reviews = data.reviews
 
+    },
+
+    async getAllAddresses(){
+      const res = await fetch(this.apis.geoLocationApi+'/addresses').catch(err => console.log(err))
+      const data = await res.json()
+
+      console.log(data)
+      this.addresses = data.addresses
+
+    },
+
+    async getAllResidences(){
+      const res = await fetch(this.apis.geoLocationApi+'/residences').catch(err => console.log(err))
+      const data = await res.json()
+
+      console.log(data)
+      this.residences = data.residences
+
+    },
+
+    // Aggregation of data using eva-functional-utils lib/package
+    async aggrRevsAddrsRes(){
+      const resPerAddress = this.residences.map( e => {
+        const addr = eva.getOrElse("???", this.addresses, e.addressId, "id")
+        return {res: e, addr: addr}
+      })
+
+      const groupRes = eva.groupBy(resPerAddress, v => v.res.id)
+
+      const revs = this.reviews.map( e => {
+        return {rev: e, location: groupRes[e.residenceId][0]}
+      })
+
+      this.aggrData = revs
+    
     },
 
     logout(){
@@ -246,7 +290,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" :reviews="reviews" :tk="tk" :apis="apis"/>
+        <component :is="currentView" :reviews="aggrData" :tk="tk" :apis="apis"/>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">

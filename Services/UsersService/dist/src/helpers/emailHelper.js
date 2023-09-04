@@ -10,9 +10,9 @@ require("dotenv/config");
 class EmailHelper {
     static async sendVerifyEmail(user) {
         var _a;
-        const currentURL = `${process.env.HOST}:${process.env.SERVER_PORT}`;
-        // process.env.JWT_SECRET ?? "" can lead to security breach
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "", {
+        const currentURL = `${process.env.HOST}:${process.env.users_PORT}`;
+        // process.env.SECRET ?? "" can lead to security breach
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : "", {
             expiresIn: "1h",
         });
         const mailOptions = {
@@ -28,7 +28,7 @@ class EmailHelper {
     static async sendChangePasswordEmail(user) {
         var _a;
         const currentURL = `${process.env.HOST}${process.env.CLIENT_PORT}`;
-        const passwordToken = jsonwebtoken_1.default.sign({ id: user.id }, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "", {
+        const passwordToken = jsonwebtoken_1.default.sign({ id: user.id }, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : "", {
             expiresIn: "2h",
         });
         const mailOptions = {

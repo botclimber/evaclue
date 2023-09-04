@@ -1,6 +1,6 @@
 import Api from "./Api";
 
-const baseURL = "user";
+const baseURL = "users/v1";
 
 export default {
   login(email: string, password: string) {
@@ -34,6 +34,6 @@ export default {
   },
 
   changePasswordRequest(email: string) {
-    return Api().get(`${baseURL}/changePassword/${email}`);
+    return Api().put(`${baseURL}/changePassword/${email}`);
   },
 };

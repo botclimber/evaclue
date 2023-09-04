@@ -1,0 +1,134 @@
+const HOST = "http://localhost";
+
+/* 
+if VIEWS ports are changed here, you also need 
+to change it on the correct location.
+*/
+const mainPlatformPort = 8010; 
+const loginPagePort = 8011;
+const adminPlatformPort = 8012;
+
+const rev_PORT          = 8000;
+const users_PORT        = 8001;
+const not_PORT          = 8002;
+const resowners_PORT    = 8003;
+const fileHandler_PORT  = 8004;
+const geo_PORT          = 8005;
+const supp_PORT         = 8006;
+const schedule_PORT     = 8007;
+
+const gateway_PORT = 80
+
+/**
+ * 
+ */
+allEnvs = {
+    "HOST": HOST,
+
+    "mainPage_PORT": mainPlatformPort,
+    "loginPage_PORT": loginPagePort,
+    "adminPage_PORT": adminPlatformPort,
+
+    "gateway_PORT": gateway_PORT,
+    "rev_PORT": rev_PORT,
+    "not_PORT": not_PORT,
+    "users_PORT": users_PORT,
+    "resowners_PORT": resowners_PORT,
+    "fileHandler_PORT": fileHandler_PORT,
+    "geo_PORT": geo_PORT,
+    "supp_PORT": supp_PORT,
+    "schedule_PORT": schedule_PORT,
+
+    "SMTP_EMAIL": "", // required
+    "SMTP_HOST": "", // required
+    "SMTP_PORT": "", // required
+    "SMTP_USER": "", // required
+    "SMTP_PASS": "", // required
+
+    "DB_HOST": "localhost", // required
+    "DB_USER": "", // required
+    "DB_PASSWORD": "", // required
+    "DB_NAME": "", // required
+    
+    "APIKEY": "", // required
+    
+    "SECRET": "", // required
+}
+
+module.exports = {
+    apps : [
+        {
+            name   : "ApiGateway",
+            script : "./ApiGateway/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name   : "NotService",
+            script : "./Services/NotificationService/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name   : "RevServices",
+            script: "./Services/ReviewsService_v2/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name: "UsersService",
+            script: "./Services/UsersService/dist/src/server.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name: "GeoLocationService",
+            script: "./Services/GeoLocationService/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name: "FileHandlerService",
+            script: "./Services/FileHandlerService/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name: "ResOwnerService",
+            script: "./Services/ResOwnerService/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+        {
+            name: "SchedulerService",
+            script: "./Services/SchedulerService/dist/index.js",
+            watch: true,
+            env: allEnvs
+        },
+
+        {
+            name   : "MainPlatform",
+            cwd    : "./Views/MainPlatform/app",
+            script : "npm",
+            args   : "start",
+            watch  : true,
+        },
+
+        {
+            name   : "authPage",
+            cwd    : "./Views/userclient",
+            script : "npm",
+            args   : "run serve",
+            watch  : true,
+        },
+
+        {
+            name   : "AdminPlatform",
+            cwd    : "./Views/Admin",
+            script : "npm",
+            args   : "run dev",
+            watch  : true
+        },
+
+    ]
+}

@@ -79,7 +79,7 @@ import MarkerClusterer from '@google/markerclustererplus';
     var locations = data.locations
   
     //if(data.type == "address") map = displayMap(data.address);
-    map = displayMap(data.address);
+    map = displayMap(data);
     markers = addMarkers(map, locations, markers[0]);
   
     //clustering marks is a bit buggy so lets remove it for now
@@ -105,7 +105,7 @@ import MarkerClusterer from '@google/markerclustererplus';
 
                         currentCity.innerHTML = component.long_name+": Available residences"
                         
-                        fetch(reviewsService+'/resOwner/getByCity?city='+component.long_name)
+                        fetch(`${resOwnerService}/getByCity?city=${component.long_name}`)
                         .then(res => res.json())
                         .then((dataFromServer) => {
                           console.log(dataFromServer)
@@ -169,7 +169,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   function search(city, street = "", nr = ""){
   
-    fetch(reviewsService+'/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
+    fetch(geoLocation+'/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
     .then(res => res.json())
     .then((data) => {console.log(data); mountPage(data)})
     .catch(err => console.log(err))
@@ -217,23 +217,24 @@ import MarkerClusterer from '@google/markerclustererplus';
   newReview.addEventListener('click', (event) => {
 
     if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
-  
-      cReview({
+      const data = {
         type: "createReview",
         lat: nrLat.value,
         lng: nrLng.value,
         city: nrCity.value,
         street: nrStreet.value,
-        buildingNumber: nrBNumber.value,
+        nr: nrBNumber.value,
         nrFloor: nrFloor.value,
         nrSide: nrSide.value,
-        nrRating: nrRating,
-        nrAnon: parseInt(nrAnon.value),
-        nrReview: nrReview.value,
+        rating: nrRating,
+        anonymous: parseInt(nrAnon.value),
+        review: nrReview.value,
         userName: fName+" "+lName,
         userImage: uImage,
         flag: flag.value
-      })
+      }
+
+      cReview(data)
   
     }else console.log("Fill required fields!")
   });
@@ -250,9 +251,33 @@ import MarkerClusterer from '@google/markerclustererplus';
         }
       })
     .then(res => res.json())
-    .then((data) => {console.log(data); $('#modalForm').trigger("reset"); $('#myForm').modal('hide'); mountPage(data)})
-    .catch(err => console.log(err))
-  }
+    .then( async (response) => {
+      console.log(response)
+      
+      const mulFiles = document.getElementById("reviewImgs").files
+      const dataWithImgs = new FormData()
+
+      for(const file of mulFiles){ dataWithImgs.append("reviewImgs", file) }
+      dataWithImgs.append("reviewId", response.revId)
+
+      try{
+      const result = await fetch(`${fileHandlerService}/addReviewImgs`, {
+        method: "POST",
+        body: dataWithImgs
+      });
+
+      console.log(result)
+
+      $('#modalForm').trigger("reset"); 
+      $('#myForm').modal('hide'); 
+      mountPage(data);
+
+    }catch(e){
+      console.log(e)
+    }
+  })
+}
+
 
   st1.addEventListener('click', (event) => {
     nrRating = 1

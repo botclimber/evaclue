@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const GeoLocationController_1 = require("../../controllers/GeoLocationController");
+const geoInstance = new GeoLocationController_1.GeoLocation();
+const getRoutes = (0, express_1.Router)();
+getRoutes.get("/search", geoInstance.search);
+getRoutes.get("/addresses", geoInstance.getAddresses);
+getRoutes.get("/residences", geoInstance.getResidences);
+exports.default = getRoutes;

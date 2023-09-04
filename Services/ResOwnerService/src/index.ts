@@ -8,19 +8,20 @@ import postRoutes from "./routes/post/postRequests";
 import patchRoutes from "./routes/patch/patchRequests";
 
 const app: Express = express();
-const port = process.env.PORT || 8000;
+const port = process.env.resowners_PORT || 8000;
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
+app.use(fileUpload())
 
 const version: string = "v1"
-const service: string = "resOwners"
+const service: string = "resowners"
 
-app.use(`/${version}/${service}/`, getRoutes)   // GET
-app.use(`/${version}/${service}/`, postRoutes)  // POST
-app.use(`/${version}/${service}/`, patchRoutes) // PATCH
+app.use(`/${service}/${version}/`, getRoutes)   // GET
+app.use(`/${service}/${version}/`, postRoutes)  // POST
+app.use(`/${service}/${version}/`, patchRoutes) // PATCH
 
 app.listen(port, () => {
   console.log(`ResidenceOwners Service listening to port: ${port}`)

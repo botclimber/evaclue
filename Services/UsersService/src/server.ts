@@ -8,6 +8,9 @@ import helmet from "helmet";
 import nodemailer from "nodemailer";
 import "dotenv/config";
 
+const service: string = "users";
+const version: string = "v1";
+
 const cors = require("cors");
 
 const SMTP_CONFIG = require("./config/smtp");
@@ -40,10 +43,10 @@ myDataSource
     app.use(express.json());
     app.use(cors(corsOptions)); // Use this after the variable declaration
     app.use(fileUpload())
-    app.use("/user", routes);
+    app.use(`/${service}/${version}/`, routes);
     app.use(errorMiddleware);
 
-    const port = process.env.SERVER_PORT || 7000;
+    const port = process.env.users_PORT || 7000;
     app.listen(port, () => {
       console.log(`${port}`);
     });

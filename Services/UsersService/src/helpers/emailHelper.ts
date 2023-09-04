@@ -5,10 +5,10 @@ import "dotenv/config";
 
 export class EmailHelper {
   static async sendVerifyEmail(user: User) {
-    const currentURL = `${process.env.HOST}:${process.env.SERVER_PORT}`;
+    const currentURL = `${process.env.HOST}:${process.env.users_PORT}`;
 
-    // process.env.JWT_SECRET ?? "" can lead to security breach
-    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
+    // process.env.SECRET ?? "" can lead to security breach
+    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.SECRET ?? "", {
       expiresIn: "1h",
     });
 
@@ -29,7 +29,7 @@ export class EmailHelper {
 
     const passwordToken = jwt.sign(
       { id: user.id },
-      process.env.JWT_SECRET ?? "",
+      process.env.SECRET ?? "",
       {
         expiresIn: "2h",
       }

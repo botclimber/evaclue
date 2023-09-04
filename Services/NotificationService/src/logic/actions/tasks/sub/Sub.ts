@@ -30,7 +30,7 @@ export class Subs{
         try{
 
             // check if email already exists
-            const getOne: Sub[] = await db.selectOne<Sub>(this.sub, this.className)
+            const getOne: Sub[] = await db.selectAll<Sub>("Subs", `email = '${this.sub.email}'`)
 
             if(getOne.length){
                 console.log(`Email ${this.sub.email} exists!`)

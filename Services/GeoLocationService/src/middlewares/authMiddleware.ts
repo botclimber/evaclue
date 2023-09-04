@@ -1,23 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { errorMessages as err} from "../helpers/errorMessages";
 import jwt from "jsonwebtoken";
-import "dotenv/config";
 
-type JwtPayload = {
-  userId: number,
-  userEmail: string,
-  userType: string
-};
-
-function deToken(token: string): JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload}
+function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.SECRET ?? "") as middlewareTypes.JwtPayload}
 
 export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-
-  console.log(req)
 
   const { authorization } = req.headers;
 
@@ -27,9 +18,10 @@ export const authMiddleware = async (
   }
 
   const token = authorization.split(" ")[1];
-
-  const {userId, userEmail, userType} = deToken(token)
+  console.log(token)
   
+  const decryptedToken  = deToken(token)
+
   // TODO: replace following lines | check if user exists
   /*
   const user = await userRepository.findOneById(userId);
@@ -44,5 +36,6 @@ export const authMiddleware = async (
   req.user = loggedUser;
  */
 
+  req.body = {...req.body, ...decryptedToken}
   next();
 };

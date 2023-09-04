@@ -7,18 +7,26 @@ import { Residences } from "../models/Residences"
 import axios from "axios"
 import { genNewDate } from "../helpers/DateFormat"
 import { ResOwnerActions } from "./ResOwnerActions"
+import fileUpload from "express-fileupload"
+import FormData from "form-data"
 
+type docProof = {
+    resId: number,
+    proofDocFiles: fileUpload.FileArray
+}
+
+const resOwnerActions = new ResOwnerActions()
+
+// TODO: on claim residence check if its an already claimed one
 export class ResOwnerController {
-    
-    resOwnerActions: ResOwnerActions
-    constructor(){ this.resOwnerActions = new ResOwnerActions() }
 
     async resOwners(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 
         
+        console.log(data)
         if ( isAuthz(data.userType)){
             try{
-                const resOwners: ResidenceOwners[] = await this.resOwnerActions.getResOwners()
+                const resOwners: ResidenceOwners[] = await resOwnerActions.getResOwners()
                 return res.status(200).json({residenceOwners: resOwners})
 
             }catch(e){
@@ -33,17 +41,20 @@ export class ResOwnerController {
 
         const city: string | undefined = (req.query.city)? req.query.city.toString().toUpperCase() : undefined
 
+        console.log(city)
         if(city){
-            const dataToBeSent = await this.resOwnerActions.getByCity(city);
+            const dataToBeSent = await resOwnerActions.getByCity(city);
             return res.status(200).json(dataToBeSent)
 
         } return res.status(err.ALL_REQUIRED.status).json({msg: err.ALL_REQUIRED.text})
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-        const data: Partial<ResidenceOwners & Addresses & Residences> & Required<middlewareTypes.JwtPayload> = req.body
+        const data: Partial<ResidenceOwners & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & docProof = req.body
 
-        const exists = await this.resOwnerActions.exists(data.userId)
+        if(!req.files || !Object.keys(req.files).includes("proofDocFiles")) return res.status(err.MISSING_PARAMS.status).json({ msg: "missing proof doc!"})
+
+        const exists = await resOwnerActions.exists(data.userId)
         if(exists) return res.status(err.CLAIMED_ALREADY.status).json({msg: err.CLAIMED_ALREADY.text})
 
         const address: Partial<Addresses> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
@@ -51,26 +62,31 @@ export class ResOwnerController {
         const residence: Partial<Residences> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
 	
         try{
-
-            // Request to fileHandler service - send fileProof
-            const fileName = `userProofOfRes-${data.userId}.pdf`
-
             // request addr and residence ids
             const response = await axios
-                .post(`http://localhost:${process.env.geo_PORT}/v1/geoLocation/create`,{address: address, residence:  residence}, { headers: {"Content-Type": "application/json"}} )
+                .post(`http://${process.env.HOST}:${process.env.geo_PORT}/v1/geoLocation/create`,{address: address, residence:  residence}, { headers: {"Content-Type": "application/json"}} )
 
             
             console.log("Request to GeoLocation Response: ")
             console.log(response)
             
             // check there are empty parameters
-            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), "0000-00-00 00:00:00", 0, true, fileName)
+            const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), "0000-00-00 00:00:00", 0, true, "???")
             
-            const resOwnerId = await this.resOwnerActions.create(newResidenceOwner)
+            const resOwnerId = await resOwnerActions.create(newResidenceOwner)
             
             if(resOwnerId){
                 console.log(`Record created with id: ${resOwnerId} !`)
-                return res.status(200).json({msg: "Requested, we gonna analise it!"})
+
+                const docData = new FormData()
+                docData.append("resId", resOwnerId)
+                docData.append("proofDocFiles", req.files.proofDocFiles)
+
+                console.log("Handling document file ...")
+                const result = await axios.post(`http://${process.env.HOST}:${process.env.fileHandler_PORT}/v1/fileHandler/addResDoc`, {body: docData})
+
+                if(result.status === 200) return res.status(200).json({msg: "Requested, we gonna analise it!"})
+                else return res.status(result.status).json({msg: result.data.msg})
             
             }else return res.status(500).json({msg: "SOMETHING WENT WRONG!"})
 
@@ -97,7 +113,7 @@ export class ResOwnerController {
 
             if(!claimId) return res.status(err.MISSING_PARAMS.status).json({msg: err.MISSING_PARAMS.text})
 
-            await this.resOwnerActions.update(claimId, body)
+            await resOwnerActions.update(claimId, body)
             
             return res.status(200).json({msg: "Residence state updated!"})
             

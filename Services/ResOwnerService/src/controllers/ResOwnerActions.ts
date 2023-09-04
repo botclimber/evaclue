@@ -42,6 +42,7 @@ export class ResOwnerActions {
                     return {...row, ...addr}
                 })
 
+                // TODO: Filter data that is being sent and shown on client side
                 return dataToBeSent
 
             }else throw Error(err.NO_AVAILABILITY.text)

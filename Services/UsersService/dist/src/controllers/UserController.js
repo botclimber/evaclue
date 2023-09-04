@@ -84,7 +84,7 @@ class UserController extends UserControllerHelper {
         if (!token)
             throw new errorTypes_1.BadRequest(constants_1.ErrorMessages.TOKEN_REQUIRED);
         try {
-            const decToken = jsonwebtoken_1.default.verify(token, (_b = process.env.JWT_SECRET) !== null && _b !== void 0 ? _b : "");
+            const decToken = jsonwebtoken_1.default.verify(token, (_b = process.env.SECRET) !== null && _b !== void 0 ? _b : "");
             const admin = await userRepository_1.userRepository.findOneBy({ id: decToken.userId });
             if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) {
                 const hashedPassword = await bcrypt_1.default.hash(password, 10);
@@ -126,7 +126,7 @@ class UserController extends UserControllerHelper {
             console.log("WRONG PASSWORD");
             throw new errorTypes_1.BadRequest(constants_1.ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
         }
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "", {
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : "", {
             expiresIn: "24h",
         });
         const { password: _, ...userLogin } = user;
@@ -147,7 +147,7 @@ class UserController extends UserControllerHelper {
         }
         if (user.type == "common")
             throw new errorTypes_1.Unauthorized(constants_1.ErrorMessages.NO_PERMISSION);
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "", {
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, userEmail: user.email, userType: user.type }, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : "", {
             expiresIn: "24h",
         });
         const { password: _, ...userLogin } = user;
@@ -167,7 +167,7 @@ class UserController extends UserControllerHelper {
             throw new errorTypes_1.BadRequest("User does not exist");
         }
         try {
-            const decodedToken = jsonwebtoken_1.default.verify(token.replaceAll("=", ''), (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : ""); // if token wrong then triggers the catch exception
+            const decodedToken = jsonwebtoken_1.default.verify(token.replaceAll("=", ''), (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : ""); // if token wrong then triggers the catch exception
             console.log(decodedToken);
             user.verified = true;
             await userRepository_1.userRepository.save(user);
@@ -201,7 +201,7 @@ class UserController extends UserControllerHelper {
         if (!user) {
             throw new errorTypes_1.BadRequest("User does not exist");
         }
-        const decode = jsonwebtoken_1.default.verify(emailToken, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : ""); // whats the purpose of this line ?
+        const decode = jsonwebtoken_1.default.verify(emailToken, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : ""); // whats the purpose of this line ?
         const { password } = req.body;
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
         user.password = hashedPassword;
@@ -218,7 +218,7 @@ class UserController extends UserControllerHelper {
         if (!user) {
             throw new errorTypes_1.BadRequest("User does not exist");
         }
-        const decode = jsonwebtoken_1.default.verify(token, (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : ""); // whats the purpose of this line ?
+        const decode = jsonwebtoken_1.default.verify(token, (_a = process.env.SECRET) !== null && _a !== void 0 ? _a : ""); // whats the purpose of this line ?
         const { oldPassword, newPassword } = req.body;
         const vPass = await bcrypt_1.default.compare(oldPassword, user.password);
         if (!vPass)

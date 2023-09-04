@@ -1,7 +1,5 @@
-import {genTestToken, genEmailToken, ofType} from "../../src/travisScott/travis_types/typeModels"
+import {genTestToken, genEmailToken, ofType} from "../../src/logic/types/typeModels"
 import jwt from "jsonwebtoken"
-import dotenv from 'dotenv';
-dotenv.config()
 
 const SECRET = process.env.SECRET ?? ""
 

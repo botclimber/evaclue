@@ -5,10 +5,13 @@
    */
 const domain = "http://localhost"
 
+const reviewsService = `${domain}/reviews/v2`
+const userService = `${domain}/users/v1`
+const resOwnerService = `${domain}/resowners/v1`
+const geoLocation = `${domain}/geo/v1`
+const fileHandlerService = `${domain}/fileHandler/v1`
+
 const authPage = `${domain}/login`
-console.log(authPage)
-const reviewsService = `${domain}/reviews/v1`
-const userService = domain
 
 const tokenName = 't'
 const typeName = "tType"

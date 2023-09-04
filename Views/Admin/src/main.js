@@ -8,8 +8,10 @@ const mainPage_PORT = "/"
 const apis = {
   loginPage: `${domain}:${loginPage_PORT}`,
   mainPlatform: `${domain}:${mainPage_PORT}`,
-  reviewsApi: `${domain}/reviews/v1`,
-  usersApi: domain
+  reviewsApi: `${domain}/reviews/v2`,
+  geoLocationApi: `${domain}/geo/v1`,
+  resOwnersApi: `${domain}/resowners/v1`, 
+  usersApi: `${domain}/users/v1`
 }
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -17,7 +19,7 @@ const tk = urlParams.get("t")
 
 async function authVerification (){
 
-    const res = await fetch(apis.usersApi+'/user/profile',{
+    const res = await fetch(apis.usersApi+'/profile',{
       method: 'GET',
       headers: {'Content-type': 'application/json',
       'authorization':'baer '+tk,

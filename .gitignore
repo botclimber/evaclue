@@ -17,3 +17,8 @@ node_modules
 
 # ignore all residence proof files
 **/resProofFiles/userProofOfRes-*.pdf
+
+# ignore all images
+**/reviewImgs/
+**/resImgs/
+**/proofDocs/

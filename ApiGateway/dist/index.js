@@ -139,6 +139,22 @@ app.all(`/${services.ResidenceOwnerService.name}/${services.ResidenceOwnerServic
         }
     },
 }));
+console.log(services.fileHandlerService);
+app.all(`/${services.fileHandlerService.name}/${services.fileHandlerService.version}/*`, (0, express_http_proxy_1.default)(services.fileHandlerService.fullPath, {
+    proxyErrorHandler: function (err, res, next) {
+        switch (err && err.code) {
+            case "ECONNRESET": {
+                return res.status(405).send("504 became 405");
+            }
+            case "ECONNREFUSED": {
+                return res.status(200).send("gotcher back");
+            }
+            default: {
+                next(err);
+            }
+        }
+    },
+}));
 // at the moment not implemented
 console.log(services.SupportService);
 app.all(`/${services.SupportService.name}/${services.SupportService.version}/*`, (0, express_http_proxy_1.default)(services.SupportService.fullPath, {

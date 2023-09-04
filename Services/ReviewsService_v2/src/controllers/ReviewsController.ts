@@ -8,8 +8,7 @@ import { genNewDate } from "../helpers/DateFormat"
 import { isAuthz } from "../middlewares/authorization"
 import { errorMessages as err } from "../helpers/errorMessages"
 import { ReviewActions } from "./ReviewActions"
-import fileUpload, { FileArray } from "express-fileupload"
-import FormData from "form-data"
+import fileUpload, { FileArray, UploadedFile } from "express-fileupload"
 
 type updateReviewState = {decision: number}
 type flag ={ flag: "fromMapClick" | undefined }
@@ -34,8 +33,11 @@ export class ReviewsController {
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+
         const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & flag & reviewImgs = req.body
-        const address: Partial<Addresses> = (data.lat && data.lng)? {lat: data.lat, lng: data.lng} : {city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
+        console.log(data)
+
+        const address: Partial<Addresses> = {lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
         const residence: Partial<Residences> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
 
         try{
@@ -44,7 +46,7 @@ export class ReviewsController {
             console.log(residence)
 
             await axios
-                .post(`http://localhost:${process.env.geo_PORT}/v1/geoLocation/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
+                .post(`http://localhost:${process.env.geo_PORT}/geo/v1/create`, {address: address, residence: residence}, { headers: {"Content-Type": "application/json"}} )
                 .then( async (response) => {
                     
                     console.log("Start validation | check if user already reviewed this Property")
@@ -57,27 +59,14 @@ export class ReviewsController {
                     
                         const revId = await reviewActions.create(rev)
 
-                        if(req.files){
-                            const imgsData = new FormData()
-                            imgsData.append("reviewId", revId)
-                            imgsData.append("reviewImgs", req.files.reviewImgs)
-
-                            console.log("Handling images ...")
-                            const result = await axios.post(`http://localhost:${process.env.fileHandler_PORT}/v1/fileHandler/addReviewImgs`, {body: imgsData as reviewImgs})
-
-                            if(result.status === 200) 
-                                console.log("Img(s) added!");
-                            else
-                                console.log(`something went wrong when trying to insert imgs \n(${result.status}, ${result.data.msg})`);
-                        }
-
-                        return res.status(200).json({msg: "New Review created!"})
+                        if(revId) return res.status(200).json({msg: "New Review created!", revId: revId})
+                        else return res.status(500).json({msg: "something went wrong when trying to insert review!"})
 
                     }else
                         return res.status(err.REPEATED_REVIEW.status).json({msg: err.REPEATED_REVIEW.text})
                     
                 })
-                .catch(err => {console.log(err); throw err})
+                .catch(err => {console.log(err); res.status(500).json({msg: "Someting went wrong!" }); })
 
         }catch(e){
             console.log(e)

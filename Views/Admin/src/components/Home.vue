@@ -12,7 +12,7 @@ export default {
     },
 
     computed: {
-      reviewsLength(){ return (this.reviews)? this.reviews.length : 0}
+      reviewsLength(){ return (this.reviews)? this.reviews.filter(r => r.rev.approved == 1).length : 0}
     }
   }
 
@@ -21,9 +21,6 @@ export default {
 <template>
       <div class="content-wrapper">
         <div class="row">
-          
-          
-          
           
         </div>
         <div class="row">

@@ -23,6 +23,7 @@ export class ResOwnerController {
     async resOwners(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 
         
+        console.log(data)
         if ( isAuthz(data.userType)){
             try{
                 const resOwners: ResidenceOwners[] = await resOwnerActions.getResOwners()

@@ -58,6 +58,9 @@ export class FileHandlerController {
                 
             }else {
                 try{
+                    const content = (!Array.isArray(req.files.reviewImgs))? [req.files.reviewImgs] : req.files.reviewImgs
+                    content.forEach(r => console.log(r))
+
                     const response = await fileHandler.saveFiles(data.reviewId, req.files[REVIEWS.paramName], REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType)
                     console.log(response)
                     

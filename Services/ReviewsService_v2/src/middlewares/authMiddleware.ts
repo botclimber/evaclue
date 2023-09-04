@@ -10,8 +10,6 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
 
-  console.log(req)
-
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -20,9 +18,9 @@ export const authMiddleware = async (
   }
 
   const token = authorization.split(" ")[1];
-
-  const {userId, userEmail, userType} = deToken(token)
   
+  const decryptedToken  = deToken(token)
+
   // TODO: replace following lines | check if user exists
   /*
   const user = await userRepository.findOneById(userId);
@@ -37,5 +35,6 @@ export const authMiddleware = async (
   req.user = loggedUser;
  */
 
+  req.body = {...req.body, ...decryptedToken}
   next();
 };

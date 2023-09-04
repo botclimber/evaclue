@@ -14,25 +14,38 @@ class GeoLocation {
      * @param next
      */
     async create(req, res, next) {
-        const createSendResponse = async (addr) => {
-            const addrId = await new AddressActions_1.AddressActions().newAddress(addr);
-            const residence = { addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction };
-            const resId = await new ResidenceActions_1.ResidenceActions().newResidence(residence);
-            res.status(200).json({ msg: "Address and Residence row created!", addrId: addrId, resId: resId });
-        };
-        const addr = req.body.address;
-        if (addr.lat === undefined && addr.lng === undefined) {
-            const locInstance = new LocationHandler_1.LocationHandler({ city: addr.city, street: addr.street, buildingNr: addr.nr });
-            const latLng = await locInstance.getLatLng();
-            if (latLng.lat !== undefined && latLng.lng !== undefined)
-                createSendResponse({ ...latLng, ...addr });
-            else {
-                res.status(errorMessages_1.errorMessages.INVALID_LOCATION.status).json({ msg: errorMessages_1.errorMessages.INVALID_LOCATION.text });
-                throw Error(errorMessages_1.errorMessages.INVALID_LOCATION.text);
+        try {
+            const createSendResponse = async (addr) => {
+                console.log("Trying to create or get address ...");
+                const addrId = await new AddressActions_1.AddressActions().newAddress(addr);
+                console.log(`address id is ${addrId}`);
+                console.log("Trying to create residence ...");
+                const residence = { addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction };
+                const resId = await new ResidenceActions_1.ResidenceActions().newResidence(residence);
+                res.status(200).json({ msg: "Address and Residence row created!", addrId: addrId, resId: resId });
+            };
+            const addr = req.body.address;
+            const residence = req.body.residence;
+            console.log(req);
+            console.log(addr);
+            console.log(residence);
+            if (addr.lat === undefined && addr.lng === undefined) {
+                const locInstance = new LocationHandler_1.LocationHandler({ city: addr.city, street: addr.street, buildingNr: addr.nr });
+                const latLng = await locInstance.getLatLng();
+                if (latLng.lat !== undefined && latLng.lng !== undefined)
+                    createSendResponse({ ...latLng, ...addr, ...residence });
+                else {
+                    res.status(errorMessages_1.errorMessages.INVALID_LOCATION.status).json({ msg: errorMessages_1.errorMessages.INVALID_LOCATION.text });
+                    throw Error(errorMessages_1.errorMessages.INVALID_LOCATION.text);
+                }
             }
+            else
+                createSendResponse({ ...addr, ...residence });
         }
-        else
-            createSendResponse(addr);
+        catch (e) {
+            console.log(e);
+            return res.status(500).json({ msg: "something went wrong" });
+        }
     }
     /**
      * Retrieve a specific location (city or/and street or/and building nr)

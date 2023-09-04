@@ -69,5 +69,14 @@ export const SupportService: service = {
     fullPath:  `${mainDomain}:${supportPort}`
 }
 
+const fileHandlerPort: port = process.env.fileHandler_PORT || "???"
+export const fileHandlerService: service = {
+    name: "fileHandler",
+    version: "v1",
+    port: fileHandlerPort,
+    domain: mainDomain,
+    fullPath:  `${mainDomain}:${fileHandlerPort}`
+}
+
 //const FileHandlerService // for now cant be accessed directly
 //const SchedulerService // only for scheduler purposes, at the moment setup is made programatcly

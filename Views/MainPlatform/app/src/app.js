@@ -223,24 +223,18 @@ import MarkerClusterer from '@google/markerclustererplus';
         lng: nrLng.value,
         city: nrCity.value,
         street: nrStreet.value,
-        buildingNumber: nrBNumber.value,
+        nr: nrBNumber.value,
         nrFloor: nrFloor.value,
         nrSide: nrSide.value,
-        nrRating: nrRating,
-        nrAnon: parseInt(nrAnon.value),
-        nrReview: nrReview.value,
+        rating: nrRating,
+        anonymous: parseInt(nrAnon.value),
+        review: nrReview.value,
         userName: fName+" "+lName,
         userImage: uImage,
         flag: flag.value
       }
 
-      const mulFiles = document.getElementById("reviewImgs").files
-      const dataWithImgs = new FormData()
-
-      for(const file of mulFiles){ data.append("reviewImgs", file) }
-      dataWithImgs.append("data", JSON.stringify(data))
-
-      cReview(dataWithImgs)
+      cReview(data)
   
     }else console.log("Fill required fields!")
   });
@@ -249,17 +243,41 @@ import MarkerClusterer from '@google/markerclustererplus';
     console.log(data)
     await fetch(reviewsService+'/create',{
         method: 'POST',
-        body: data,
+        body: JSON.stringify(data),
         headers: {
           'authorization':'baer '+t,
-          //'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
           // 'Content-Type': 'application/x-www-form-urlencoded',
         }
       })
     .then(res => res.json())
-    .then((data) => {console.log(data); $('#modalForm').trigger("reset"); $('#myForm').modal('hide'); mountPage(data)})
-    .catch(err => console.log(err))
-  }
+    .then( async (response) => {
+      console.log(response)
+      
+      const mulFiles = document.getElementById("reviewImgs").files
+      const dataWithImgs = new FormData()
+
+      for(const file of mulFiles){ dataWithImgs.append("reviewImgs", file) }
+      dataWithImgs.append("reviewId", response.revId)
+
+      try{
+      const result = await fetch(`${fileHandlerService}/addReviewImgs`, {
+        method: "POST",
+        body: dataWithImgs
+      });
+
+      console.log(result)
+
+      $('#modalForm').trigger("reset"); 
+      $('#myForm').modal('hide'); 
+      mountPage(data);
+
+    }catch(e){
+      console.log(e)
+    }
+  })
+}
+
 
   st1.addEventListener('click', (event) => {
     nrRating = 1

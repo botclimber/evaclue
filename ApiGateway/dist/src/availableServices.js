@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SupportService = exports.ReviewsService = exports.NotificationsService = exports.UsersService = exports.GeoLocationService = exports.ResidenceOwnerService = void 0;
+exports.fileHandlerService = exports.SupportService = exports.ReviewsService = exports.NotificationsService = exports.UsersService = exports.GeoLocationService = exports.ResidenceOwnerService = void 0;
 // Services
 const mainDomain = process.env.HOST || "???";
 const resPort = process.env.resowners_PORT || "???";
@@ -50,6 +50,14 @@ exports.SupportService = {
     port: supportPort,
     domain: mainDomain,
     fullPath: `${mainDomain}:${supportPort}`
+};
+const fileHandlerPort = process.env.fileHandler_PORT || "???";
+exports.fileHandlerService = {
+    name: "fileHandler",
+    version: "v1",
+    port: fileHandlerPort,
+    domain: mainDomain,
+    fullPath: `${mainDomain}:${fileHandlerPort}`
 };
 //const FileHandlerService // for now cant be accessed directly
 //const SchedulerService // only for scheduler purposes, at the moment setup is made programatcly

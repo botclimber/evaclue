@@ -25,3 +25,13 @@ declare namespace locationFormats{
         buildingNr?: string,
     }
 }
+
+declare namespace middlewareTypes {
+    type JwtPayload = {
+        userId: number,
+        userName?: string,
+        userImage?: string,
+        userEmail: string,
+        userType: string
+      };
+}

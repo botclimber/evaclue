@@ -16,6 +16,7 @@ const resOwnerActions = new ResOwnerActions_1.ResOwnerActions();
 class ResOwnerController {
     async resOwners(req, res, next) {
         const data = req.body;
+        console.log(data);
         if ((0, authorization_1.isAuthz)(data.userType)) {
             try {
                 const resOwners = await resOwnerActions.getResOwners();

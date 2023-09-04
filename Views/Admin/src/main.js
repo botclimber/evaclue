@@ -10,6 +10,7 @@ const apis = {
   mainPlatform: `${domain}:${mainPage_PORT}`,
   reviewsApi: `${domain}/reviews/v2`,
   geoLocationApi: `${domain}/geo/v1`,
+  resOwnersApi: `${domain}/resowners/v1`, 
   usersApi: `${domain}/users/v1`
 }
 

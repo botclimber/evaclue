@@ -12,8 +12,8 @@ const patchRequests_1 = __importDefault(require("./routes/patch/patchRequests"))
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const app = (0, express_1.default)();
 const port = process.env.rev_PORT || 8000;
-app.use(body_parser_1.default.json());
-app.use(body_parser_1.default.urlencoded({ extended: false }));
+app.use(body_parser_1.default.json({ limit: '50mb' }));
+app.use(body_parser_1.default.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use((0, cors_1.default)());
 app.use((0, express_fileupload_1.default)());
 app.use(express_1.default.static(__dirname + '/public'));

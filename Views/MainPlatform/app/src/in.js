@@ -9,6 +9,7 @@ const reviewsService = `${domain}/reviews/v2`
 const userService = `${domain}/users/v1`
 const resOwnerService = `${domain}/resowners/v1`
 const geoLocation = `${domain}/geo/v1`
+const fileHandlerService = `${domain}/fileHandler/v1`
 
 const authPage = `${domain}/login`
 

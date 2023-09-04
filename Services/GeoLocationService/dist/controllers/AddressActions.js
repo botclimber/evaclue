@@ -10,6 +10,8 @@ class AddressActions {
     async newAddress(addr) {
         const exists = await this.db.selectAll("Addresses", `lat=${addr.lat} and lng=${addr.lng}`);
         try {
+            console.log("check if this address is already registed ...");
+            console.log(exists);
             if (exists.length) {
                 return exists[0].id;
             }

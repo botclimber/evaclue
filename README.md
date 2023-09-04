@@ -11,7 +11,7 @@ Platform for house rent reviews
       - email: superAdmin@evaclue.pt
       - pass: diablo4Approach.
 
-- erase ".template" from "system.config.js.template" and fill missing required parameters;
+- Erase ".template" from "system.config.js.template" and fill missing required parameters.
 
 - Install all dependencies (run commands in the root folder):
 

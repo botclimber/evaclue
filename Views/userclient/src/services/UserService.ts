@@ -3,8 +3,39 @@ import Api from "./Api";
 const baseURL = "users/v1";
 
 export default {
-  login(email: string, password: string) {
-    return Api().post(`${baseURL}/login/platform`, { email, password });
+  async login(email: string, password: string) {
+    const { data } = await Api().post(
+      `${baseURL}/login`,
+      { email, password },
+      { withCredentials: true }
+    );
+
+    console.log(data);
+
+    return data;
+  },
+
+  async teste() {
+    const { data } = await Api(true).get(`${baseURL}/teste`);
+
+    return data;
+  },
+
+  async logout() {
+
+    const { data } = await Api().post(`${baseURL}/logout`, null, {
+      withCredentials: true,
+    });
+
+    localStorage.removeItem("Access_token");
+  },
+
+  async refreshToken() {
+    const { data } = await Api(true).post(`${baseURL}/refreshToken`, null, {
+      withCredentials: true,
+    });
+
+    return data;
   },
 
   loginAdmin(email: string, password: string) {
@@ -18,7 +49,7 @@ export default {
     email: string,
     password: string
   ) {
-    return Api().post(`${baseURL}/register/common`, {
+    return Api().post(`${baseURL}/register`, {
       firstName,
       lastName,
       username,
@@ -27,13 +58,14 @@ export default {
     });
   },
 
-  updatePassword(id: number, password: string, token: string) {
-    return Api().post(`${baseURL}/updatePassword/${id}/${token}`, {
+  recoverUserPasswordConfirmation(token: string, password: string) {
+    return Api().post(`${baseURL}//recover-password/confirmation`, {
+      token,
       password,
     });
   },
 
-  changePasswordRequest(email: string) {
-    return Api().put(`${baseURL}/changePassword/${email}`);
+  recoverUserPasswordEmailRequest(email: string) {
+    return Api().get(`${baseURL}/recover-password/request/${email}`);
   },
 };

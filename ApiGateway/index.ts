@@ -2,11 +2,12 @@ import proxy from "express-http-proxy";
 import http from "http";
 import express, { Express, NextFunction, Request, Response } from 'express';
 import * as services from "./src/availableServices";
+import path from "path";
 
 const app: Express = express();
 
 // Views // only for dev purposes
-const mainPlatform = `${process.env.HOST}:${process.env.mainPage_PORT}`
+const mainPlatform = "../../../evaclueFrontEnd/"
 const authPlatform = `${process.env.HOST}:${process.env.loginPage_PORT}`
 const adminPlatform = `${process.env.HOST}:${process.env.adminPage_PORT}`
 
@@ -16,9 +17,9 @@ const adminPlatform = `${process.env.HOST}:${process.env.adminPage_PORT}`
  */
 app.get('/', function(req: Request, res: Response) {
 
-  console.log("serving to main Platform")
-  const url = req.url
-  res.redirect(`${mainPlatform}${url}`)
+  app.use(express.static(path.join(__dirname, mainPlatform)));
+
+  res.sendFile(path.join(__dirname, `${mainPlatform}`))
 })
 
 app.get('/login*', function(req: Request, res: Response) {

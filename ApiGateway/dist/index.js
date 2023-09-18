@@ -30,9 +30,10 @@ const express_http_proxy_1 = __importDefault(require("express-http-proxy"));
 const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const services = __importStar(require("./src/availableServices"));
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 // Views // only for dev purposes
-const mainPlatform = `${process.env.HOST}:${process.env.mainPage_PORT}`;
+const mainPlatform = "../../../evaclueFrontEnd/";
 const authPlatform = `${process.env.HOST}:${process.env.loginPage_PORT}`;
 const adminPlatform = `${process.env.HOST}:${process.env.adminPage_PORT}`;
 /**
@@ -40,9 +41,8 @@ const adminPlatform = `${process.env.HOST}:${process.env.adminPage_PORT}`;
  *
  */
 app.get('/', function (req, res) {
-    console.log("serving to main Platform");
-    const url = req.url;
-    res.redirect(`${mainPlatform}${url}`);
+    app.use(express_1.default.static(path_1.default.join(__dirname, mainPlatform)));
+    res.sendFile(path_1.default.join(__dirname, `${mainPlatform}`));
 });
 app.get('/login*', function (req, res) {
     console.log("serving auth Platform");

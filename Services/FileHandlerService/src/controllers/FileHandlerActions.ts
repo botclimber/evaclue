@@ -2,8 +2,11 @@ import fileUpload, { UploadedFile } from "express-fileupload";
 import * as path from "path";
 import { fHelper } from "./FileHandlerHelper";
 import { fileTypeStrings } from "../helpers/enums";
+import {Db} from "../db/Db";
 
 export class FileHandlerActions {
+    db: Db;
+    constructor(){ this.db = new Db() }
     
     /**
      * 
@@ -50,6 +53,20 @@ export class FileHandlerActions {
             })
 
             return {status: 200, msg: "Images added!"}
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+    }
+
+    async updateReviewImgsStatus(reviewId: number): Promise<boolean>{
+
+        try{
+            const toUpdate: DbParams.updateParams = {table: "Reviews", id: reviewId, columns: ["hasImgs"], values: [true]}
+            await this.db.update(toUpdate)
+
+            return true
 
         }catch(e){
             console.log(e)

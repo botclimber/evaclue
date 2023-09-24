@@ -3,6 +3,7 @@ import { FileHandlerActions } from "./FileHandlerActions"
 import { errorMessages as err } from "../helpers/errorMessages";
 import * as path from "path";
 import { fileType, fileTypeStrings } from "../helpers/enums";
+import * as eva from "eva-functional-utils";
 
 type folderConfig = {
     prefix: string,
@@ -64,9 +65,13 @@ export class FileHandlerController {
                     const response = await fileHandler.saveFiles(data.reviewId, req.files[REVIEWS.paramName], REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType)
                     console.log(response)
                     
-                    if(response.status === 200)
-                        return res.status(response.status).json({msg: response.msg})
-                    else
+                    if(response.status === 200){
+                        //update review hasImgs column value
+                        const update = eva.Try.evaluate(async () => await fileHandler.updateReviewImgsStatus(data.reviewId));
+
+                        if(update.itSucceed()) return res.status(response.status).json({msg: response.msg})
+                        else return res.status(500).json({msg: "something went wrong when trying to update column (hasImgs)"})
+                    }else
                         return res.status(response.status).json({msg: response.msg})
 
                 }catch(e){

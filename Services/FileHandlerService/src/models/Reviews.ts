@@ -9,9 +9,9 @@ export class Reviews {
     approvedOn: formatTypes.dateFormat; // "1000-01-01"
     anonymous: boolean;
     approved: number; // 2 - rejected, 0 - pending, 1 - approved TODO: change name to status
-    hasImgs: boolean;
+    imgs: number;
 
-    constructor(userId: number, adminId: number, residenceId: number, review: string, rating: number, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, anonymous: boolean, approved: number, hasImgs: boolean = false) {
+    constructor(userId: number, adminId: number, residenceId: number, review: string, rating: number, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, anonymous: boolean, approved: number, imgs: number = 0) {
         this.userId = userId;
         this.adminId = adminId;
         this.residenceId = residenceId;
@@ -21,6 +21,6 @@ export class Reviews {
         this.approvedOn = approvedOn;
         this.anonymous = anonymous;
         this.approved = approved;
-        this.hasImgs = hasImgs;
+        this.imgs = imgs;
     }
 }

@@ -60,10 +60,10 @@ export class FileHandlerActions {
         }
     }
 
-    async updateReviewImgsStatus(reviewId: number): Promise<boolean>{
+    async updateReviewImgsStatus(reviewId: number, nrImgs: number): Promise<boolean>{
 
         try{
-            const toUpdate: DbParams.updateParams = {table: "Reviews", id: reviewId, columns: ["hasImgs"], values: [true]}
+            const toUpdate: DbParams.updateParams = {table: "Reviews", id: reviewId, columns: ["imgs"], values: [nrImgs]}
             await this.db.update(toUpdate)
 
             return true

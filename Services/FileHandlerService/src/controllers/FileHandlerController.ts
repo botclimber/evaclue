@@ -59,15 +59,17 @@ export class FileHandlerController {
                 
             }else {
                 try{
-                    const content = (!Array.isArray(req.files.reviewImgs))? [req.files.reviewImgs] : req.files.reviewImgs
+                    const imgs = req.files[REVIEWS.paramName] || []
+
+                    const content = (!Array.isArray(imgs))? [imgs] : imgs
                     content.forEach(r => console.log(r))
 
-                    const response = await fileHandler.saveFiles(data.reviewId, req.files[REVIEWS.paramName], REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType)
+                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType)
                     console.log(response)
                     
                     if(response.status === 200){
                         //update review hasImgs column value
-                        const update = eva.Try.evaluate(async () => await fileHandler.updateReviewImgsStatus(data.reviewId));
+                        const update = eva.Try.evaluate(async () => await fileHandler.updateReviewImgsStatus(data.reviewId, content.length));
 
                         if(update.itSucceed()) return res.status(response.status).json({msg: response.msg})
                         else return res.status(500).json({msg: "something went wrong when trying to update column (hasImgs)"})

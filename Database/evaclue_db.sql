@@ -34,7 +34,7 @@ Create Table Reviews (
   approvedOn datetime,
   anonymous boolean not null,
   approved int not null, -- 0 - pending, 1 - approved, 3 - rejected
-  imgs int not null,
+  imgs int DEFAULT 0 not null,
   PRIMARY KEY (id)
 );
 

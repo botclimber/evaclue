@@ -28,9 +28,10 @@ const FileHandlerActions_1 = require("./FileHandlerActions");
 const errorMessages_1 = require("../helpers/errorMessages");
 const path = __importStar(require("path"));
 const enums_1 = require("../helpers/enums");
+const eva = __importStar(require("eva-functional-utils"));
 const REVIEWS = {
     prefix: "review",
-    path: path.join(__dirname, "../reviewImgs/"),
+    path: path.join(__dirname, "../../../../../evaclueFrontEnd/assets/images/reviewImgs/"),
     limit: 3,
     fType: enums_1.fileType.IMG,
     paramName: "reviewImgs"
@@ -66,12 +67,19 @@ class FileHandlerController {
             }
             else {
                 try {
-                    const content = (!Array.isArray(req.files.reviewImgs)) ? [req.files.reviewImgs] : req.files.reviewImgs;
+                    const imgs = req.files[REVIEWS.paramName] || [];
+                    const content = (!Array.isArray(imgs)) ? [imgs] : imgs;
                     content.forEach(r => console.log(r));
-                    const response = await fileHandler.saveFiles(data.reviewId, req.files[REVIEWS.paramName], REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType);
+                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType);
                     console.log(response);
-                    if (response.status === 200)
-                        return res.status(response.status).json({ msg: response.msg });
+                    if (response.status === 200) {
+                        //update review hasImgs column value
+                        const update = eva.Try.evaluate(async () => await fileHandler.updateReviewImgsStatus(data.reviewId, content.length));
+                        if (update.itSucceed())
+                            return res.status(response.status).json({ msg: response.msg });
+                        else
+                            return res.status(500).json({ msg: "something went wrong when trying to update column (hasImgs)" });
+                    }
                     else
                         return res.status(response.status).json({ msg: response.msg });
                 }

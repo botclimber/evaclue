@@ -26,7 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileHandlerActions = void 0;
 const path = __importStar(require("path"));
 const FileHandlerHelper_1 = require("./FileHandlerHelper");
+const Db_1 = require("../db/Db");
 class FileHandlerActions {
+    constructor() { this.db = new Db_1.Db(); }
     /**
      *
      * Generic method to save images
@@ -68,6 +70,17 @@ class FileHandlerActions {
                 });
             });
             return { status: 200, msg: "Images added!" };
+        }
+        catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+    async updateReviewImgsStatus(reviewId, nrImgs) {
+        try {
+            const toUpdate = { table: "Reviews", id: reviewId, columns: ["imgs"], values: [nrImgs] };
+            await this.db.update(toUpdate);
+            return true;
         }
         catch (e) {
             console.log(e);

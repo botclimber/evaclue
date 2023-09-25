@@ -20,9 +20,13 @@ class GeoLocation {
                 const addrId = await new AddressActions_1.AddressActions().newAddress(addr);
                 console.log(`address id is ${addrId}`);
                 console.log("Trying to create residence ...");
-                const residence = { addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction };
-                const resId = await new ResidenceActions_1.ResidenceActions().newResidence(residence);
-                res.status(200).json({ msg: "Address and Residence row created!", addrId: addrId, resId: resId });
+                if (typeof (addrId) === "number") {
+                    const residence = { addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction };
+                    const resId = await new ResidenceActions_1.ResidenceActions().newResidence(residence);
+                    res.status(200).json({ msg: "Address and Residence row created!", addrId: addrId, resId: resId });
+                }
+                else
+                    res.status(addrId.status).json({ msg: addrId.text });
             };
             const addr = req.body.address;
             const residence = req.body.residence;

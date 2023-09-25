@@ -27,10 +27,15 @@ export class GeoLocation {
                 console.log(`address id is ${addrId}`)
 
                 console.log("Trying to create residence ...")
-                const residence: Residences = {addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction }
-                const resId = await new ResidenceActions().newResidence(residence)
+                if(typeof(addrId) === "number"){
+                    const residence: Residences = {addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction }
+                    const resId = await new ResidenceActions().newResidence(residence)
 
-                res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
+                    res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})
+                
+                }else res.status(addrId.status).json({msg: addrId.text});
+
+                
             }
 
             const addr = req.body.address as Addresses

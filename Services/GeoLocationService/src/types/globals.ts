@@ -35,3 +35,10 @@ declare namespace middlewareTypes {
         userType: string
       };
 }
+
+declare namespace errorTypes {
+    type errorMsg = {
+        status: number,
+        text: string
+      };
+}

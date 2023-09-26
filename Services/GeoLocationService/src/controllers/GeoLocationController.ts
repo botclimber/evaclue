@@ -28,7 +28,7 @@ export class GeoLocation {
 
                 console.log("Trying to create residence ...")
                 if(typeof(addrId) === "number"){
-                    const residence: Residences = {addressId: addrId, floor: req.body.residence.floor, direction: req.body.residence.direction }
+                    const residence: Residences = {addressId: addrId, floor: addr.floor, direction: addr.direction }
                     const resId = await new ResidenceActions().newResidence(residence)
 
                     res.status(200).json({msg: "Address and Residence row created!", addrId: addrId, resId: resId})

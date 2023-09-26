@@ -18,6 +18,8 @@ rule.minute = 0;
 //  await new Scheduler().sendAvailableResidencesByFilter()
 //});
 
+// TODO: clean up task that remove from Residences table all residences not assigned to a review
+
 app.listen(port, () => {
   console.log(`Scheduler Service listening to port: ${port}`)
 })

@@ -35,7 +35,9 @@ export class ReviewsController {
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
-        const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & flag & reviewImgs = req.body
+        type addressId = number | undefined;
+
+        const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & flag & reviewImgs & addressId = req.body
         console.log(data)
 
         const address: Partial<Addresses> = {lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}

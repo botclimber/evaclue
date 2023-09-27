@@ -37,14 +37,14 @@ class GeoLocation {
                 const locInstance = new LocationHandler_1.LocationHandler({ city: addr.city, street: addr.street, buildingNr: addr.nr });
                 const latLng = await locInstance.getLatLng();
                 if (latLng.lat !== undefined && latLng.lng !== undefined)
-                    createSendResponse({ ...latLng, ...addr, ...residence });
+                    await createSendResponse({ ...latLng, ...addr, ...residence });
                 else {
                     res.status(errorMessages_1.errorMessages.INVALID_LOCATION.status).json({ msg: errorMessages_1.errorMessages.INVALID_LOCATION.text });
                     throw Error(errorMessages_1.errorMessages.INVALID_LOCATION.text);
                 }
             }
             else
-                createSendResponse({ ...addr, ...residence });
+                await createSendResponse({ ...addr, ...residence });
         }
         catch (e) {
             console.log(e);

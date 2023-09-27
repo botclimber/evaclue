@@ -24,6 +24,8 @@ declare namespace locationFormats{
         street?: string,
         buildingNr?: string,
     }
+
+    type flag ={ flag: "fromMapClick"| "fromMarker" | undefined }
 }
 
 declare namespace middlewareTypes {

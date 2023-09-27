@@ -5,6 +5,7 @@ import * as services from "./src/availableServices";
 import path from "path";
 
 const app: Express = express();
+const FILE_LIMIT_SIZE = "5mb"
 
 // Views // only for dev purposes
 const mainPlatform = "../../../evaclueFrontEnd/"
@@ -145,6 +146,7 @@ console.log(services.fileHandlerService)
 app.all(
   `/${services.fileHandlerService.name}/${services.fileHandlerService.version}/*`,
   proxy(services.fileHandlerService.fullPath, {
+    limit: FILE_LIMIT_SIZE,
     proxyErrorHandler: function (err, res, next) {
       switch (err && err.code) {
         case "ECONNRESET": {
@@ -183,6 +185,9 @@ app.all(
 );
 
 const port = process.env.PORT || 80;
+
+app.use(express.json({ limit: FILE_LIMIT_SIZE }));
+app.use(express.urlencoded({ limit: FILE_LIMIT_SIZE, extended: true })); 
 
 http.createServer(app).listen(port, function () {
   console.log("Express server listening on port " + port);

@@ -33,26 +33,33 @@ class AddressActions {
         this.db = new Db_1.Db();
     }
     async newAddress(addr) {
-        if (eva.isEmpty(addr.city) && eva.isEmpty(addr.street) && eva.isEmpty(addr.nr))
+        if (eva.isEmpty(addr.city) || eva.isEmpty(addr.street) || eva.isEmpty(addr.nr) || eva.isEmpty(addr.flag))
             return errorMessages_1.errorMessages.NOT_VALID_ADDRESS;
         else {
-            const exists = await this.db.selectAll("Addresses", `(lat=${addr.lat} and lng=${addr.lng}) or (city="${addr.city}" and street="${addr.street}" and nr="${addr.nr}")`);
-            try {
-                console.log("check if this address is already registed ...");
-                console.log(exists);
-                if (exists.length) {
-                    return exists[0].id;
+            const operator = (addr.flag === "fromMapClick") ? "or" : (addr.flag === "fromMarker") ? "and" : undefined;
+            if (operator) {
+                const exists = await this.db.selectAll("Addresses", `(lat=${addr.lat} and lng=${addr.lng}) ${operator} (city="${addr.city}" and street="${addr.street}" and nr="${addr.nr}")`);
+                try {
+                    console.log("check if this address is already registed ...");
+                    console.log(exists);
+                    if (exists.length) {
+                        return exists[0].id;
+                    }
+                    else if (addr.flag === "fromMapClick") {
+                        const newAddr = new Addresses_1.Addresses(addr.lat, addr.lng, addr.city, addr.street, addr.nr, addr.postalCode, addr.country);
+                        const id = await this.db.insert(newAddr);
+                        return id;
+                    }
+                    else
+                        return errorMessages_1.errorMessages.INVALID_MARKER_LOCATION;
                 }
-                else {
-                    const newAddr = new Addresses_1.Addresses(addr.lat, addr.lng, addr.city, addr.street, addr.nr, addr.postalCode, addr.country);
-                    const id = await this.db.insert(newAddr);
-                    return id;
+                catch (e) {
+                    console.log(e);
+                    throw e;
                 }
             }
-            catch (e) {
-                console.log(e);
-                throw e;
-            }
+            else
+                return errorMessages_1.errorMessages.INVALID_FLAG;
         }
     }
     async getAddresses() {

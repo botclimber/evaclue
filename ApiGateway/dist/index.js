@@ -32,6 +32,7 @@ const express_1 = __importDefault(require("express"));
 const services = __importStar(require("./src/availableServices"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
+const FILE_LIMIT_SIZE = "5mb";
 // Views // only for dev purposes
 const mainPlatform = "../../../evaclueFrontEnd/";
 const authPlatform = `${process.env.HOST}:${process.env.loginPage_PORT}`;
@@ -141,6 +142,7 @@ app.all(`/${services.ResidenceOwnerService.name}/${services.ResidenceOwnerServic
 }));
 console.log(services.fileHandlerService);
 app.all(`/${services.fileHandlerService.name}/${services.fileHandlerService.version}/*`, (0, express_http_proxy_1.default)(services.fileHandlerService.fullPath, {
+    limit: FILE_LIMIT_SIZE,
     proxyErrorHandler: function (err, res, next) {
         switch (err && err.code) {
             case "ECONNRESET": {
@@ -173,6 +175,8 @@ app.all(`/${services.SupportService.name}/${services.SupportService.version}/*`,
     },
 }));
 const port = process.env.PORT || 80;
+app.use(express_1.default.json({ limit: FILE_LIMIT_SIZE }));
+app.use(express_1.default.urlencoded({ limit: FILE_LIMIT_SIZE, extended: true }));
 http_1.default.createServer(app).listen(port, function () {
     console.log("Express server listening on port " + port);
 });

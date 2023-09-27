@@ -61,6 +61,8 @@ const fileHandler = new FileHandlerActions_1.FileHandlerActions();
 class FileHandlerController {
     async addReviewImgs(req, res, next) {
         const data = req.body;
+        console.log("Data to be handle:");
+        console.log(data);
         if (data.reviewId) {
             if (!req.files || Object.keys(req.files).length === 0 || !Object.keys(req.files).includes(REVIEWS.paramName)) {
                 return res.status(errorMessages_1.errorMessages.NO_FILES_OR_KEY.status).json({ msg: errorMessages_1.errorMessages.NO_FILES_OR_KEY.text });

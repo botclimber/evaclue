@@ -12,7 +12,6 @@ import fileUpload, { FileArray, UploadedFile } from "express-fileupload"
 import * as eva from "eva-functional-utils";
 
 type updateReviewState = {decision: number}
-type flag ={ flag: "fromMapClick" | undefined }
 type reviewImgs = {
     reviewId?: number,
     reviewImgs?: fileUpload.FileArray
@@ -24,6 +23,7 @@ export class ReviewsController {
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
         try{
+            // TODO: if user type common filter review to return only approved ones and handle anonymous users
             const reviews: Reviews[] = await reviewActions.getReviews()
             return res.status(200).json({reviews: reviews})
         
@@ -35,12 +35,10 @@ export class ReviewsController {
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
-        type addressId = number | undefined;
-
-        const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & flag & reviewImgs & addressId = req.body
+        const data: Partial<Reviews & Addresses & Residences> & Required<middlewareTypes.JwtPayload> & locationFormats.flag & reviewImgs = req.body
         console.log(data)
 
-        const address: Partial<Addresses> = {lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal"}
+        const address: Partial<Addresses & locationFormats.flag> = {lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal", flag: data.flag}
         const residence: Partial<Residences> = (data.floor && data.direction)? {floor: data.floor, direction: data.direction} : {}
 
         if(eva.isEmpty(data.review)) res.status(400).json({msg: `Review is empty!` });
@@ -58,7 +56,9 @@ export class ReviewsController {
                         const revValidator = new ReviewValidator()
                         const reviewLimit = await revValidator.reviewLimit(data.userId, response.data.addrId)
                         
-                        if(!reviewLimit){
+                        // TODO: enable review limit
+                        //if(!reviewLimit){
+                        if(true){
                             const appr: number = (data.flag !== "fromMapClick")? 1: 0;
                             const rev = new Reviews(data.userId, 0, response.data.resId, data.review || "", data.rating || 5, genNewDate(), "1000-01-01 00:00:00", data.anonymous || false, appr)
                         
@@ -73,7 +73,7 @@ export class ReviewsController {
                     })
                     .catch(err => {
                         console.log(`Response from GeoLocation server: ${err}`); 
-                        res.status(400).json({msg: `Response from GeoLocation: city, street and nr must be filled!` });
+                        res.status(err.response.status).json({msg: err.response.data.msg });
                     })
 
             }catch(e){

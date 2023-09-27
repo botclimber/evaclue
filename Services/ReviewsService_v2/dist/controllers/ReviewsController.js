@@ -50,7 +50,7 @@ class ReviewsController {
     async create(req, res, next) {
         const data = req.body;
         console.log(data);
-        const address = { lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal" };
+        const address = { lat: data.lat, lng: data.lng, city: data.city, street: data.street, nr: data.nr, postalCode: "0000-000", country: "Portugal", flag: data.flag };
         const residence = (data.floor && data.direction) ? { floor: data.floor, direction: data.direction } : {};
         if (eva.isEmpty(data.review))
             res.status(400).json({ msg: `Review is empty!` });
@@ -65,7 +65,8 @@ class ReviewsController {
                     console.log("Start validation | check if user already reviewed this Property");
                     const revValidator = new ReviewValidator_1.ReviewValidator();
                     const reviewLimit = await revValidator.reviewLimit(data.userId, response.data.addrId);
-                    if (!reviewLimit) {
+                    //if(!reviewLimit){
+                    if (true) {
                         const appr = (data.flag !== "fromMapClick") ? 1 : 0;
                         const rev = new Reviews_1.Reviews(data.userId, 0, response.data.resId, data.review || "", data.rating || 5, (0, DateFormat_1.genNewDate)(), "1000-01-01 00:00:00", data.anonymous || false, appr);
                         const revId = await reviewActions.create(rev);
@@ -79,7 +80,7 @@ class ReviewsController {
                 })
                     .catch(err => {
                     console.log(`Response from GeoLocation server: ${err}`);
-                    res.status(400).json({ msg: `Response from GeoLocation: city, street and nr must be filled!` });
+                    res.status(err.response.status).json({ msg: err.response.data.msg });
                 });
             }
             catch (e) {

@@ -57,7 +57,7 @@ export class GeoLocation {
             }else await createSendResponse({...addr, ...residence});
         }catch(e){
             console.log(e)
-            return res.status(500).json({msg: "something went wrong"})
+            return res.status(500).json({msg: e})
         }
     }
 

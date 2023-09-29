@@ -1,7 +1,8 @@
-import { Db } from "../db/Db";
-import { Reviews } from "../models/Reviews";
-import { genNewDate } from "../helpers/DateFormat";
-import { Users } from "../models/Users";
+import { Db } from "../../../CommonUtils/src/db/Db";
+import { Reviews } from "../../../CommonUtils/src/models/Reviews";
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
+import { Users } from "../../../CommonUtils/src/models/Users";
+import "../../../CommonUtils/src/types/globals";
 
 export class ReviewActions {
     

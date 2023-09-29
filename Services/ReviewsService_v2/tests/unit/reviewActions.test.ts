@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
-import { genNewDate } from '../../src/helpers/DateFormat';
-import { Reviews} from "../../src/models/Reviews";
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
+import { Reviews} from "../../../CommonUtils/src/models/Reviews";
 import { ReviewActions } from "../../src/controllers/ReviewActions";
 
 describe( "Testing ReviewActions class methods", () => {

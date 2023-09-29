@@ -2,7 +2,8 @@ import fileUpload, { UploadedFile } from "express-fileupload";
 import * as path from "path";
 import { fHelper } from "./FileHandlerHelper";
 import { fileTypeStrings } from "../helpers/enums";
-import {Db} from "../db/Db";
+import {Db} from "../../../CommonUtils/src/db/Db";
+import "../../../CommonUtils/src/types/globals";
 
 export class FileHandlerActions {
     db: Db;

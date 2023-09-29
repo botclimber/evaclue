@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express"
 import { FileHandlerActions } from "./FileHandlerActions"
-import { errorMessages as err } from "../helpers/errorMessages";
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
 import * as path from "path";
 import { fileType, fileTypeStrings } from "../helpers/enums";
 import * as eva from "eva-functional-utils";

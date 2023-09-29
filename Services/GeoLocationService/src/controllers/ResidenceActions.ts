@@ -1,6 +1,7 @@
-import { Db } from "../db/Db";
+import { Db } from "../../../CommonUtils/src/db/Db";
+import "../../../CommonUtils/src/types/globals";
 
-import { Residences } from "../models/Residences";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 
 export class ResidenceActions{
     db: Db

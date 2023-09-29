@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": ["es5", "es6", "ES2021.String", "ES2018"],
+    "lib": ["es5", "es6", "ES2020", "ES2021"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -12,9 +12,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": true,
-    "strictPropertyInitialization": false,
-    "typeRoots": ["./src/types"]
+    "noImplicitAny": false,
+    "strictPropertyInitialization": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],

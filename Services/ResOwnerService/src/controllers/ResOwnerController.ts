@@ -1,11 +1,11 @@
 import {Request, Response, NextFunction} from "express"
-import { errorMessages as err } from "../helpers/errorMessages"
-import { ResidenceOwners } from "../models/ResidenceOwners"
-import { isAuthz } from "../middlewares/authorization"
-import { Addresses } from "../models/Addresses"
-import { Residences } from "../models/Residences"
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
+import { ResidenceOwners } from "../../../CommonUtils/src/models/ResidenceOwners";
+import { isAuthz } from "../../../CommonUtils/src/middlewares/authorization";
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 import axios from "axios"
-import { genNewDate } from "../helpers/DateFormat"
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
 import { ResOwnerActions } from "./ResOwnerActions"
 import fileUpload from "express-fileupload"
 import FormData from "form-data"
@@ -107,7 +107,7 @@ export class ResOwnerController {
 
         // check if user is colaborator
         const claimId: number | undefined = parseInt(req.params.claimId)
-        const body: globalTypes.updateResOwnerState = req.body
+        const body: globalTypes.updateResOwnerState & middlewareTypes.JwtPayload = req.body
 
         if(isAuthz(body.userType)){
 

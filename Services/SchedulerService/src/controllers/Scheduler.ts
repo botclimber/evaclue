@@ -1,13 +1,14 @@
 import axios from "axios"
-import { errorMessages as err } from "../helpers/errorMessages"
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
 
-import { Db } from "../db/Db"
+import "../../../CommonUtils/src/types/globals"
+import { Db } from "../../../CommonUtils/src/db/Db";
 
-import { UserFilters } from "../models/UserFilters"
-import { Addresses } from "../models/Addresses"
-import { ResidenceOwners } from "../models/ResidenceOwners"
-import { Users } from "../models/Users"
-import { Residences } from "../models/Residences"
+import { UserFilters } from "../../../CommonUtils/src/models/UserFilters";
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
+import { ResidenceOwners } from "../../../CommonUtils/src/models/ResidenceOwners";
+import { Users } from "../../../CommonUtils/src/models/Users";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 
 type availableResidences = {
     resOwnerId: number,

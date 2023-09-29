@@ -1,6 +1,13 @@
 import {createPool, Pool} from "mysql2";
 import * as eva from "eva-functional-utils";
 
+type updateParams = {
+    table: string,
+    id: number,
+    columns: string[],
+    values: any[]
+}
+
 type DbConfig = {
     host: string,
     user: string,
@@ -71,7 +78,7 @@ export class Db {
     }
 
     // update
-    async update(params: DbParams.updateParams): Promise<void> {
+    async update(params: updateParams): Promise<void> {
         const con = await this.openConnection();
         
         try{
@@ -89,7 +96,6 @@ export class Db {
             con.end(() => {/** close connection */})
         }
     }
-
 
     //TODO: maybe we should create an exists method for performance reasons
     // delete

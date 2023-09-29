@@ -31,7 +31,8 @@ const services = {
     "GeoLocationService": {"path": "./Services/GeoLocationService/"},
     "FileHandlerService": {"path": "./Services/FileHandlerService/"},
     "ResOwnerService": {"path": "./Services/ResOwnerService/"},
-    "SchedulerService": {"path": "./Services/SchedulerService/"}
+    "SchedulerService": {"path": "./Services/SchedulerService/"},
+    "CommonUtils": {"path": "./Services/CommonUtils/"}
     //"SupportService": {"path": "./Services/SupportService/"}
 }
 

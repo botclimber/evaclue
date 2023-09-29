@@ -1,13 +1,14 @@
 import {Request, Response, NextFunction} from "express"
 import { LocationHandler } from "./LocationHandler"
+import "../../../CommonUtils/src/types/globals";
 
-import { Addresses } from "../models/Addresses"
-import { Residences } from "../models/Residences"
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 
 import { AddressActions } from "./AddressActions"
 import { ResidenceActions } from "./ResidenceActions"
 
-import { errorMessages as err } from "../helpers/errorMessages"
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
 
 export class GeoLocation {
 

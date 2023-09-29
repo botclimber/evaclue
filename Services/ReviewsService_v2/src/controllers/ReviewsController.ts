@@ -1,12 +1,12 @@
 import {Request, Response, NextFunction} from "express"
 import axios from "axios"
-import { Reviews } from "../models/Reviews"
-import { Addresses } from "../models/Addresses"
-import { Residences } from "../models/Residences"
+import { Reviews } from "../../../CommonUtils/src/models/Reviews";
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 import { ReviewValidator } from "../middlewares/ReviewValidator"
-import { genNewDate } from "../helpers/DateFormat"
-import { isAuthz } from "../middlewares/authorization"
-import { errorMessages as err } from "../helpers/errorMessages"
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat"
+import { isAuthz } from "../../../CommonUtils/src/middlewares/authorization";
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
 import { ReviewActions } from "./ReviewActions"
 import fileUpload, { FileArray, UploadedFile } from "express-fileupload"
 import * as eva from "eva-functional-utils";
@@ -23,7 +23,7 @@ export class ReviewsController {
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
         try{
-            // TODO: if user type common filter review to return only approved ones and handle anonymous users
+            // TODO: at the moment approved reviews are handle on client side. Maybe depending on user type return only approved reviews and also on backend filtered anonymous user info
             const reviews: Reviews[] = await reviewActions.getReviews()
             return res.status(200).json({reviews: reviews})
         

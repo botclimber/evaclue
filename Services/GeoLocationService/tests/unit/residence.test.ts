@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 import {ResidenceActions} from "../../src/controllers/ResidenceActions"
-import { Residences } from '../../src/models/Residences';
+import { Residences } from '../../../CommonUtils/src/models/Residences';
 
 /*describe('sum module', () => {
   test('adds 1 + 2 to equal 3', () => {

@@ -1,9 +1,10 @@
-import {Db} from "../db/Db"
+import {Db} from "../../../CommonUtils/src/db/Db";
+import "../../../CommonUtils/src/types/globals"
 
-import { errorMessages as err } from "../helpers/errorMessages"
-import { genNewDate } from "../helpers/DateFormat"
-import { Addresses } from "../models/Addresses";
-import { ResidenceOwners } from "../models/ResidenceOwners";
+import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMessages";
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
+import { ResidenceOwners } from "../../../CommonUtils/src/models/ResidenceOwners";
 
 export class ResOwnerActions {
     db: Db;
@@ -73,7 +74,7 @@ export class ResOwnerActions {
         }else return false
     }
 
-    async update(claimId: number, body: globalTypes.updateResOwnerState): Promise<void> {
+    async update(claimId: number, body: globalTypes.updateResOwnerState & middlewareTypes.JwtPayload): Promise<void> {
 
         try{
             const chgConfig: DbParams.updateParams = {table: "ResidenceOwners", id: claimId, columns: ["adminId", "approved", "approvedOn"], values: [body.userId, body.state || 0, genNewDate()]} 

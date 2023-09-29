@@ -1,8 +1,9 @@
-import { Db } from "../db/Db";
+import { Db } from "../../../CommonUtils/src/db/Db";
 import * as eva from "eva-functional-utils";
-import { errorMessages } from "../helpers/errorMessages";
+import { errorMessages } from "../../../CommonUtils/src/helpers/errorMessages";
+import "../../../CommonUtils/src/types/globals";
 
-import { Addresses } from "../models/Addresses";
+import { Addresses } from "../../../CommonUtils/src/models/Addresses";
 
 export class AddressActions{
     db: Db

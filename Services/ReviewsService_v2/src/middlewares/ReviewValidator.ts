@@ -1,7 +1,7 @@
-import { Db } from "../db/Db";
+import { Db } from "../../../CommonUtils/src/db/Db";
 import dateAndTime from "date-and-time"
-import { RevChecker } from "../models/RevChecker";
-import { genNewDate } from "../helpers/DateFormat";
+import { RevChecker } from "../../../CommonUtils/src/models/RevChecker";
+import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
 
 export class ReviewValidator {
     db: Db;

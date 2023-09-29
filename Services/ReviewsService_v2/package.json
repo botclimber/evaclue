@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/ReviewsService_v2/src/index.js",
     "test": "jest"
   },
   "author": "botclimber",

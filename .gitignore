@@ -9,6 +9,9 @@ node_modules
 *.log
 .vscode
 
+# ignore all dist files
+**/dist
+
 # ignore all log folders
 **/logs
 

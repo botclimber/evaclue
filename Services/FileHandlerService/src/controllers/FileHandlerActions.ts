@@ -1,5 +1,4 @@
-import fileUpload, { UploadedFile } from "express-fileupload";
-import * as path from "path";
+import { UploadedFile } from "express-fileupload";
 import { fHelper } from "./FileHandlerHelper";
 import { fileTypeStrings } from "../helpers/enums";
 import {Db} from "../../../CommonUtils/src/db/Db";
@@ -23,9 +22,10 @@ export class FileHandlerActions {
     async saveFiles(id: number, files: UploadedFile | UploadedFile[], limit: number, prefix: string, folderPath: string, fileType: fileTypeStrings): Promise<requestFormat.genericResponse>{
 
         try{
+            console.log("Files to be processed:")
             console.log(files)
 
-            const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowed(path.extname(r.name), fileType))
+            const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowed(r.mimetype, fileType))
 
             if(castedFiles.length === 0) return {status: 400, msg: "No files sent or not allowed extension"}
 

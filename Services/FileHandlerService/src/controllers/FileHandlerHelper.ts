@@ -7,8 +7,8 @@ import { fileType, fileTypeStrings } from "../helpers/enums";
 export namespace fHelper {
     type allowedExtensions = string[]
 
-    export const allowedImgExtensions: allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"]
-    export const allowedDocExtensions: allowedExtensions = [".pdf"]
+    export const allowedImgExtensions: allowedExtensions = ["image/jpg", "image/jpeg", "image/png", "image/gif"]    
+    export const allowedDocExtensions: allowedExtensions = ["application/pdf"]
    
     // Function signatures
     type orCreateFolder = (path: string) => Promise<boolean>
@@ -45,8 +45,8 @@ export namespace fHelper {
     export const onlyAllowed: onlyAllowed = (fExt, fType) => {
 
         switch(fType) {
-            case fileType.IMG: 
-                return allowedImgExtensions.includes(fExt); 
+            case fileType.IMG:
+                return allowedImgExtensions.includes(fExt);
             
             case fileType.DOC: 
                 return allowedDocExtensions.includes(fExt); 

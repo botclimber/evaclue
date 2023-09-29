@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/FileHandlerService/src/index.js",
     "test": "test"
   },
   "author": "botclimber",

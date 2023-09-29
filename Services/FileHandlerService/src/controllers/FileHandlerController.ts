@@ -15,7 +15,7 @@ type folderConfig = {
 
 const REVIEWS: folderConfig = {
     prefix: "review",
-    path: path.join(__dirname, "../../../../../evaclueFrontEnd/assets/images/reviewImgs/"),
+    path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/reviewImgs/"),
     limit: 3,
     fType: fileType.IMG,
     paramName: "reviewImgs"

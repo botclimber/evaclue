@@ -16,7 +16,7 @@
     "strictPropertyInitialization": false,
     "typeRoots": ["./src/types"]
   },
-  "include": ["src/**/*", "../CommonUtils/middlewares/authorization.ts", "../CommonUtils/src/helpers/DateFormat.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "files": true

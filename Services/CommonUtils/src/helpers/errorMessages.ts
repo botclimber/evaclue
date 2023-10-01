@@ -15,7 +15,7 @@ export const errorMessages = {
     INVALID_MARKER_LOCATION: {status: 409, text: "Conflict: trying to add review from existing address but with diferent location"},
     INVALID_FLAG: {status: 400, text: "Flag value is not valid"},
     NO_AVAILABILITY: {status: 200, text: "No Available residences found for this city!"},
-    CLAIMED_ALREADY: {status: 200, text: "This property was already claimed by you, wait until we finish validation!"},
+    CLAIMED_ALREADY: {status: 400, text: "This property was already claimed by you, wait until we finish validation!"},
     ADDRESS_SEGMENT_FAULT: {status: 500, text: "Residence Owner without Address"},
     EMAIL_SEGMENT_FAULT: {status:500, text: "User without Email"}
   } as const;

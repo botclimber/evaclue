@@ -7,6 +7,7 @@ import * as eva from "eva-functional-utils";
 
 type folderConfig = {
     prefix: string,
+    fileAlternativeName: string,
     path: string,
     limit: number,
     fType: fileTypeStrings,
@@ -15,6 +16,7 @@ type folderConfig = {
 
 const REVIEWS: folderConfig = {
     prefix: "review",
+    fileAlternativeName: "rImg",
     path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/reviewImgs/"),
     limit: 3,
     fType: fileType.IMG,
@@ -23,7 +25,8 @@ const REVIEWS: folderConfig = {
 
 const RESIDENCES: folderConfig = {
     prefix: "residence",
-    path: path.join(__dirname, "../resImgs/"),
+    fileAlternativeName: "img",
+    path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/resImgs/"),
     limit: 5,
     fType: fileType.IMG,
     paramName: "resImgs"
@@ -31,7 +34,8 @@ const RESIDENCES: folderConfig = {
 
 const PROOFDOCS: folderConfig = {
     prefix: "proofDoc",
-    path: path.join(__dirname, "../proofDocs/"),
+    fileAlternativeName: "doc",
+    path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/proofDocs/"),
     limit: 1,
     fType: fileType.DOC,
     paramName: "proofDocFiles"
@@ -39,6 +43,7 @@ const PROOFDOCS: folderConfig = {
 
 const TICKETS: folderConfig = {
     prefix: "ticket",
+    fileAlternativeName: "ticket",
     path: path.join(__dirname, "../ticketAttachments/"),
     limit: 1,
     fType: fileType.ATTACH,
@@ -67,7 +72,7 @@ export class FileHandlerController {
                     const content = (!Array.isArray(imgs))? [imgs] : imgs
                     content.forEach(r => console.log(r))
 
-                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType)
+                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType, REVIEWS.fileAlternativeName)
                     console.log(response)
                     
                     if(response.status === 200){
@@ -99,7 +104,7 @@ export class FileHandlerController {
 
             }else {
                 try{
-                    const response = await fileHandler.saveFiles(data.resId, req.files[RESIDENCES.paramName], RESIDENCES.limit, RESIDENCES.prefix, RESIDENCES.path, RESIDENCES.fType)
+                    const response = await fileHandler.saveFiles(data.resId, req.files[RESIDENCES.paramName], RESIDENCES.limit, RESIDENCES.prefix, RESIDENCES.path, RESIDENCES.fType, RESIDENCES.fileAlternativeName)
                     console.log(response)
                     
                     if(response.status === 200)
@@ -128,7 +133,7 @@ export class FileHandlerController {
 
             }else {
                 try{
-                    const response = await fileHandler.saveFiles(data.resId, req.files[PROOFDOCS.paramName], PROOFDOCS.limit, PROOFDOCS.prefix, PROOFDOCS.path, PROOFDOCS.fType)
+                    const response = await fileHandler.saveFiles(data.resId, req.files[PROOFDOCS.paramName], PROOFDOCS.limit, PROOFDOCS.prefix, PROOFDOCS.path, PROOFDOCS.fType, PROOFDOCS.fileAlternativeName)
                     console.log(response)
                     
                     if(response.status === 200)
@@ -157,7 +162,7 @@ export class FileHandlerController {
 
             }else {
                 try{
-                    const response = await fileHandler.saveFiles(data.ticketId, req.files[TICKETS.paramName], TICKETS.limit, TICKETS.prefix, TICKETS.path, TICKETS.fType)
+                    const response = await fileHandler.saveFiles(data.ticketId, req.files[TICKETS.paramName], TICKETS.limit, TICKETS.prefix, TICKETS.path, TICKETS.fType, TICKETS.fileAlternativeName)
                     console.log(response)
                     
                     if(response.status === 200)

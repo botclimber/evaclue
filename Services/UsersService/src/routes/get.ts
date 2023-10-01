@@ -2,7 +2,8 @@ import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
-const routes = Router();
+const getRoutes = Router();
 
+getRoutes.get("/profile", authMiddleware, new UserController().getProfile);
 
-// routes.get("/profile", authMiddleware, new UserController().getProfile);
+export default getRoutes;

@@ -7,7 +7,7 @@ export default (requiresAuth = false) => {
   });
 
   if (requiresAuth) {
-    const access_Token = localStorage.getItem("Access_token") as string;
+    const access_Token = localStorage.getItem("token") as string;
     if(access_Token){
       instance.defaults.headers.common[
         "Authorization"

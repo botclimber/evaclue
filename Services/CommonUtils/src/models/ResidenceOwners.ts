@@ -10,9 +10,8 @@ export class ResidenceOwners {
     approvedOn: formatTypes.dateFormat;
     approved: number;
     hide: boolean;
-    fileProof: string;
 
-    constructor(userId: number, adminId: number, addressId: number, resId: number, rentPrice: number, free: boolean, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, approved: number, hide: boolean, fileProof: string){
+    constructor(userId: number, adminId: number, addressId: number, resId: number, rentPrice: number, free: boolean, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, approved: number, hide: boolean){
         this.userId = userId;
         this.adminId = adminId;
         this.addressId = addressId;
@@ -23,6 +22,5 @@ export class ResidenceOwners {
         this.approvedOn = approvedOn
         this.approved = approved;
         this.hide = hide;
-        this.fileProof = fileProof;
     }
 }

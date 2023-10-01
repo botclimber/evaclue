@@ -25,7 +25,7 @@ export class GeoLocation {
 
                 console.log("Trying to create or get address ...")
                 const addrId = await new AddressActions().newAddress(addr)
-                console.log(`address id is ${addrId}`)
+                console.log(`address id is ${JSON.stringify(addrId)}`)
 
                 console.log("Trying to create residence ...")
                 if(typeof(addrId) === "number"){
@@ -40,15 +40,17 @@ export class GeoLocation {
 
             const addr = req.body.address as Required<Addresses & locationFormats.flag>
             const residence = req.body.residence as Residences
-            console.log(req)
+
             console.log(addr)
             console.log(residence)
 
-            if(addr.lat === undefined && addr.lng === undefined){
+            if(!addr.lat && !addr.lng){
                 const locInstance = new LocationHandler({city: addr.city, street: addr.street, buildingNr: addr.nr})
                 const latLng: locationFormats.latLng = await locInstance.getLatLng()
 
-                if(latLng.lat !== undefined && latLng.lng !== undefined) await createSendResponse({...latLng, ...addr, ...residence});
+                console.log("Maps returned coords:")
+                console.log(latLng)
+                if(latLng.lat && latLng.lng) await createSendResponse({...latLng, ...addr, ...residence});
                 else{
                     res.status(err.INVALID_LOCATION.status).json({msg: err.INVALID_LOCATION.text})
                     throw Error(err.INVALID_LOCATION.text);

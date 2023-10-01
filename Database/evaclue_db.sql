@@ -50,7 +50,6 @@ Create Table ResidenceOwners (
   approvedOn datetime,
   approved int not null,
   hide int,
-  fileProof varchar(120) not null,
   PRIMARY KEY (id)
 );
 

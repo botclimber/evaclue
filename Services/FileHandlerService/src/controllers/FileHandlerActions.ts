@@ -19,7 +19,7 @@ export class FileHandlerActions {
      * @param folderPath 
      * @returns 
      */
-    async saveFiles(id: number, files: UploadedFile | UploadedFile[], limit: number, prefix: string, folderPath: string, fileType: fileTypeStrings): Promise<requestFormat.genericResponse>{
+    async saveFiles(id: number, files: UploadedFile | UploadedFile[], limit: number, prefix: string, folderPath: string, fileType: fileTypeStrings, fileAlternativeName: string): Promise<requestFormat.genericResponse>{
 
         try{
             console.log("Files to be processed:")
@@ -42,7 +42,7 @@ export class FileHandlerActions {
             
             console.log(`Rename images and change its extension`)
             const ext = await fHelper.alternativeExt(fileType)
-            const eFiles = (ext)? await fHelper.rnExtension(castedFiles, "rImg", ext) : castedFiles
+            const eFiles = (ext)? await fHelper.rnExtension(castedFiles, fileAlternativeName, ext) : castedFiles
 
             console.log(eFiles)
             console.log(`moving file(s) to ${newFolderPath}`)

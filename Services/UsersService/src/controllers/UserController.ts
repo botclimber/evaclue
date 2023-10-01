@@ -181,9 +181,10 @@ export class UserController {
   //   return res.status(200).json({ user: { uImage: userLogin.image, uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
   // }
 
-  // async getProfile(req: Request, res: Response, next: NextFunction) {
-  //   return res.status(200).json(req.user);
-  // }
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+    console.log("is getting here")
+    return res.status(200).json(req.user);
+  }
 
   // /**
   //  * Method that updates user profile image

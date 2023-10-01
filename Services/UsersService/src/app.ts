@@ -2,6 +2,7 @@ import "express-async-errors";
 import express from "express";
 import fileUpload from "express-fileupload";
 import routes from "./routes/post";
+import getRoutes from "./routes/get";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
 import nodemailer from "nodemailer";
@@ -29,7 +30,7 @@ export const transporter = nodemailer.createTransport({
 });
 
 const corsOptions = {
-  origin: `http://localhost:${process.env.loginPage_PORT}`,
+  origin: [`http://localhost:${process.env.loginPage_PORT}`, `http://localhost:${process.env.adminPage_PORT}`],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
   //exposedHeaders: ['set-cookie']
@@ -52,6 +53,7 @@ routes.get('/', (req, res ) => {
 });
 
 app.use(`/${service}/${version}/`, routes);
+app.use(`/${service}/${version}/`, getRoutes);
 app.use(errorMiddleware);
 
 

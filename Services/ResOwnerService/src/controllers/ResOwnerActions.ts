@@ -65,9 +65,9 @@ export class ResOwnerActions {
         }
     }  
 
-    async exists(userId: number): Promise<boolean> {
+    async exists(userId: number, addrId: number): Promise<boolean> {
 
-        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId}`)
+        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId} and addressId = ${addrId}`)
         if(exists.length){
             return true
 

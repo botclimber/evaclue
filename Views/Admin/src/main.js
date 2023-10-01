@@ -16,6 +16,7 @@ const apis = {
 
 const urlParams = new URLSearchParams(window.location.search)
 const tk = urlParams.get("t")
+console.log(tk)
 
 async function authVerification (){
 
@@ -28,14 +29,17 @@ async function authVerification (){
     }).catch(err => console.log(err))
 
     const data = await res.json()
-    if(!data.blocked && (data.type === "col" || data.type === "admin" || data.type === "superAdmin")){
+    console.log(data)
+
+    //if(!data.blocked && (data.type === "col" || data.type === "admin" || data.type === "superAdmin")){
+    if((data.userType === "col" || data.userType === "admin" || data.userType === "superAdmin")){
 
       createApp(App)
 
       .provide('apis', apis)
       .provide('tk', tk)
-      .provide('firstName', data.firstName)
-      .provide('lastName', data.lastName)
+      .provide('firstName', "???")
+      .provide('lastName', "???")
 
       .mount('#app')
 

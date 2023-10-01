@@ -1,5 +1,5 @@
 declare namespace globalTypes { 
     type updateResOwnerState = {
-        state?: number
+        decision?: number
     }
 }

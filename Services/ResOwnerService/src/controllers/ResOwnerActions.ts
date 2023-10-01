@@ -13,6 +13,19 @@ export class ResOwnerActions {
         this.db = new Db();
     }
 
+    async getOwnedResidences(userId: number): Promise<ResidenceOwners[]> {
+
+        try{
+            const resOwners = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId}`);
+            return resOwners
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+
+    }
+
     async getResOwners(): Promise<ResidenceOwners[]> {
 
         try{
@@ -77,7 +90,7 @@ export class ResOwnerActions {
     async update(claimId: number, body: globalTypes.updateResOwnerState & middlewareTypes.JwtPayload): Promise<void> {
 
         try{
-            const chgConfig: DbParams.updateParams = {table: "ResidenceOwners", id: claimId, columns: ["adminId", "approved", "approvedOn"], values: [body.userId, body.state || 0, genNewDate()]} 
+            const chgConfig: DbParams.updateParams = {table: "ResidenceOwners", id: claimId, columns: ["adminId", "approved", "approvedOn"], values: [body.userId, body.decision || 0, genNewDate()]} 
 
             await this.db.update(chgConfig)
 

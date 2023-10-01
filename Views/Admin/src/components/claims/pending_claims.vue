@@ -22,6 +22,7 @@ export default{
 
     async updateClaim(claimId, dec){
       if(confirm("Are you sure ?")){
+        console.log(`claimId: ${claimId} | dec: ${dec}`)
         const res = await fetch(this.apis.resOwnersApi+'/updateApproval/'+claimId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
@@ -29,8 +30,9 @@ export default{
           body: JSON.stringify({decision: dec})
         })
         const data = await res.json()
+        console.log(data)
 
-        this.allData = this.onlyPendingRes(data.claims)
+        await this.getAllClaims()
       }
     },
 

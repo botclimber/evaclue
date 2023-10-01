@@ -14,6 +14,20 @@ const resOwnerActions = new ResOwnerActions()
 // TODO: on claim residence check if its an already claimed one
 export class ResOwnerController {
 
+    async getByOwnerId(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
+        const data: middlewareTypes.JwtPayload = req.body 
+        
+        console.log(data)
+            try{
+                const resOwners: ResidenceOwners[] = await resOwnerActions.getOwnedResidences(data.userId)
+                return res.status(200).json({ownedResidences: resOwners})
+
+            }catch(e){
+                console.log(e)
+                return res.status(500).json({msg: e})
+            }
+    }
+
     async resOwners(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 
         
@@ -96,6 +110,7 @@ export class ResOwnerController {
 
             if(!claimId) return res.status(err.MISSING_PARAMS.status).json({msg: err.MISSING_PARAMS.text})
 
+            console.log(claimId, JSON.stringify(body))
             await resOwnerActions.update(claimId, body)
             
             return res.status(200).json({msg: "Residence state updated!"})

@@ -6,6 +6,7 @@ const resInstance: ResOwnerController = new ResOwnerController();
 const getRoutes = Router();
 
 getRoutes.get("/getAll", authMiddleware, resInstance.resOwners)
+getRoutes.get("/getByUser", authMiddleware, resInstance.getByOwnerId)
 getRoutes.get("/getByCity", resInstance.getByCity)
 
 export default getRoutes

@@ -44,3 +44,7 @@ declare namespace errorTypes {
         text: string
       };
 }
+
+type DynamicObject<T> = {
+    [key: string]: T;
+  };

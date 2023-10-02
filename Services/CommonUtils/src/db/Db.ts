@@ -1,3 +1,4 @@
+// TODO: URGENT - BIND PARAMS
 import {createPool, Pool} from "mysql2";
 
 type DbConfig = {
@@ -46,25 +47,28 @@ export class Db {
         }
     }
 
-    async insert<T extends {}>(object: T): Promise<number> { 
-        const con = await this.openConnection()
-
-        try
-        {
-            const columnNames: string = Object.keys(object).join(',')
-            const values: string = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',')
-
-            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
-
-            console.log("[SQL - INSERT]: "+sql)
-            const res = await con.promise().execute(sql);
-            return res[0].insertId
-
-        }catch(e){
-            console.log(e)
-            throw e
-        }finally{
-            con.end(() => {/** close connection */})
+    async insert<T extends {}>(object: T): Promise<number> {
+        const con = await this.openConnection();
+    
+        try {
+            const columnNames: string = Object.keys(object).join(',');
+            const placeholders: string = Object.keys(object).map(() => '?').join(',');
+    
+            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${placeholders})`;
+            const values: any[] = Object.values(object);
+    
+            console.log("[SQL - INSERT]: " + sql);
+    
+            const res = await con.promise().execute(sql, values); // Pass the object as parameter values
+    
+            return res[0].insertId;
+        } catch (e) {
+            console.log(e);
+            throw e;
+        } finally {
+            con.end(() => {
+                /** close connection */
+            });
         }
     }
 

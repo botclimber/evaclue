@@ -5,6 +5,7 @@ import { authMiddleware } from "../../../../CommonUtils/src/middlewares/authMidd
 const resInstance: ResOwnerController = new ResOwnerController();
 const patchRoutes = Router();
 
-patchRoutes.patch("/updateApproval/:claimId", authMiddleware, resInstance.update)
+patchRoutes.patch("/updateApproval/:claimId", authMiddleware, resInstance.approve)
+patchRoutes.patch("/update/:resId", authMiddleware, resInstance.update)
 
 export default patchRoutes

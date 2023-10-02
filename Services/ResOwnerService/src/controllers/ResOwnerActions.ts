@@ -100,4 +100,38 @@ export class ResOwnerActions {
         }
     }
 
+    async updateByParams(resId: number, body: DynamicObject<Partial<ResidenceOwners> & middlewareTypes.JwtPayload> ): Promise<void> {
+
+        const validKeys = ["rentPrice", "free", "bedRooms", "bathRooms", "flatSize", "notes", "parking", "elevator", "buildingAge"]
+        try{
+            const userId = body.userId
+            
+            const paramKeysToUpdate = []
+            const paramValuesToUpdate = []
+            for (let key in body){
+                if (validKeys.includes(key)){
+                    paramKeysToUpdate.push(key);
+                    paramValuesToUpdate.push(body[key]);
+                }
+            }
+
+            console.log("keys and values to be updated: ")
+            console.log(paramKeysToUpdate)
+            console.log(paramValuesToUpdate)
+            const getResidence = await this.db.selectAll("ResidenceOwners", `id = ${resId} and userId = ${userId}`)
+
+            console.log("checking if user is owner of following residence")
+            console.log(getResidence)
+            if(!getResidence.length) throw new Error("Trying to access not owned property!")
+
+            const chgConfig: DbParams.updateParams = {table: "ResidenceOwners", id: resId, columns: paramKeysToUpdate, values: paramValuesToUpdate} 
+
+            await this.db.update(chgConfig)
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+    }
+
 }

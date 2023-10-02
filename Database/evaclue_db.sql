@@ -46,6 +46,13 @@ Create Table ResidenceOwners (
   resId int not null,
   rentPrice float(7,2),
   free int not null, -- 0 false, 1 true
+  bedRooms int DEFAULT 0,
+  bathRooms int DEFAULT 0,
+  flatSize float(7,2),
+  notes text,
+  parking boolean DEFAULT false,
+  elevator boolean DEFAULT false,
+  buildingAge int DEFAULT 0,
   createdOn datetime,
   approvedOn datetime,
   approved int not null,

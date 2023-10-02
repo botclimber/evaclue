@@ -7,7 +7,6 @@ import { Residences } from "../../../CommonUtils/src/models/Residences";
 import axios from "axios"
 import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
 import { ResOwnerActions } from "./ResOwnerActions"
-import FormData from "form-data"
 
 const resOwnerActions = new ResOwnerActions()
 
@@ -100,7 +99,7 @@ export class ResOwnerController {
      * @param res 
      * @param next 
      */
-    async update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    async approve(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
         // check if user is colaborator
         const claimId: number | undefined = parseInt(req.params.claimId)
@@ -116,5 +115,29 @@ export class ResOwnerController {
             return res.status(200).json({msg: "Residence state updated!"})
             
         }else return res.status(err.NO_PERMISSION.status).json({msg: err.NO_PERMISSION.text})
+    }
+
+    async update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+
+        // check if user is colaborator
+        const resId: number | undefined = parseInt(req.params.resId)
+        const body: DynamicObject<Partial<ResidenceOwners> & middlewareTypes.JwtPayload> = req.body
+
+        console.log("Recieved body: ")
+        console.log(body)
+
+        if(!resId) return res.status(err.MISSING_PARAMS.status).json({msg: err.MISSING_PARAMS.text})
+        
+        console.log(resId, JSON.stringify(body))
+        
+        try{
+        await resOwnerActions.updateByParams(resId, body)
+        return res.status(200).json({msg: "Residence changes saved!"})
+        
+        }catch(e){
+            console.log(e)
+            return res.status(500).json({msg: e})
+        }
+
     }
 }

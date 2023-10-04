@@ -2,6 +2,8 @@ export type ofType = "superAdmin" | "admin" | "col"
 export type genTestToken = (id: number, type: ofType, email?: string) => string
 export type genEmailToken = (emai: string) => string
 
+// TODO: move to the CommonUtils types that can be Models 
+
 export type UserFilters = {
     id?: number,
     userId: number,

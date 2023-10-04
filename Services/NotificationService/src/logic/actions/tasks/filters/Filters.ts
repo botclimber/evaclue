@@ -2,6 +2,8 @@ import {Response} from "express"
 import {Db} from "../../../../Db/Db"
 import { UserFilters } from "../../../types/typeModels"
 
+class FiltersCompanion {}
+
 export class Filters {
     className: string = "Filters"
     private userFilters: UserFilters
@@ -13,9 +15,11 @@ export class Filters {
     }
     
     async setFilters(data: UserFilters & middlewareTypes.JwtPayload){
+
     }
 
     async getFilters(userId: number){
+        
     }
 
 }

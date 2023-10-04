@@ -2,6 +2,15 @@ export type ofType = "superAdmin" | "admin" | "col"
 export type genTestToken = (id: number, type: ofType, email?: string) => string
 export type genEmailToken = (emai: string) => string
 
+export type UserFilters = {
+    id?: number,
+    userId: number,
+    byCities: string,
+    byRentPriceMax: number,
+    byRentPriceMin: number,
+    enable: boolean
+}
+
 export interface User {
     id: number,
     email: string,

@@ -48,7 +48,7 @@ app.post(`${revPath}/create`, (req, res) => {
 
 })
 
-// to be transported to the UsersService
+// to be transported to the Notification Services
 app.post(`${revPath}/setFilter`, (req, res) => {
 
   th.tokenHandler(req)
@@ -60,7 +60,7 @@ app.post(`${revPath}/setFilter`, (req, res) => {
  
  })
 
- // to be transported to the UsersService
+ // to be transported to the Notification Services
  app.get(`${revPath}/getFilter/:userId`, (req, res) => {
   actions.actions(res).getFilter(req.params.userId)
  })

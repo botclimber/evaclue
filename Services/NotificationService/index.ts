@@ -12,6 +12,9 @@ import { EmailEngine } from './src/logic/actions/sendEmail/EmailEngine';
 import { EmailTemplate } from './src/logic/actions/sendEmail/EmailTemplate';
 import { EmailClassValidator } from './src/logic/checks/checkInput/checkInput';
 import { NotifyUsers } from './src/logic/actions/tasks/massivelyEmail/NotifyUsers';
+import { Filters } from './src/logic/actions/tasks/filters/Filters';
+import { authMiddleware } from "../CommonUtils/src/middlewares/authMiddleware";
+import  "../CommonUtils/src/types/globals";
 
 const app: Express = express();
 app.use(bodyParser.json())
@@ -122,6 +125,32 @@ app.post(`/${service}/${v}/notifyUsers`, async (req: Request, res: Response) => 
   }catch(err){
     console.log(err); 
     res.status(500).json({msg:"Some Internal Error"})
+  }
+})
+
+app.post(`/${service}/${v}/setFilters`, authMiddleware, async (req: Request, res: Response) => {
+  try{
+    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body.data
+    const filters: Filters = new Filters(data, res)
+
+    await filters.setFilters(data)
+    
+  }catch(err){
+    console.log(err); 
+    res.status(500).json({msg: err})
+  }
+})
+
+app.get(`/${service}/${v}/getFilters`, authMiddleware, async (req: Request, res: Response) => {
+  try{
+    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body.data
+    const filters: Filters = new Filters(data, res)
+
+    await filters.getFilters(data.userId)
+    
+  }catch(err){
+    console.log(err); 
+    res.status(500).json({msg: err})
   }
 })
 

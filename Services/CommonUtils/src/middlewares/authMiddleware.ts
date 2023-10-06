@@ -21,6 +21,8 @@ export const authMiddleware = async (
 
   // check if deToken returns JwtPayload otherwise it may be because of invalid SECRET or token
   const decryptedToken  = deToken(token)
+  console.log("decrypted token: ")
+  console.log(decryptedToken)
 
   // TODO: replace following lines | check if user exists
   /*

@@ -130,10 +130,10 @@ app.post(`/${service}/${v}/notifyUsers`, async (req: Request, res: Response) => 
 
 app.post(`/${service}/${v}/setFilters`, authMiddleware, async (req: Request, res: Response) => {
   try{
-    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body.data
+    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body
     const filters: Filters = new Filters(data, res)
 
-    await filters.setFilters(data)
+    await filters.setFilters()
     
   }catch(err){
     console.log(err); 
@@ -143,10 +143,10 @@ app.post(`/${service}/${v}/setFilters`, authMiddleware, async (req: Request, res
 
 app.get(`/${service}/${v}/getFilters`, authMiddleware, async (req: Request, res: Response) => {
   try{
-    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body.data
+    const data: types.UserFilters & middlewareTypes.JwtPayload = req.body
     const filters: Filters = new Filters(data, res)
 
-    await filters.getFilters(data.userId)
+    await filters.getFilters()
     
   }catch(err){
     console.log(err); 

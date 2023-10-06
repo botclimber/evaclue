@@ -14,6 +14,11 @@ export class ResidenceActions{
         try{
             const floor = (res.floor) ? res.floor : "";
             const direction = (res.direction) ? res.direction : "";
+
+            const exists: Required<Residences>[] | undefined = await this.db.selectAll<Residences>("Residences", `addressId = ${res.addressId} and floor = '${floor}' and direction = '${direction}' `)
+
+            if(exists && exists.length > 0) return exists[0].id;
+
             const newResidence = new Residences(res.addressId, floor, direction)
             const id: number = await this.db.insert(newResidence)
 

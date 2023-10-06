@@ -18,7 +18,7 @@ export class ResOwnerController {
         
         console.log(data)
             try{
-                const resOwners: ResidenceOwners[] = await resOwnerActions.getOwnedResidences(data.userId)
+                const resOwners: ResidenceOwners[] = (await resOwnerActions.getOwnedResidences(data.userId)).filter (_ => _.approved === 1)
                 return res.status(200).json({ownedResidences: resOwners})
 
             }catch(e){
@@ -71,7 +71,7 @@ export class ResOwnerController {
                     console.log(response)
 
                     console.log("Checking if user already claimed on this location ...")
-                    const exists = await resOwnerActions.exists(data.userId, response.data.addrId)
+                    const exists = await resOwnerActions.exists(data.userId, response.data.addrId, response.data.resId)
                     if(exists) return res.status(err.CLAIMED_ALREADY.status).json({msg: err.CLAIMED_ALREADY.text})
                         
                     // check there are empty parameters

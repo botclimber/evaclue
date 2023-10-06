@@ -78,9 +78,10 @@ export class ResOwnerActions {
         }
     }  
 
-    async exists(userId: number, addrId: number): Promise<boolean> {
+    async exists(userId: number, addrId: number, resId: number): Promise<boolean> {
 
-        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId} and addressId = ${addrId}`)
+        // TODO: change logic, create new table to count how many claim attemps for each user
+        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId} and addressId = ${addrId} and resId = ${resId} and approved < 2`)
         if(exists.length){
             return true
 

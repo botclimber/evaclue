@@ -50,10 +50,18 @@ export class ResOwnerController {
 
         console.log(city)
         if(city){
-            const dataToBeSent = await resOwnerActions.getByCity(city);
-            return res.status(200).json(dataToBeSent)
+            try{
+                const dataToBeSent = await resOwnerActions.getByCity(city);
+                res.status(200).json(dataToBeSent)
+    
+            }catch(e){
+                console.log(e)
 
-        } return res.status(err.ALL_REQUIRED.status).json({msg: err.ALL_REQUIRED.text})
+                if(e instanceof Error) res.status(500).json({msg: e.message})
+                else res.status(500).json({msg: String(e)})
+            }
+            
+        }else return res.status(err.ALL_REQUIRED.status).json({msg: err.ALL_REQUIRED.text})
     }
 
     async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {

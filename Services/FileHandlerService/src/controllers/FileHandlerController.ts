@@ -26,7 +26,7 @@ const REVIEWS: folderConfig = {
 const RESIDENCES: folderConfig = {
     prefix: "residence",
     fileAlternativeName: "img",
-    path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/resImgs/"),
+    path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/resImgs/"),
     limit: 5,
     fType: fileType.IMG,
     paramName: "resImgs"

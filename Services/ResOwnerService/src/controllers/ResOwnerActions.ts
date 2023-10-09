@@ -5,6 +5,7 @@ import { errorMessages as err } from "../../../CommonUtils/src/helpers/errorMess
 import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
 import { Addresses } from "../../../CommonUtils/src/models/Addresses";
 import { ResidenceOwners } from "../../../CommonUtils/src/models/ResidenceOwners";
+import { Residences } from "../../../CommonUtils/src/models/Residences";
 
 export class ResOwnerActions {
     db: Db;
@@ -42,6 +43,10 @@ export class ResOwnerActions {
     async getByCity(city: string | undefined): Promise<Partial<ResidenceOwners & Addresses>[]>{
     
         try{
+            const residences: Required<Residences>[] = await this.db.selectAll<Residences>("Residences")
+            const residencesMap = new Map<number, Residences>()
+            residences.forEach(r => residencesMap.set(r.id, r))
+
             const addresses: Required<Addresses>[] = await this.db.selectAll<Addresses>("Addresses", `upper(city) = "${city}"`)
             const addressesMap = new Map<number, Addresses>()
             addresses.forEach(r => addressesMap.set(r.id, r))
@@ -50,16 +55,17 @@ export class ResOwnerActions {
             const filteredResOwners: ResidenceOwners[] = resOwners.filter(r => r.free && r.approved === 1 && Array.from(addressesMap.keys()).includes(r.addressId))
 
             if(filteredResOwners.length){
-                const dataToBeSent: Partial<ResidenceOwners & Addresses>[] = filteredResOwners.map(row => {
+                const dataToBeSent = filteredResOwners.map(row => {
                     const addr: Addresses | undefined = addressesMap.get(row.addressId)
+                    const residence: Residences | undefined = residencesMap.get(row.resId)
 
-                    return {...row, ...addr}
-                })
+                    return {resData: row, addr: addr, res: residence}
+                }) as Partial<ResidenceOwners & Addresses & Residences>[]
 
                 // TODO: Filter data that is being sent and shown on client side
                 return dataToBeSent
 
-            }else throw Error(err.NO_AVAILABILITY.text)
+            }else throw new Error(err.NO_AVAILABILITY.text)
 
         }catch(e){
             console.log(e)

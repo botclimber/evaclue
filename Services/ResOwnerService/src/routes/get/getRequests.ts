@@ -7,6 +7,6 @@ const getRoutes = Router();
 
 getRoutes.get("/getAll", authMiddleware, resInstance.resOwners)
 getRoutes.get("/getByUser", authMiddleware, resInstance.getByOwnerId)
-getRoutes.get("/getByCity", resInstance.getByCity)
+getRoutes.get("/getByCity", resInstance.getByCity) // ?city=???
 
 export default getRoutes

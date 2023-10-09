@@ -57,6 +57,7 @@ Create Table ResidenceOwners (
   approvedOn datetime,
   approved int not null,
   hide int,
+  imgs int DEFAULT 0 not null,
   PRIMARY KEY (id)
 );
 

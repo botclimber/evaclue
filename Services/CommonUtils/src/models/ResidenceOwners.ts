@@ -17,8 +17,9 @@ export class ResidenceOwners {
     parking: boolean;
     elevator: boolean;
     buildingAge: number;
+    imgs: number;
 
-    constructor(userId: number, adminId: number, addressId: number, resId: number, rentPrice: number, free: boolean, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, approved: number, hide: boolean, bedRooms: number = 0, bathRooms: number = 0, flatSize: number = 0.0, notes: string = "", parking: boolean = false, elevator: boolean = false, buildingAge: number = 0){
+    constructor(userId: number, adminId: number, addressId: number, resId: number, rentPrice: number, free: boolean, createdOn: formatTypes.dateFormat, approvedOn: formatTypes.dateFormat, approved: number, hide: boolean, bedRooms: number = 0, bathRooms: number = 0, flatSize: number = 0.0, notes: string = "", parking: boolean = false, elevator: boolean = false, buildingAge: number = 0, imgs: number = 0){
         this.userId = userId;
         this.adminId = adminId;
         this.addressId = addressId;
@@ -36,5 +37,6 @@ export class ResidenceOwners {
         this.parking = parking;
         this.elevator = elevator;
         this.buildingAge = buildingAge;
+        this.imgs = imgs;
     }
 }

@@ -74,4 +74,18 @@ export class FileHandlerActions {
             throw e
         }
     }
+
+    async updateResOwnerImgsStatus(resOwnerId: number, nrImgs: number): Promise<boolean>{
+
+        try{
+            const toUpdate: DbParams.updateParams = {table: "ResidenceOwners", id: resOwnerId, columns: ["imgs"], values: [nrImgs]}
+            await this.db.update(toUpdate)
+
+            return true
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+    }
 }

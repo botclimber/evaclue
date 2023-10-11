@@ -2,78 +2,91 @@
  * Email Template
  */
 
-import { AvailableRents, ContactResOwner, available} from "../../types/typeModels";
+import { AvailableRents, ToContact, available} from "../../types/typeModels";
 
 export class EmailTemplate {
-    static forContactResOwner(data: ContactResOwner): string{
-        const html = `
+    static forContactResOwner(data: ToContact): string{
+        const html = /*html */`
         <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="x-apple-disable-message-reformatting">
-  <title></title>
-  <!--[if mso]>
-  <noscript>
-    <xml>
-      <o:OfficeDocumentSettings>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-      </o:OfficeDocumentSettings>
-    </xml>
-  </noscript>
-  <![endif]-->
-  <style>
-    table, td, div, h1, p {font-family: Arial, sans-serif;}
-  </style>
-</head>
-<body style="margin:0;padding:0;">
-  <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
-    <tr>
-      <td align="center" style="padding:0;">
-        <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
-          <tr>
-            <td align="center" style="padding:40px 0 30px 0;background:black;color:white;">
-              <img width="250px" src="https://evaclue.com/evaclue_icons/logoEvaclue_v2.png" />
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:36px 30px 42px 30px;">
-              <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
-                <tr>
-                  <td style="padding:0 0 36px 0;color:#153643;">
-                    <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">${data.userName}</h1>
-                    <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">${data.message}</p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:30px;background:black;">
-              <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
-                <tr>
-                  <td style="padding:0;width:50%;" align="left">
-                    <p style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
-                      &reg; Evaclue, 2023<br/><a href="https://www.evaclue.com" style="color:#ffffff;text-decoration:underline;">https://www.evaclue.com</a>
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>
+        <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <meta name="x-apple-disable-message-reformatting">
+          <title></title>
+          <!--[if mso]>
+          <noscript>
+            <xml>
+              <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+              </o:OfficeDocumentSettings>
+            </xml>
+          </noscript>
+          <![endif]-->
+          <style>
+            table, td, div, h1, p {font-family: Arial, sans-serif;}
+          </style>
+        </head>
+        <body style="margin:0;padding:0;">
+          <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+            <tr>
+              <td align="center" style="padding:0;">
+                <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                  <tr>
+                    <td align="center" style="padding:40px 0 30px 0;background:black;color:white;">
+                      <img width="250px" src="https://evaclue.com/evaclue_icons/logoEvaclue_v2.png" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:36px 30px 42px 30px;">
+                      <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                        <tr>
+                          <td style="padding:0 0 36px 0;color:#153643;">
+                            <h2 class="text-gray-700 dark:text-gray-200">I'm ${data.userName},</h2>
+        
+                <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
+                    ${data.message}
+                </p>
+        
+                <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
+                    If you pretend to keep comunication going, use this user email: ${data.userEmail}
+                </p>
+                
+                <p class="mt-8 text-gray-600 dark:text-gray-300">
+                    Thanks, <br>
+                    evalue team
+                    <br><br> <span style="color:orange;font-size:9pt">This is a no reply email</span>
+                </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:30px;background:black;">
+                      <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
+                        <tr>
+                          <td style="padding:0;width:50%;" align="left">
+                            <p style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
+                              &reg; Evaclue, 2023<br/><a href="https://www.evaclue.com" style="color:#ffffff;text-decoration:underline;">https://www.evaclue.com</a>
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
         `
         return html
     }
 
     static forSubscription(): string{
-        const html = `
+        const html = /*html*/`
         <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -153,7 +166,7 @@ export class EmailTemplate {
         return `<tr class="trBootstrap"><td class="tdBootstrap"><a href="${url}/mainPage.html?city=${element.city}">${element.city}</a><p>${element.street}, nr ${element.nr}</p><span>${element.rentPrice} eur/month</span></td></tr>`
       }) 
 
-      const html = `
+      const html = /*html*/`
       <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>

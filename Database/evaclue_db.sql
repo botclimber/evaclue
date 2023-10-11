@@ -81,13 +81,11 @@ Create Table Subs(
   PRIMARY KEY (id)
 );
 
+-- For now limit of only one email per user, this can be extended in future ofc
 Create Table ContactResOwner(
   id int auto_increment,
   resOwnerId int not null,
   userId int not null,
-  resOwnerEmail varchar(120) not null,
-  userEmail varchar(120) not null,
-  userName varchar(80) not null,
   createdAt datetime,
   PRIMARY KEY (id)
 );
@@ -171,6 +169,32 @@ VALUES
     "admin",
     "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
     "superAdmin",
+    0,
+    1
+  );
+
+  -- Create first test common user
+INSERT INTO
+  Users (
+    email,
+    username,
+    firstName,
+    image,
+    lastName,
+    password,
+    type,
+    blocked,
+    verified
+  )
+VALUES
+  (
+    "daniel.silva.prg@gmail.com",
+    "botclimber",
+    "Daniel",
+    "default.gif",
+    "Silva",
+    "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
+    "common",
     0,
     1
   );

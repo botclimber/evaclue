@@ -55,7 +55,7 @@ export class Db {
             const placeholders: string = Object.keys(object).map(() => '?').join(',');
     
             const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${placeholders})`;
-            const values: any[] = Object.values(object);
+            const values: any = Object.values(object);
     
             console.log("[SQL - INSERT]: " + sql);
     
@@ -77,10 +77,11 @@ export class Db {
         const con = await this.openConnection();
         
         try{
-            const toBeUpdated: string = params.columns.map( (value, key) =>  value+'='+this.sqlTypeSafer(params.values[key])).join();
+
+            const toBeUpdated: string = params.columns.map( (value, _) =>  value+' = ?').join(',');
             const sql: string = `UPDATE ${params.table} SET ${toBeUpdated} WHERE id = ${params.id}`;
 
-            const res = await con.promise().execute(sql);
+            const res = await con.promise().execute(sql, params.values);
             console.log("i guess it worked!")
             console.log(res)
 

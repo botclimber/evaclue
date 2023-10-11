@@ -29,7 +29,7 @@ export type Users = User & {
     verified: boolean
 }
 
-export interface ContactResOwner {
+export interface ToContact {
     cId?: number,
     resOwnerId: number,
     userId: number,
@@ -54,7 +54,7 @@ export interface EmailForm {
     html: string,
 }
 
-export type CROPlusUser = ContactResOwner & User
+export type CROPlusUser = ToContact & User
 
 export interface available {    
     resOwnerId: number,
@@ -72,3 +72,11 @@ export interface AvailableRents {
     toEmail: string,
     available: Array<available>
 }
+
+export type emBody = {
+    resOwnerId: number,
+    userId: number,
+    message: string
+}
+
+export type userData = {fullName: string, email: string}

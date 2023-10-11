@@ -3,11 +3,10 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import {Subs} from './src/logic/actions/tasks/sub/Sub'
 import date from "date-and-time"
+import * as eva from "eva-functional-utils"
 
 import * as types from './src/logic/types/typeModels' // interface types
-import { tokenHandler } from './src/logic/checks/tokenHandler/tokenHandler';
-import { ContactResOwnerClass } from './src/logic/actions/tasks/contactResOwner/ContactResOwnerClass';
-import { tokenReader } from './src/logic/checks/tokenReader/tokenReader';
+import { ContactResOwnerClass, classContactResOwnerCompanion } from './src/logic/actions/tasks/contactResOwner/ContactResOwnerClass';
 import { EmailEngine } from './src/logic/actions/sendEmail/EmailEngine';
 import { EmailTemplate } from './src/logic/actions/sendEmail/EmailTemplate';
 import { EmailClassValidator } from './src/logic/checks/checkInput/checkInput';
@@ -68,37 +67,48 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
  *  - userName, message, resOwnerEmail, userId, resOwnerId
  * 
  */ 
-app.post("/"+service+"/"+v+"/emToOwner", async (req: Request, res: Response) => {
+app.post("/"+service+"/"+v+"/emToOwner", authMiddleware,async (req: Request, res: Response) => {
 
+  // TODO: decouple code into functions
   try{
 
     // 1. check token [done]
-    const data: Omit<types.CROPlusUser, "cId" | "userEmail" | "createdAt"> = await tokenHandler<Omit<types.ContactResOwner, "cId" | "createdAt" | "userEmail">>(req)
+    const data: types.emBody  = req.body
+    console.log("recieved body: ")
+    console.log(data)
 
     // 2. check body parameters
-    if( (!data.userName || data.userName == "") || (!data.message || data.message == "") || (!data.resOwnerEmail || data.resOwnerEmail == "") || (!data.resOwnerId) || (!data.userId)) 
-      res.status(400).json({msg: "Missing some required parameters!"})
-    
+    if( !data.userId || eva.isEmpty(data.message) || !data.resOwnerId ) res.status(400).json({msg: "Missing some required parameters!"});
     else{
 
-      // 3. get email from encrypted
-      const emailTo: string = await tokenReader<string>(data.resOwnerEmail)
-      console.log(emailTo)
+      // 3. get users data
+      console.log("Getting fromUser and toUser ...")
+     
+      const fromUserData: types.userData = await classContactResOwnerCompanion.getUserData(data.userId);
+      const toUserData: types.userData =  await classContactResOwnerCompanion.getUserData(data.resOwnerId);
+    
+      console.log(fromUserData)
+      console.log(toUserData)
 
-      const cro: types.ContactResOwner = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: emailTo, userEmail: data.email, userName: data.userName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
+      // 4. TODO: Check if this user already tried to contact residence owner
+
+      const cro: types.ToContact = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: toUserData.email, userEmail: fromUserData.email, userName: fromUserData.fullName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
 
       const croClass: ContactResOwnerClass = new ContactResOwnerClass(cro)
 
-      // 4. send email to res owner
+      // 5. send email to res owner
       const html: string = EmailTemplate.forContactResOwner(cro)
       const subject: string = "Evaclue: Someone is trying to get in touch with!"
-      const emailForm: types.EmailForm = {from: process.env.SMTP_EMAIL || "???", to: cro.resOwnerEmail, cc: data.email, subject: subject, html: html}
+      
+      const emailForm: types.EmailForm = {from: process.env.SMTP_EMAIL || "???", to: cro.resOwnerEmail, cc: fromUserData.email, subject: subject, html: html}
+      
       const emailEngine: EmailEngine = new EmailEngine(emailForm)
+      
       const status: boolean = await emailEngine.send()
 
       if(status){
-        // 5. create record on contactResOwner table
-        // 6. send feedback to user on web page
+        // 6. create record on contactResOwner table
+        // 7. send feedback to user on web page
         await croClass.createContact(res)
         
       }else

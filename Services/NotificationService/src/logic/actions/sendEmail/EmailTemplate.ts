@@ -42,14 +42,13 @@ export class EmailTemplate {
                       <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
                         <tr>
                           <td style="padding:0 0 36px 0;color:#153643;">
-                            <h2 class="text-gray-700 dark:text-gray-200">I'm ${data.userName},</h2>
         
                 <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
                     ${data.message}
                 </p>
         
                 <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
-                    If you pretend to keep comunication going, use this user email: ${data.userEmail}
+                    If you pretend to keep comunication going, use this email ${data.userEmail}.
                 </p>
                 
                 <p class="mt-8 text-gray-600 dark:text-gray-300">

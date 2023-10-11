@@ -21,6 +21,17 @@ export class classContactResOwnerCompanion{
 
         }catch (e){ throw e }
     }
+
+    static async checkComunication(fromUserId: number, toUserId: number): Promise<boolean>{
+        const db: Db = new Db();
+
+        try{
+            const getRecord: ContactResOwner[] = await db.selectAll("ContactResOwner", `userId = ${fromUserId} and resOwnerId = ${toUserId}`)
+
+            return (getRecord.length > 0)
+
+        }catch(e) { throw e}
+    }
 }
 
 export class ContactResOwnerClass{

@@ -91,6 +91,12 @@ app.post("/"+service+"/"+v+"/emToOwner", authMiddleware,async (req: Request, res
       console.log(toUserData)
 
       // 4. TODO: Check if this user already tried to contact residence owner
+      const checkComunication = await classContactResOwnerCompanion.checkComunication(data.userId, data.resOwnerId)
+
+      if(checkComunication){ 
+        res.status(400).json({msg: "You already tried to contact this user, wait for response!"}); 
+        return ;
+      }
 
       const cro: types.ToContact = {resOwnerId: data.resOwnerId, userId: data.userId, resOwnerEmail: toUserData.email, userEmail: fromUserData.email, userName: fromUserData.fullName, createdAt: date.format(new Date(), "YYYY/MM/DD HH:mm:ss"), message: data.message}
 
@@ -98,7 +104,7 @@ app.post("/"+service+"/"+v+"/emToOwner", authMiddleware,async (req: Request, res
 
       // 5. send email to res owner
       const html: string = EmailTemplate.forContactResOwner(cro)
-      const subject: string = "Evaclue: Someone is trying to get in touch with!"
+      const subject: string = `Evaclue: ${fromUserData.fullName} is trying to reach you!`
       
       const emailForm: types.EmailForm = {from: process.env.SMTP_EMAIL || "???", to: cro.resOwnerEmail, cc: fromUserData.email, subject: subject, html: html}
       

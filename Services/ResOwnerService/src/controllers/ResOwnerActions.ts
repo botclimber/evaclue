@@ -6,6 +6,44 @@ import { genNewDate } from "../../../CommonUtils/src/helpers/DateFormat";
 import { Addresses } from "../../../CommonUtils/src/models/Addresses";
 import { ResidenceOwners } from "../../../CommonUtils/src/models/ResidenceOwners";
 import { Residences } from "../../../CommonUtils/src/models/Residences";
+import { Users } from "../../../CommonUtils/src/models/Users";
+
+export class ResOwnerActionsCompanion {
+
+    static async getAddresses(db: Db, city?: string): Promise<Map<number, Addresses>> {
+        try{
+            const cond = (city)? `upper(city) = "${city}"` : "";
+            const addresses = await db.selectAll<Addresses>("Addresses", cond);
+            const addressesMap = new Map<number, Addresses>()
+            addresses.forEach(r => addressesMap.set(r.id, r))
+
+            return addressesMap
+
+        }catch(e){ throw e}
+    }
+
+    static async getResidences(db: Db): Promise<Map<number, Residences>> {
+        try{
+            const residences: Required<Residences>[] = await db.selectAll<Residences>("Residences")
+            const residencesMap = new Map<number, Residences>()
+            residences.forEach(r => residencesMap.set(r.id, r))
+
+            return residencesMap
+
+        }catch(e){ throw e}
+
+    }
+
+    static async getUsers(db: Db): Promise<Map<number, Users>> {
+        try{
+            const users = await db.selectAll<Users>("Users")
+            const usersMap = new Map<number, Users>()
+            users.forEach(r => usersMap.set(r.id, r))
+
+            return usersMap
+        }catch(e){ throw e}
+    }
+}
 
 export class ResOwnerActions {
     db: Db;
@@ -43,13 +81,9 @@ export class ResOwnerActions {
     async getByCity(city: string | undefined): Promise<Partial<ResidenceOwners & Addresses>[]>{
     
         try{
-            const residences: Required<Residences>[] = await this.db.selectAll<Residences>("Residences")
-            const residencesMap = new Map<number, Residences>()
-            residences.forEach(r => residencesMap.set(r.id, r))
-
-            const addresses: Required<Addresses>[] = await this.db.selectAll<Addresses>("Addresses", `upper(city) = "${city}"`)
-            const addressesMap = new Map<number, Addresses>()
-            addresses.forEach(r => addressesMap.set(r.id, r))
+            const usersMap = await ResOwnerActionsCompanion.getUsers(this.db) 
+            const residencesMap = await ResOwnerActionsCompanion.getResidences(this.db)
+            const addressesMap = await ResOwnerActionsCompanion.getAddresses(this.db, city)
 
             const resOwners: ResidenceOwners[] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners")
             const filteredResOwners: ResidenceOwners[] = resOwners.filter(r => r.free && r.approved === 1 && Array.from(addressesMap.keys()).includes(r.addressId))
@@ -58,8 +92,10 @@ export class ResOwnerActions {
                 const dataToBeSent = filteredResOwners.map(row => {
                     const addr: Addresses | undefined = addressesMap.get(row.addressId)
                     const residence: Residences | undefined = residencesMap.get(row.resId)
+                    const user: Users | undefined = usersMap.get(row.userId)
 
-                    return {resData: row, addr: addr, res: residence}
+                    return {resData: {...row, ...{userName: `${user?.firstName} ${user?.lastName}`, userImage: user?.image}}, addr: addr, res: residence}
+                
                 }) as Partial<ResidenceOwners & Addresses & Residences>[]
 
                 // TODO: Filter data that is being sent and shown on client side

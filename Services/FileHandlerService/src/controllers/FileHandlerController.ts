@@ -11,7 +11,8 @@ type folderConfig = {
     path: string,
     limit: number,
     fType: fileTypeStrings,
-    paramName: string
+    paramName: string,
+    table: string
 }
 
 const REVIEWS: folderConfig = {
@@ -20,7 +21,8 @@ const REVIEWS: folderConfig = {
     path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/reviewImgs/"),
     limit: 3,
     fType: fileType.IMG,
-    paramName: "reviewImgs"
+    paramName: "reviewImgs",
+    table: "Reviews"
 }
 
 const RESIDENCES: folderConfig = {
@@ -29,7 +31,8 @@ const RESIDENCES: folderConfig = {
     path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/resImgs/"),
     limit: 5,
     fType: fileType.IMG,
-    paramName: "resImgs"
+    paramName: "resImgs",
+    table: "ResidenceOwners"
 }
 
 const PROOFDOCS: folderConfig = {
@@ -38,7 +41,8 @@ const PROOFDOCS: folderConfig = {
     path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/proofDocs/"),
     limit: 1,
     fType: fileType.DOC,
-    paramName: "proofDocFiles"
+    paramName: "proofDocFiles",
+    table: ""
 }
 
 const TICKETS: folderConfig = {
@@ -47,7 +51,8 @@ const TICKETS: folderConfig = {
     path: path.join(__dirname, "../ticketAttachments/"),
     limit: 1,
     fType: fileType.ATTACH,
-    paramName: "ticketAttachFiles"
+    paramName: "ticketAttachFiles",
+    table: ""
 }
 
 const fileHandler = new FileHandlerActions();
@@ -72,7 +77,7 @@ export class FileHandlerController {
                     const content = (!Array.isArray(imgs))? [imgs] : imgs
                     content.forEach(r => console.log(r))
 
-                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType, REVIEWS.fileAlternativeName)
+                    const response = await fileHandler.saveFiles(data.reviewId, imgs, REVIEWS.limit, REVIEWS.prefix, REVIEWS.path, REVIEWS.fType, REVIEWS.fileAlternativeName, REVIEWS.table)
                     console.log(response)
                     
                     if(response.status === 200){
@@ -109,7 +114,7 @@ export class FileHandlerController {
                     const content = (!Array.isArray(imgs))? [imgs] : imgs
                     content.forEach(r => console.log(r))
 
-                    const response = await fileHandler.saveFiles(data.resId, req.files[RESIDENCES.paramName], RESIDENCES.limit, RESIDENCES.prefix, RESIDENCES.path, RESIDENCES.fType, RESIDENCES.fileAlternativeName)
+                    const response = await fileHandler.saveFiles(data.resId, req.files[RESIDENCES.paramName], RESIDENCES.limit, RESIDENCES.prefix, RESIDENCES.path, RESIDENCES.fType, RESIDENCES.fileAlternativeName, RESIDENCES.table)
                     console.log(response)
                     
                     if(response.status === 200){
@@ -131,6 +136,29 @@ export class FileHandlerController {
             return res.status(err.MISSING_ID_PARAM.status).json({msg: err.MISSING_ID_PARAM.text})
         }
 
+    }
+
+    async deleteResFile(req: Request, res: Response, next: NextFunction){
+        try{
+            const id: number = parseInt(req.params.id)
+            const imgNr: number = parseInt(req.params.imgNr)
+
+            console.log(`Params recieved: Residence Owner ID: ${id} | Imgs Number: ${imgNr}`)
+
+            if(!id || imgNr == undefined) return res.status(400).json({msg: "required parameters missing!"});
+            else{
+
+                await fileHandler.deleteFile(id, RESIDENCES.table, imgNr, RESIDENCES.path, RESIDENCES.prefix, RESIDENCES.fileAlternativeName, RESIDENCES.fType)
+                res.status(200).json({msg:"File removed!"});
+
+            }
+
+        }catch(e){
+            console.log(e)
+            
+            if(e instanceof Error) res.status(500).json({msg: e.message})
+            else res.status(500).json({msg: String(e)})
+        }
     }
 
     async addResDoc(req: Request, res: Response, next: NextFunction): Promise<Response | void>{

@@ -93,7 +93,25 @@ export class Db {
         }
     }
 
+    async delete(table: string, conditions: string){
+        const con = await this.openConnection();
+        
+        try{
+
+            const cond = (conditions)? ` WHERE ${conditions}` : ""
+            const sql = `DELETE FROM ${table}${cond}`
+
+            const res = await con.promise().execute(sql);
+            console.log("i guess it worked!")
+            console.log(res)
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }finally{
+            con.end(() => {/** close connection */})
+        }
+    }
 
     //TODO: maybe we should create an exists method for performance reasons
-    // delete
 }

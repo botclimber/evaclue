@@ -12,10 +12,11 @@ export namespace fHelper {
    
     // Function signatures
     type orCreateFolder = (path: string) => Promise<boolean>
-    type rnExtension = (files: UploadedFile[], name: string, ext: string) => Promise<UploadedFile[]>
+    type rnExtension = (files: UploadedFile[], name: string, ext: string, nrExistingImgs: number) => Promise<UploadedFile[]>
     type castFilesType = (files: UploadedFile | UploadedFile[]) => Promise<UploadedFile[]>
     type onlyAllowed = (fExtension: string, fileType: fileTypeStrings) => boolean
     type alternativeExt = (fType: fileTypeStrings) => Promise<string | undefined>
+    type reorderFiles = (path: string, filePrefix: string, ext: string) => Promise<void>
 
     export const orCreateFolder: orCreateFolder =  async (path) => {
         if(!fs.existsSync(path)){ 
@@ -25,10 +26,11 @@ export namespace fHelper {
         }else return true 
     }
     
-    export const rnExtension: rnExtension = async (files, name, ext) => {
+    export const rnExtension: rnExtension = async (files, name, ext, nrExistingImgs) => {
     
         for (const x in files){
-            const newFileName = `${name}-${x}.${ext}`;
+            const imgNr: number = parseInt(x) + nrExistingImgs
+            const newFileName = `${name}-${imgNr}.${ext}`;
             files[x].name = newFileName;
         }
 
@@ -68,5 +70,28 @@ export namespace fHelper {
 
             default: return undefined;
         }
+    }
+
+    export const reorderFiles: reorderFiles = async (path, filePrefix, ext) => {
+
+        const files: string[] = fs.readdirSync(path)
+
+        console.log(`Iterating over existing files in dir ${path}`)
+        console.log(`files found:`)
+        console.log(files)
+        files.forEach( (v, i) => {
+            console.log(v)
+            console.log(i)
+
+            const oldFileName = `${path}${v}`
+            const newFileName = `${path}${filePrefix}-${i}.${ext}`
+
+            console.log(`Rename file ${oldFileName} to ${newFileName}`)
+        
+            fs.rename(oldFileName, newFileName, (err) => {
+                if(err) throw err
+                console.log("Rename Complete!")
+            })
+        })
     }
 }

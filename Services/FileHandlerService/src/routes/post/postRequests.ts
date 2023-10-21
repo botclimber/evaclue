@@ -5,7 +5,7 @@ const FH: FileHandlerController = new FileHandlerController();
 
 const postRoutes = Router();
 
-// TODO: only intern services or users with high privileges can access this requests
+// TODO: add token verification and check if user who is trying to manage files is the owner
 postRoutes.post("/addReviewImgs", FH.addReviewImgs)
 postRoutes.post("/addResImgs", FH.addResImgs)
 postRoutes.post("/addResDoc", FH.addResDoc)

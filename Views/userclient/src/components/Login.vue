@@ -60,6 +60,17 @@
         </div>
       </div>
 
+      <div class="row mb-4">
+          <!-- Submit button -->
+          <button
+            title="Login"
+            class="btn btn-primary btn-md btn-block"
+            type="submit"
+          >
+            Sign in
+          </button>
+        </div>
+
       <!-- Register buttons -->
       <div class="text-center">
         <p>Not a member? <a href="" @click="register">Register</a></p>
@@ -97,7 +108,7 @@ export default defineComponent({
         const data = await UserService.login(this.email, this.password);
         console.log(data);
         localStorage.setItem("token", data as string);
-        window.location.href = "http://localhost"
+        window.location.href = `http://localhost?token=${data}`
       } catch (error) {
         console.log(error);
       }

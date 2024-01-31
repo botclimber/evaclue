@@ -101,10 +101,10 @@ Create Table Users(
   type varchar(30) not null,
   blocked boolean DEFAULT false,
   verified boolean DEFAULT false,
-  createdAt datetime,
-  createdBy varchar(128),
-  modifiedOn datetime,
-  modifiedBy varchar(128),
+  createdAt datetime DEFAULT "1000-01-01 00:00:00",
+  createdBy int DEFAULT 0,
+  modifiedOn datetime DEFAULT "1000-01-01 00:00:00",
+  modifiedBy int DEFAULT 0,
   PRIMARY KEY (id)
 );
 
@@ -150,50 +150,62 @@ Create Table UserFilters(
 INSERT INTO
   Users (
     email,
-    username,
     firstName,
     image,
     lastName,
     password,
     type,
     blocked,
-    verified
+    verified,
+    createdAt,
+    createdBy,
+    modifiedOn,
+    modifiedBy
   )
 VALUES
   (
     "superAdmin@evaclue.pt",
-    "admin",
     "admin",
     "default.gif",
     "admin",
     "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
     "superAdmin",
     0,
-    1
+    1,
+    "1000-01-01 00:00:00",
+    0,
+    "1000-01-01 00:00:00",
+    0
   );
 
   -- Create first test common user
 INSERT INTO
   Users (
     email,
-    username,
     firstName,
     image,
     lastName,
     password,
     type,
     blocked,
-    verified
+    verified,
+    createdAt,
+    createdBy,
+    modifiedOn,
+    modifiedBy
   )
 VALUES
   (
     "daniel.silva.prg@gmail.com",
-    "botclimber",
     "Daniel",
     "default.gif",
     "Silva",
     "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
     "common",
     0,
-    1
+    1,
+    "1000-01-01 00:00:00",
+    0,
+    "1000-01-01 00:00:00",
+    0
   );

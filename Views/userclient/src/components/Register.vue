@@ -138,6 +138,7 @@ export default defineComponent({
   },
   methods: {
     async register() {
+      
       UserService.register(
         this.firstName,
         this.lastName,
@@ -145,11 +146,12 @@ export default defineComponent({
         this.password
       )
         .then((response) => {
-          console.log(response.data);
+          console.log(`Success response is ${response}`);
           this.isRegistered = true;
         })
         .catch((error) => {
           console.error(error);
+          console.error(error.response.data.msg)
         });
     },
     goToLogin() {

@@ -15,25 +15,34 @@ export class UserController {
   async RegistUser(req: Request, res: Response, next: NextFunction) {
     const user = req.body as IUser;
 
-    const { firstName, lastName, password, email, username, type } = user;
-    const specFields = [firstName, lastName, password, email, type] // mandatory fields one can bypass JS validation on front-end
+    const { firstName, lastName, password, email } = user;
+    const specFields = [firstName, lastName, password, email] // mandatory fields one can bypass JS validation on front-end
 
-    specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
+    specFields.forEach(field => { if (field === "") { return res.status(401).json({ msg: ErrorMessages.ALL_REQUIRED }); } })
 
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
-    await UserService.Register(user, "common");
+    try{
+      await UserService.Register(user, "common");
 
-    return res.status(201); // TODO: return token and in front-end redirect to main platform
+      console.log("User registed!")
+      return res.status(201).end(); // TODO: return token and in front-end redirect to main platform
+    
+    }catch(e){
+      console.log(e)
+
+      if(e instanceof(BadRequest)) return res.status(e.statusCode).json({msg: e.message})
+      else return res.status(500).send(e)
+    }
   }
 
   async RegistUserAdmin(req: Request, res: Response, next: NextFunction) {
     const user = req.body as IUser;
 
-    const { firstName, lastName, password, email, username, type } = user;
-    const specFields = [firstName, lastName, password, email, type] // mandatory fields one can bypass JS validation on front-end
+    const { firstName, lastName, password, email} = user;
+    const specFields = [firstName, lastName, password, email] // mandatory fields one can bypass JS validation on front-end
 
-    specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
+    specFields.forEach(field => { if (field === "") { return res.status(401).json({ msg: ErrorMessages.ALL_REQUIRED }); } })
 
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
@@ -41,9 +50,18 @@ export class UserController {
     const token: string = (req.headers['authorization'] ?? "") as string
     if (!token) throw new BadRequest(ErrorMessages.TOKEN_REQUIRED)
 
-    await UserService.RegisterAdmin(user, token);
+    try{
+      await UserService.RegisterAdmin(user, token);
 
-    return res.status(201); // TODO: return token and in front-end redirect admin page
+      console.log("Colaborator registed!")
+      return res.status(201).end(); // TODO: return token and in front-end redirect to main platform
+    
+    }catch(e){
+      console.log(e)
+
+      if(e instanceof(BadRequest)) return res.status(e.statusCode).json({msg: e.message})
+      else return res.status(500).send(e)
+    }
   }
 
   async Teste(req: Request, res: Response, next: NextFunction) {

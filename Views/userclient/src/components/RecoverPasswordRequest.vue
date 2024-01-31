@@ -1,5 +1,6 @@
 <template>
   <div class="container" style="margin-top: 60px; width: 30%">
+    <div class="row" style="margin-bottom: 60px;"><a href="/user/login">go back</a></div> <!-- change this to dynamic go to previous page -->
     <div v-if="isEmailSent">
         If a user with this email exists, a recovery email will be sent to it.
     </div>

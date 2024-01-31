@@ -1,7 +1,7 @@
 <template>
 
   <div class="container mt-3" style="width: 30%">
-  <div class="row" style="margin-bottom: 60px;"><a href="/user/login">go back</a></div>
+  <div class="row" style="margin-bottom: 60px;"><a href="/user/login">go back</a></div> <!-- change this to dynamic go to previous page -->
     <div v-if="isRegistered">
       User registered successfully. Check your email to verify your account
 

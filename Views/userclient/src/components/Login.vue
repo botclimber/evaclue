@@ -60,18 +60,6 @@
         </div>
       </div>
 
-      <div class="row mb-4">
-        <!-- Submit button -->
-        <button
-          title="Login"
-          style="backgroundcolor: rgb(51, 24, 127); color: rgb(202, 84, 84)"
-          class="btn btn-default"
-          type="submit"
-        >
-          Sign in
-        </button>
-      </div>
-
       <!-- Register buttons -->
       <div class="text-center">
         <p>Not a member? <a href="" @click="register">Register</a></p>

@@ -2,6 +2,8 @@ import { NextFunction, Response, Request } from "express";
 import "dotenv/config";
 import UserService from "../services/UserService";
 import { IUser } from "../models/User";
+import { ErrorMessages } from "../helpers/Constants";
+import { BadRequest } from "../helpers/ErrorTypes";
 
 type JwtPayload = {
   userId: number;
@@ -13,11 +15,35 @@ export class UserController {
   async RegistUser(req: Request, res: Response, next: NextFunction) {
     const user = req.body as IUser;
 
+    const { firstName, lastName, password, email, username, type } = user;
+    const specFields = [firstName, lastName, password, email, username, type] // mandatory fields one can bypass JS validation on front-end
+
+    specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
+
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
     await UserService.Register(user, "common");
 
-    return res.status(201); // return token ? or just regist status ?
+    return res.status(201); // TODO: return token and in front-end redirect to main platform
+  }
+
+  async RegistUserAdmin(req: Request, res: Response, next: NextFunction) {
+    const user = req.body as IUser;
+
+    const { firstName, lastName, password, email, username, type } = user;
+    const specFields = [firstName, lastName, password, email, username, type] // mandatory fields one can bypass JS validation on front-end
+
+    specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
+
+    // Call to service layer.
+    // Abstraction on how to access the data layer and the business logic.
+    
+    const token: string = (req.headers['r-access-token'] ?? "") as string
+    if (!token) throw new BadRequest(ErrorMessages.TOKEN_REQUIRED)
+
+    await UserService.RegisterAdmin(user, "common", token);
+
+    return res.status(201); // TODO: return token and in front-end redirect admin page
   }
 
   async Teste(req: Request, res: Response, next: NextFunction) {
@@ -32,9 +58,10 @@ export class UserController {
 
     const accessToken = await UserService.RefreshToken(refreshToken);
 
-    return res.status(200).json({ access_token: accessToken});
+    return res.status(200).json({ access_token: accessToken });
   }
 
+  // TODO: check if its necessary stil;l
   async Logout(req: Request, res: Response, next: NextFunction) {
     console.log(req.cookies);
     res.clearCookie("refreshToken");
@@ -43,14 +70,13 @@ export class UserController {
   }
 
   async LoginUser(req: Request, res: Response, next: NextFunction) {
-    console.log("entrooo !")
     const user: IUser = req.body;
 
     const { acessToken, refreshToken } = await UserService.Login(user);
 
     res.cookie("refreshToken", refreshToken, {
       maxAge: 3.123e10,
-      httpOnly: true,
+      httpOnly: true, // TODO: this may cause issues in PROD
     });
 
     return res.status(200).json(acessToken);
@@ -93,63 +119,6 @@ export class UserController {
 
     return res.status(200).json({ msg: "updated  " });
   }
-
-  // async getUser(req: Request, res: Response, next: NextFunction) {
-  //   const user = req.body as IUser;
-  //   const token = await UserService.Login(user);
-
-  //   return res.status(200).json(token);
-  // }
-
-  // async registAdmin(req: Request, res: Response, next: NextFunction) {
-
-  //   const { firstName, lastName, password, email, username, type } = req.body;
-  //   const specFields = [firstName, lastName, password, email, username, type]
-
-  //   specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
-
-  //   console.log(`Registration Request for email: ${email}`);
-
-  //   const userExists = await userRepository.findOneBy({ email });
-  //   if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
-
-  //   const token: string = (req.headers['r-access-token'] ?? "") as string
-  //   if (!token) throw new BadRequest(ErrorMessages.TOKEN_REQUIRED)
-
-  //   try {
-  //     const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
-  //     const admin: any = await userRepository.findOneBy({ id: decToken.userId })
-
-  //     if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) {
-  //       const hashedPassword = await bcrypt.hash(password, 10);
-
-  //       const newUser = userRepository.create({
-  //         image: "default.gif",
-  //         firstName,
-  //         lastName,
-  //         password: hashedPassword,
-  //         email,
-  //         username,
-  //         type
-  //       });
-
-  //       await userRepository.save(newUser);
-  //       console.log(`Registration Successful for email: ${email}`);
-
-  //       EmailHelper.sendVerifyEmail(newUser);
-  //       console.log(`Sending verification email to: ${email}`);
-
-  //       const { password: _, ...user } = newUser;
-
-  //       return res.status(201).json(user);
-
-  //     } else throw new Unauthorized(ErrorMessages.ADMIN_NOT_FOUND)
-
-  //   } catch (e) {
-  //     console.log(e)
-  //     throw new BadRequest(ErrorMessages.INVALID_TOKEN)
-  //   }
-  // }
 
   // async loginAdmin(req: Request, res: Response, next: NextFunction) {
   //   const { password, email } = req.body;

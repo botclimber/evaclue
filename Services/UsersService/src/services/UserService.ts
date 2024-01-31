@@ -34,6 +34,40 @@ export default class UserService {
     console.log(`Sending verification email to: ${user.email}`);
   }
 
+  static async RegisterAdmin(user: IUser, type: string, token: string) {
+    console.log(`Registration Request for email: ${user.email}`);
+
+    const userExists = await UserRepository.FindOneByEmail(user.email);
+    if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
+
+    const hashedPassword = await bcrypt.hash(user.password as string, 10);
+    
+    user.type = type;
+    user.image = "default.gif";
+    user.password = hashedPassword;
+    user.verified = true;
+
+    try {
+      const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
+      const admin: IUser | undefined = await UserRepository.FindOneById(decToken.userId)
+
+      if(admin){
+        if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) await UserRepository.Create(user);
+        else throw new Unauthorized(ErrorMessages.ADMIN_NOT_FOUND)
+        
+      }
+
+    } catch (e) {
+      console.log(e)
+      throw new BadRequest(ErrorMessages.INVALID_TOKEN)
+    }
+
+    user = await UserRepository.Create(user);
+
+    EmailService.SendVerifyEmail(user);
+    console.log(`Sending verification email to: ${user.email}`);
+  }
+
   static async Login(user: IUser) {
     console.log(`Login Request for email: ${user.email}`);
 

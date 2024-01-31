@@ -70,13 +70,19 @@ export default class UserService {
   }
 
   static async GetUserData(userId: number): Promise<IUser> {
+    // depending on whos getting the data remove and hide some fields
+
     try {
       console.log(`Decrypting token`)
       const user: IUser | undefined = await UserRepository.FindOneById(userId)
 
       console.log(`Checking if user ${user} exists and returning it as response`)
-      if(user) return {firstName: user.firstName, lastName: user.lastName, email:user.email, image: user.image, type: user.type, blocked: user.blocked, created_at: user.created_at, verified: user.verified, id: user.id} as IUser
-      else throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST)
+      if(user){
+
+        delete user.password;
+        return user;
+      
+      }else throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST)
 
     } catch (e) {
       console.log(e)

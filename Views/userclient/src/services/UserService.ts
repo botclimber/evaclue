@@ -27,7 +27,7 @@ export default {
       withCredentials: true,
     });
 
-    localStorage.removeItem("Access_token");
+    localStorage.removeItem("token");
   },
 
   async refreshToken() {
@@ -45,14 +45,12 @@ export default {
   register(
     firstName: string,
     lastName: string,
-    username: string,
     email: string,
     password: string
   ) {
     return Api().post(`${baseURL}/register`, {
       firstName,
       lastName,
-      username,
       email,
       password,
     });

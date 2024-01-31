@@ -24,7 +24,7 @@ export default defineComponent({
   name: "Login-Form",
   mounted() {
     try {
-        const access_Token = localStorage.getItem("Access_token") as string;
+        const access_Token = localStorage.getItem("token") as string;
         var { email } = jwt_decode(access_Token) as IUser;
         this.email = email;
       } catch (error) {
@@ -47,7 +47,7 @@ export default defineComponent({
     },
     async teste() {
       try {
-        const access_Token = localStorage.getItem("Access_token") as string;
+        const access_Token = localStorage.getItem("token") as string;
         var decoded = jwt_decode(access_Token);
         console.log(decoded);
       } catch (error) {

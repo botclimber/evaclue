@@ -110,13 +110,9 @@ export default defineComponent({
     async login() {
       await UserService.loginAdmin(this.email, this.password)
         .then((response) => {
-          console.log(response.data);
-          // if true
-          // regist token in localStorage
-          // redirect to evaclue home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost/admin/?uImage="+response.data.user.uImage+"&firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime+"&uId="+response.data.user.uId
+          window.location.href = "http://localhost/admin/?token="+response.data
         })
         .catch((error) => {
           this.qResponse = error["response"].data.message

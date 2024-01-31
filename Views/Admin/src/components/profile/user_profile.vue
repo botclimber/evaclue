@@ -28,7 +28,7 @@ export default {
 
     methods: {
       async getUserData(){
-        const res = await fetch(this.apis.usersApi+'/user/profile',{
+        const res = await fetch(this.apis.usersApi+'/profile',{
           method: 'GET',
           headers: {'Content-type': 'application/json',
           'authorization':'baer '+this.tk,

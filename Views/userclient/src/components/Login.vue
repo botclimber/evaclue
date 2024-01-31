@@ -96,7 +96,7 @@ export default defineComponent({
       try {
         const data = await UserService.login(this.email, this.password);
         console.log(data);
-        localStorage.setItem("Access_token", data as string);
+        localStorage.setItem("token", data as string);
         window.location.href = "http://localhost"
       } catch (error) {
         console.log(error);

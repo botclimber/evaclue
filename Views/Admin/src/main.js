@@ -15,7 +15,7 @@ const apis = {
 }
 
 const urlParams = new URLSearchParams(window.location.search)
-const tk = urlParams.get("t")
+const tk = urlParams.get("token")
 console.log(tk)
 
 async function authVerification (){
@@ -32,14 +32,14 @@ async function authVerification (){
     console.log(data)
 
     //if(!data.blocked && (data.type === "col" || data.type === "admin" || data.type === "superAdmin")){
-    if((data.userType === "col" || data.userType === "admin" || data.userType === "superAdmin")){
+    if((data.type === "col" || data.type === "admin" || data.type === "superAdmin")){
 
       createApp(App)
 
       .provide('apis', apis)
       .provide('tk', tk)
-      .provide('firstName', "???")
-      .provide('lastName', "???")
+      .provide('firstName', data.firstName)
+      .provide('lastName', data.lastName)
 
       .mount('#app')
 

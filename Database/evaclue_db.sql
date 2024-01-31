@@ -94,7 +94,6 @@ Create Table ContactResOwner(
 Create Table Users(
   id int auto_increment,
   email varchar(60) not null,
-  username varchar(30) not null,
   firstName varchar(30) not null,
   image varchar(120),
   lastName varchar(30) not null,

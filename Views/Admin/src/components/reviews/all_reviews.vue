@@ -20,7 +20,7 @@ export default {
     methods: {
         getModals (){
           const modals = new Map()
-          if(this.reviews) this.reviews.map(row => modals.set('modal'+row.id, false))
+          if(this.reviews) this.reviews.map(row => modals.set('modal'+row.rev.id, false))
           else "???"
 
           console.log(modals)
@@ -54,42 +54,42 @@ export default {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="row of allData" :key="row.id">
-                            <SimpleModal v-if="modals.get('modal'+row.id)" :title="'teste de teste'" >
+                          <tr v-for="row of allData" :key="row.rev.id">
+                            <SimpleModal v-if="modals.get('modal'+row.rev.id)" :title="'teste de teste'" >
                                 <template #body>
                                 <div>
                                   <div>
-                                    <h2>Address ({{row.addr.lat}}, {{row.addr.lng}})</h2>
-                                    <p>{{row.addr.country}}, {{row.addr.city}}, {{row.addr.street}} nr. {{row.addr.nr}}, {{row.addr.postalCode}}, {{row.res.floor}} {{row.res.direction}}</p>
+                                    <h2>Address ({{row.location.addr.lat}}, {{row.location.addr.lng}})</h2>
+                                    <p>{{row.location.addr.country}}, {{row.location.addr.city}}, {{row.location.addr.street}} nr. {{row.location.addr.nr}}, {{row.location.addr.postalCode}}, {{row.location.res.floor}} {{row.location.res.direction}}</p>
                                   </div>
                                   <div>
                                     <h2>Review</h2>
-                                    <p>id: {{row.id}}</p>
-                                    <p>UserID: {{row.userId}}</p>
-                                    <p>Approved by AdminID: {{row.adminId}}</p>
-                                    <p>anonymous: {{row.anonymous ? 'Yes' : 'No'}}</p>
-                                    <p>review: {{row.review}}</p>
-                                    <p>rating: {{row.rating}}</p>
-                                    <p v-if="row.approved === 1">Approved: Yes</p>
-                                    <p v-else-if="row.approved === 2">Approved: Rejected</p>
+                                    <p>id: {{row.rev.id}}</p>
+                                    <p>UserID: {{row.rev.userId}}</p>
+                                    <p>Approved by AdminID: {{row.rev.adminId}}</p>
+                                    <p>anonymous: {{row.rev.anonymous ? 'Yes' : 'No'}}</p>
+                                    <p>review: {{row.rev.review}}</p>
+                                    <p>rating: {{row.rev.rating}}</p>
+                                    <p v-if="row.rev.approved === 1">Approved: Yes</p>
+                                    <p v-else-if="row.rev.approved === 2">Approved: Rejected</p>
                                     <p v-else>Approved: Pending</p>
-                                    <p>approved on: {{row.approvedOn}}</p>
-                                    <p>created on: {{row.createdOn}}</p>
+                                    <p>approved on: {{row.rev.approvedOn}}</p>
+                                    <p>created on: {{row.rev.createdOn}}</p>
                                   </div>
                                 </div>
                                 </template>
                                 <template #footer>
-                                <button @click="close(row.id)">Close</button>
+                                <button @click="close(row.rev.id)">Close</button>
                                 </template>
                             </SimpleModal>
                             <td class="py-1">
-                              <button @click="callModal(row.id)"><img src="../../../public/assets/images/faces-clipart/pic-1.png" alt="image" /></button>
+                              <button @click="callModal(row.rev.id)"><img src="../../../public/assets/images/faces-clipart/pic-1.png" alt="image" /></button>
                             </td>
-                            <td> {{ row.review }} </td>
+                            <td> {{ row.rev.review }} </td>
                             <td>
-                              {city}, {street} nr. {building number}
+                              {{ row.location.addr.city }}, {{ row.location.addr.street }} nr. {{ row.location.addr.nr }}
                             </td>
-                            <td> {{ row.createdOn }}</td>
+                            <td> {{ row.rev.createdOn }}</td>
                             <td> </td>
                           </tr>
 

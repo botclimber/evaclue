@@ -55,24 +55,6 @@
           >
         </div>
 
-        <!-- Username input -->
-        <div class="form-outline mb-4">
-          <Field
-            name="username"
-            type="text"
-            id="form2Example1"
-            class="form-control"
-            v-model="username"
-            placeholder="Username"
-            :rules="isRequired"
-          />
-          <ErrorMessage as="div" name="username" v-slot="{ message }">
-            <small id="passwordHelpBlock" class="form-text text-muted">
-              {{ message }}
-            </small></ErrorMessage
-          >
-        </div>
-
         <!-- Email input -->
         <div class="form-outline mb-4">
           <Field
@@ -149,7 +131,6 @@ export default defineComponent({
     return {
       firstName: "",
       lastName: "",
-      username: "",
       email: "",
       password: "",
       isRegistered: false,
@@ -160,7 +141,6 @@ export default defineComponent({
       UserService.register(
         this.firstName,
         this.lastName,
-        this.username,
         this.email,
         this.password
       )

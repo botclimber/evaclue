@@ -34,25 +34,26 @@ export default class UserService {
     console.log(`Sending verification email to: ${user.email}`);
   }
 
-  static async RegisterAdmin(user: IUser, type: string, token: string) {
+  static async RegisterAdmin(user: IUser, token: string) {
     console.log(`Registration Request for email: ${user.email}`);
 
     const userExists = await UserRepository.FindOneByEmail(user.email);
     if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
-
-    const hashedPassword = await bcrypt.hash(user.password as string, 10);
-    
-    user.type = type;
-    user.image = "default.gif";
-    user.password = hashedPassword;
-    user.verified = true;
 
     try {
       const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
       const admin: IUser | undefined = await UserRepository.FindOneById(decToken.userId)
 
       if(admin){
-        if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) await UserRepository.Create(user);
+        if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) {
+          const hashedPassword = await bcrypt.hash(user.password as string, 10);
+    
+          user.image = "default.gif";
+          user.password = hashedPassword;
+          user.verified = true;
+
+          await UserRepository.Create(user);
+        }
         else throw new Unauthorized(ErrorMessages.ADMIN_NOT_FOUND)
         
       }
@@ -66,6 +67,21 @@ export default class UserService {
 
     EmailService.SendVerifyEmail(user);
     console.log(`Sending verification email to: ${user.email}`);
+  }
+
+  static async GetUserData(userId: number): Promise<IUser> {
+    try {
+      console.log(`Decrypting token`)
+      const user: IUser | undefined = await UserRepository.FindOneById(userId)
+
+      console.log(`Checking if user ${user} exists and returning it as response`)
+      if(user) return {firstName: user.firstName, lastName: user.lastName, email:user.email, image: user.image, type: user.type, blocked: user.blocked, created_at: user.created_at, verified: user.verified, id: user.id} as IUser
+      else throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST)
+
+    } catch (e) {
+      console.log(e)
+      throw new BadRequest(ErrorMessages.INVALID_TOKEN)
+    }
   }
 
   static async Login(user: IUser) {
@@ -91,6 +107,8 @@ export default class UserService {
     delete userFound.password;
 
     console.log(`Login Successful for email: ${userFound.email} `);
+
+    user.id = userFound.id
 
     const acessToken = generateAcessToken(user);
     const refreshToken = generateRefreshToken(user);

@@ -5,6 +5,7 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 const routes = Router();
 
 routes.post("/register", new UserController().RegistUser);
+routes.post("/registerAdmin", new UserController().RegistUserAdmin);
 routes.post("/login", new UserController().LoginUser);
 
 routes.get(

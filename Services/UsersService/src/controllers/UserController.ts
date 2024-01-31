@@ -16,7 +16,7 @@ export class UserController {
     const user = req.body as IUser;
 
     const { firstName, lastName, password, email, username, type } = user;
-    const specFields = [firstName, lastName, password, email, username, type] // mandatory fields one can bypass JS validation on front-end
+    const specFields = [firstName, lastName, password, email, type] // mandatory fields one can bypass JS validation on front-end
 
     specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
 
@@ -31,17 +31,17 @@ export class UserController {
     const user = req.body as IUser;
 
     const { firstName, lastName, password, email, username, type } = user;
-    const specFields = [firstName, lastName, password, email, username, type] // mandatory fields one can bypass JS validation on front-end
+    const specFields = [firstName, lastName, password, email, type] // mandatory fields one can bypass JS validation on front-end
 
     specFields.forEach(field => { if (field === "") { throw new BadRequest(ErrorMessages.ALL_REQUIRED) } })
 
     // Call to service layer.
     // Abstraction on how to access the data layer and the business logic.
-    
-    const token: string = (req.headers['r-access-token'] ?? "") as string
+
+    const token: string = (req.headers['authorization'] ?? "") as string
     if (!token) throw new BadRequest(ErrorMessages.TOKEN_REQUIRED)
 
-    await UserService.RegisterAdmin(user, "common", token);
+    await UserService.RegisterAdmin(user, token);
 
     return res.status(201); // TODO: return token and in front-end redirect admin page
   }
@@ -120,39 +120,27 @@ export class UserController {
     return res.status(200).json({ msg: "updated  " });
   }
 
-  // async loginAdmin(req: Request, res: Response, next: NextFunction) {
-  //   const { password, email } = req.body;
-
-  //   console.log(`Login Request for email: ${email}`);
-
-  //   const user = await userRepository.findOneBy({ email });
-
-  //   if (!user) {
-  //     throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
-  //   }
-
-  //   const verifyPassword = await bcrypt.compare(password, user.password);
-
-  //   if (!verifyPassword) {
-  //     throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
-  //   }
-
-  //   if (user.type == "common") throw new Unauthorized(ErrorMessages.NO_PERMISSION)
-
-  //   const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
-  //     expiresIn: "24h",
-  //   });
-
-  //   const { password: _, ...userLogin } = user;
-
-  //   console.log(`Login Successful for email: ${email}`);
-
-  //   return res.status(200).json({ user: { uImage: userLogin.image, uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
-  // }
-
+  // TODO: if its colaborator or owner request show full email otherwise hide it
   async getProfile(req: Request, res: Response, next: NextFunction) {
-    console.log("is getting here")
-    return res.status(200).json(req.user);
+
+    const userId = () => {
+      const userIdFromUrl = req.query.userId
+
+      // TODO: verify also if its possible to convert to a number  ...
+      if(userIdFromUrl && typeof userIdFromUrl === "string") return parseInt(userIdFromUrl)
+      else return req.user.id
+    }
+
+    const id = userId()
+
+    if(id){
+
+      console.log("Getting user profile ...")
+      const userData = await UserService.GetUserData(id)
+
+      return res.status(200).json(userData);
+
+    } else return res.status(401).json({msg: "must send user ID within the request"})
   }
 
   // /**

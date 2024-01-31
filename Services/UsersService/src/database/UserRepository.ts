@@ -45,8 +45,8 @@ export class UserRepository {
         return new Promise((resolve, reject) => {
             const connection = mysql.createConnection(Database.Access);
             connection.query<OkPacket>(
-                "INSERT INTO users (email, username, firstName, lastName, password , type) VALUES(?,?,?,?,?,?)",
-                [user.email, user.username, user.firstName, user.lastName, user.password, user.type],
+                "INSERT INTO users (email, firstName, lastName, password , type) VALUES(?,?,?,?,?,?)",
+                [user.email, user.firstName, user.lastName, user.password, user.type],
                 (err, res) => {
                     if (err) reject(err)
                     else

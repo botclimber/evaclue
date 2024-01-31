@@ -18,7 +18,6 @@ export default {
         ],
         firstName: "",
         lastName: "",
-        username: "",
         email: "",
         pass: ""
 
@@ -30,13 +29,13 @@ export default {
 
           if(confirm("confirm this action, please!")){
 
-            const res = await fetch(this.apis.usersApi+'/user/register/special',{
+            const res = await fetch(this.apis.usersApi+'/registerAdmin',{
               method: 'POST',
               headers: {
                 'Content-type': 'application/json',
-                'r-access-token':this.tk
+                'authorization':this.tk
               },
-              body: JSON.stringify({firstName: this.firstName, lastName: this.lastName, username: this.username, email: this.email, type: this.type, password: this.pass})
+              body: JSON.stringify({firstName: this.firstName, lastName: this.lastName, email: this.email, type: this.type, password: this.pass})
               }).catch(err => console.log(err))
 
             const data = await res.json()
@@ -66,9 +65,6 @@ export default {
           <div class="col-md-12 nto">
           <input v-model="lastName"  placeholder="Last Name" />
           </div>
-<div class="col-md-12 nto">
-          <input v-model="username"  placeholder="Username" />
-</div>
 <div class="col-md-12 nto">
           <input v-model="email"  placeholder="Email" />
 </div>

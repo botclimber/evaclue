@@ -117,7 +117,7 @@ export default defineComponent({
     async signInWithGoogle() {
       //http://localhost/#access_token=ya29.a0AfB_byDZF05iWf9nAYr-Y2dB9dA3GAS-diFeN8plFAKh4sWnzGlj2OS_BHOUccibVCaJJIQ_wnaqE2ZjZn3hAkLHFdUXlNd7oy2cioDJ55mG4_hms3AAYnkU5gAmYOrCypTRuS5T_Fqd-qYd5i9TgIoa4k6vEBZpFgaCgYKAXUSARISFQHGX2Miy01ylQQzllJgVjUZBhlyrw0169&token_type=Bearer&expires_in=3599&scope=email%20profile%20https://www.googleapis.com/auth/userinfo.email%20openid%20https://www.googleapis.com/auth/userinfo.profile&authuser=0&prompt=consent
       const redirectUri = 'http://localhost'; // Set up a redirect URI in your Google Cloud Console
-      const clientId = '494026924297-dtg67lmk2ac1j2ke0h72h93qbll68d7b.apps.googleusercontent.com'; // Your Google Cloud Console OAuth client ID
+      const clientId = process.env.VUE_APP_CLIENTID; // Your Google Cloud Console OAuth client ID
       const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=openid%20profile%20email`;
 
       window.location.href = authUrl;

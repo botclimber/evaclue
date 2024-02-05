@@ -112,7 +112,7 @@ export default defineComponent({
         .then((response) => {
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost/admin/?token="+response.data
+          window.location.href = "http://localhost/admin/?token="+response.data.accessToken
         })
         .catch((error) => {
           this.qResponse = error["response"].data.message

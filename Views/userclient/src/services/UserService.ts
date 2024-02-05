@@ -39,7 +39,7 @@ export default {
   },
 
   loginAdmin(email: string, password: string) {
-    return Api().post(`${baseURL}/login`, { email, password });
+    return Api().post(`${baseURL}/login`, { email, password }, { withCredentials: true });
   },
 
   register(

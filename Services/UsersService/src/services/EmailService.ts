@@ -5,12 +5,14 @@ import { IUser } from "../models/User";
 import { IEmailVerificationTokens } from "../models/EmailVerificationTokens";
 import { EmailVerificationTokensRepository } from "../database/EmailVerificationTokensRepository";
 import { generateAcessToken, generateRefreshToken } from "../utils/jwtUtilities";
+import UserService from "./UserService";
 
 export class EmailService {
   static async SendVerifyEmail(user: IUser) {
     const currentURL = `localhost:7000`;
 
-    const token = generateAcessToken(user);
+    const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(user.id || 0, user.email, `${user.firstName} ${user.lastName}`, user.image, user.type);
+    const token = generateAcessToken(tokenInfo);
 
     let emailVerificationTokensInstance = { token: token, userId: user.id };
 
@@ -31,7 +33,8 @@ export class EmailService {
   static async SendChangePasswordEmail(user: IUser) {
     const currentURL = `localhost:8011`;
 
-    const token = generateAcessToken(user);
+    const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(user.id || 0, user.email, `${user.firstName} ${user.lastName}`, user.image, user.type);
+    const token = generateAcessToken(tokenInfo);
 
     const mailOptions = {
       from: "supp.evaclue@gmail.com",

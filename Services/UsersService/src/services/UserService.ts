@@ -19,9 +19,19 @@ import {
 
 export default class UserService {
 
+  static parseToTokenObj(userId: number, email: string , name: string, img: string, type: string): middlewareTypes.JwtPayload {
+    return {
+      userId: userId, // TODO: handle this case better
+      userEmail: email,
+      userName: name,
+      userImage: img,
+      userType: type
+    }
+  }
+
   static async GoogleUserAuth(userInfo: GoogleUserType): Promise<{accessToken: string, userId: number}> {
 
-    const token = (user: IUser): string => generateAcessToken(user); 
+    const token = (user: middlewareTypes.JwtPayload): string => generateAcessToken(user); 
 
     const user = {
       email: userInfo.email,
@@ -39,14 +49,16 @@ export default class UserService {
     if (!userExists){
       console.log(`User ${user.email} doesnt exist, creating new record on database ...`)
       const newUser = await UserRepository.Create(user)
-      user.userId = newUser.id
 
-      return {accessToken: token(user), userId: user.userId}
+      const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(newUser.id || 0, user.email, user.firstName, user.image, user.type);
+
+      return {accessToken: token(tokenInfo), userId: user.userId}
     }
     
     console.log(`User ${user.email} already registed! returning new generated token ...`)
-    user.userId = userExists.id
-    return {accessToken: token(user), userId: user.userId}
+    const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(userExists.id || 0, user.email, user.firstName, user.image, user.type);
+
+    return {accessToken: token(tokenInfo), userId: user.userId}
   }
 
   static async Register(user: IUser, type: string) {
@@ -147,8 +159,10 @@ export default class UserService {
 
     user.id = userFound.id
 
-    const acessToken = generateAcessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(userFound.id || 0, userFound.email, `${userFound.firstName} ${userFound.lastName}`, userFound.image, userFound.type);
+
+    const acessToken = generateAcessToken(tokenInfo);
+    const refreshToken = generateRefreshToken(tokenInfo);
 
     return { acessToken, refreshToken, userId: user.id};
   }
@@ -166,7 +180,9 @@ export default class UserService {
     user = (await UserRepository.FindOneByEmail(user.email)) as IUser;
 
     delete user.password;
-    const accessToken = generateAcessToken(user);
+
+    const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(user.id || 0, user.email, `${user.firstName} ${user.lastName}`, user.image, user.type);
+    const accessToken = generateAcessToken(tokenInfo);
 
     return accessToken;
   }

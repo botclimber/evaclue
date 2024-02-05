@@ -178,7 +178,7 @@ export class UserController {
 
       // TODO: verify also if its possible to convert to a number  ...
       if (userIdFromUrl && typeof userIdFromUrl === "string") return parseInt(userIdFromUrl)
-      else return req.user.id
+      else return req.user.userId
     }
 
     const id = userId()

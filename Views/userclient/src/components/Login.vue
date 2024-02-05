@@ -93,17 +93,8 @@ export default defineComponent({
       try {
         const data = await UserService.login(this.email, this.password);
         console.log(data);
-        localStorage.setItem("token", data as string);
-        window.location.href = `http://localhost?token=${data.accessToken}&userId=${data.userId}`
-      } catch (error) {
-        console.log(error);
-      }
-    },
 
-    async teste() {
-      try {
-        const data = await UserService.teste();
-        console.log(data);
+        window.location.href = `http://localhost?token=${data.accessToken}&userId=${data.userId}`
       } catch (error) {
         console.log(error);
       }

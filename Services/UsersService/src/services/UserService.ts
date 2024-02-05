@@ -18,6 +18,36 @@ import {
 } from "../utils/jwtUtilities";
 
 export default class UserService {
+
+  static async GoogleUserAuth(userInfo: GoogleUserType): Promise<string> {
+
+    const token = (user: IUser): string => generateAcessToken(user); 
+
+    const user = {
+      email: userInfo.email,
+      firstName: userInfo.given_name,
+      lastName: userInfo.family_name,
+      image: "default.gif",
+      created_at: new Date(),
+      blocked: false,
+      verified: userInfo.email_verified,
+      type: "common"
+    } as IUser // TODO: change user type on source
+
+    console.log(`Checking if user exists for email: ${userInfo.email}`)
+    const userExists = await UserRepository.FindOneByEmail(userInfo.email);
+    if (!userExists){
+      console.log(`User ${user.email} doesnt exist, creating new record on database ...`)
+      const newUser = await UserRepository.Create(user)
+      user.id = newUser.id
+
+      return token(user)
+    }
+    
+    console.log(`User ${user.email} already registed! returning new generated token ...`)
+    return token(user)
+  }
+
   static async Register(user: IUser, type: string) {
     user.type = type;
     console.log(`Registration Request for email: ${user.email}`);
@@ -44,10 +74,10 @@ export default class UserService {
       const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
       const admin: IUser | undefined = await UserRepository.FindOneById(decToken.userId)
 
-      if(admin){
+      if (admin) {
         if ((admin.type == "admin" || admin.type == "superAdmin") && !admin.blocked) {
           const hashedPassword = await bcrypt.hash(user.password as string, 10);
-    
+
           user.image = "default.gif";
           user.password = hashedPassword;
           user.verified = true;
@@ -55,7 +85,7 @@ export default class UserService {
           await UserRepository.Create(user);
         }
         else throw new Unauthorized(ErrorMessages.ADMIN_NOT_FOUND)
-        
+
       }
 
     } catch (e) {
@@ -77,12 +107,12 @@ export default class UserService {
       const user: IUser | undefined = await UserRepository.FindOneById(userId)
 
       console.log(`Checking if user ${user} exists and returning it as response`)
-      if(user){
+      if (user) {
 
         delete user.password;
         return user;
-      
-      }else throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST)
+
+      } else throw new Unauthorized(ErrorMessages.USER_DOES_NOT_EXIST)
 
     } catch (e) {
       console.log(e)

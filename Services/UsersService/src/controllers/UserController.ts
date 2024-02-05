@@ -12,17 +12,6 @@ type JwtPayload = {
   userType: string;
 };
 
-type GoogleUserType = {
-  sub: string,
-  name: string,
-  given_name: string,
-  family_name: string,
-  picture: string, // we can give the user the option of using google picture in future | for now i would like to avoid it because brings more complexcity
-  email: string,
-  email_verified: boolean,
-  locale: string
-}
-
 export class UserController {
   async RegistUser(req: Request, res: Response, next: NextFunction) {
     const user = req.body as IUser;
@@ -51,18 +40,16 @@ export class UserController {
   async GoogleAuth(req: Request, res: Response, next: NextFunction) {
     const access_token: String | undefined = req.body.access_token
 
+    console.log(`ACCESS_TOKEN recieved: ${access_token}`)
     if (access_token) {
       try {
         await axios
           .get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
-          .then((response) => {
+          .then(async (response) => {
             const userInfo: GoogleUserType = response.data
+            const newGenToken = await UserService.GoogleUserAuth(userInfo)
 
-            // check if user already exists
-            // if true -> returns new generated token
-            // if false -> regists user and return generated token
-            
-            // TODO: mainly return access_token
+            return res.status(200).json(newGenToken);
 
           })
           .catch(err => {

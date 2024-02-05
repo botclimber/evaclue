@@ -19,7 +19,7 @@ import {
 
 export default class UserService {
 
-  static async GoogleUserAuth(userInfo: GoogleUserType): Promise<string> {
+  static async GoogleUserAuth(userInfo: GoogleUserType): Promise<{accessToken: string, userId: number}> {
 
     const token = (user: IUser): string => generateAcessToken(user); 
 
@@ -39,13 +39,14 @@ export default class UserService {
     if (!userExists){
       console.log(`User ${user.email} doesnt exist, creating new record on database ...`)
       const newUser = await UserRepository.Create(user)
-      user.id = newUser.id
+      user.userId = newUser.id
 
-      return token(user)
+      return {accessToken: token(user), userId: user.userId}
     }
     
     console.log(`User ${user.email} already registed! returning new generated token ...`)
-    return token(user)
+    user.userId = userExists.id
+    return {accessToken: token(user), userId: user.userId}
   }
 
   static async Register(user: IUser, type: string) {
@@ -149,7 +150,7 @@ export default class UserService {
     const acessToken = generateAcessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    return { acessToken, refreshToken };
+    return { acessToken, refreshToken, userId: user.id};
   }
 
   static async RefreshToken(refreshToken: string) {

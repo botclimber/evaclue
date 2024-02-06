@@ -1,4 +1,5 @@
 <script>
+// TODO: get user info and address info, then show specific location based on lat,lng and modal with user info.
 
 export default{
   name:"Pending_Claims",
@@ -48,6 +49,7 @@ export default{
         console.log(data)
 
         this.allData = this.onlyPendingRes(data.residenceOwners )
+        console.log(this.allData)
     },
 
     onlyPendingRes(input){ return input.filter(row => row.approved == 0) }
@@ -80,7 +82,7 @@ export default{
                     <img style="width:50px;height:50px" :src="+apis.mainPlatform+'/images/userImages/'+row.userImg"/>
                   </td>
                   <td>{{row.userName}}</td>
-                  <td><a :href="'src/assets/images/resProofFiles/'+row.fileProof" target="_blank">{{row.fileProof}}</a> </td>
+                  <td><a :href="'public/assets/images/resProofFiles/proofDoc-'+row.id+'/doc-0.pdf'" target="_blank">Proof Document</a> </td>
                   <td>
                     <a href="#">check specific Location</a>
                   </td>

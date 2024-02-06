@@ -24,4 +24,4 @@ node_modules
 # ignore all images
 **/reviewImgs/
 **/resImgs/
-**/proofDocs/
+**/resProofFiles/

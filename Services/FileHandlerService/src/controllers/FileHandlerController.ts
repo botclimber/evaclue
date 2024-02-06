@@ -38,7 +38,7 @@ const RESIDENCES: folderConfig = {
 const PROOFDOCS: folderConfig = {
     prefix: "proofDoc",
     fileAlternativeName: "doc",
-    path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/proofDocs/"),
+    path: path.join(__dirname, "../../../../../../Views/Admin/public/assets/images/resProofFiles/"),
     limit: 1,
     fType: fileType.DOC,
     paramName: "proofDocFiles",
@@ -163,6 +163,8 @@ export class FileHandlerController {
 
     async addResDoc(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
         const data: requestFormat.resFiles = req.body
+        console.log(`Trying to save a ${PROOFDOCS.prefix} file`)
+        console.log(data)
 
         if(data.resId){
             if(!req.files || Object.keys(req.files).length === 0 || !Object.keys(req.files).includes(PROOFDOCS.paramName)){

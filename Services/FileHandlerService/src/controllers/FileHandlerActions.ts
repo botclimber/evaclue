@@ -57,7 +57,7 @@ export class FileHandlerActions {
                 });
             })
 
-            return {status: 200, msg: "Images added!"}
+            return {status: 200, msg: `${fileAlternativeName}(s) added!`}
 
         }catch(e){
             console.log(e)

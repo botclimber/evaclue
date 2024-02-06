@@ -20,7 +20,7 @@ const rule = new schedule.RecurrenceRule()
 //rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
 rule.dayOfWeek = [week.tuesday];
 rule.hour = 10;
-rule.minute = 32;
+rule.minute = 40;
 
 schedule.scheduleJob(rule, async function(){
   console.log(`Scheduler started for send email with available residences by filter at ${rule.dayOfWeek} ${rule.hour}:${rule.minute}`)

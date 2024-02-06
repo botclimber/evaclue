@@ -18,6 +18,7 @@ export const authMiddleware = async (
   }
 
   const token = authorization.split(" ")[1];
+  console.log(`string to be decrypted: ${token}`)
 
   // check if deToken returns JwtPayload otherwise it may be because of invalid SECRET or token
   const decryptedToken  = deToken(token)

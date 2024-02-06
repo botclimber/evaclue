@@ -52,13 +52,13 @@ export default class UserService {
 
       const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(newUser.id || 0, user.email, user.firstName, user.image, user.type);
 
-      return {accessToken: token(tokenInfo), userId: user.userId}
+      return {accessToken: token(tokenInfo), userId: user.userId || 0}
     }
     
     console.log(`User ${user.email} already registed! returning new generated token ...`)
     const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(userExists.id || 0, user.email, user.firstName, user.image, user.type);
 
-    return {accessToken: token(tokenInfo), userId: user.userId}
+    return {accessToken: token(tokenInfo), userId: userExists.id || 0}
   }
 
   static async Register(user: IUser, type: string) {

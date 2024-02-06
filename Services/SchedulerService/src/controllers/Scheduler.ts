@@ -28,8 +28,7 @@ interface availableForRentByUserFilter {
 }
 
 export class Scheduler{
-    
-    // TODO: complete method
+
     private mountData = async (): Promise<availableForRentByUserFilter[]>  => {
         const db: Db = new Db()
 

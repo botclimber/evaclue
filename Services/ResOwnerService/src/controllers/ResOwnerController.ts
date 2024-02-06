@@ -18,6 +18,7 @@ export class ResOwnerController {
         
         console.log(data)
             try{
+                // TODO: remove filter and show pending on front-end
                 const resOwners: ResidenceOwners[] = (await resOwnerActions.getOwnedResidences(data.userId)).filter (_ => _.approved === 1)
                 return res.status(200).json({ownedResidences: resOwners})
 

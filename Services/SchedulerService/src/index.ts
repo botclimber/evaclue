@@ -5,18 +5,25 @@ import * as schedule from "node-schedule"
 const app: Express = express();
 const port = process.env.schedule_PORT || 8000;
 
+const week = {
+  "monday": 1,
+  "tuesday": 2,
+  "wednesday": 3,
+  "thursday": 4,
+  "friday": 5,
+  "saturday": 6,
+  "sunday": 7
+}
+
 const rule = new schedule.RecurrenceRule()
 
-/**
- * runs on monday, wednesday and saturday
- */
-rule.dayOfWeek = [1,3,6];
-rule.hour = 20;
-rule.minute = 0;
+rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
+rule.hour = 23;
+rule.minute = 15;
 
-//schedule.scheduleJob(rule, async function(){
-//  await new Scheduler().sendAvailableResidencesByFilter()
-//});
+schedule.scheduleJob(rule, async function(){
+  await new Scheduler().sendAvailableResidencesByFilter()
+});
 
 // TODO: clean up task that remove from Residences table all residences not assigned to a review
 

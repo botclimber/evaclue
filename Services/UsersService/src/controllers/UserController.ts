@@ -48,7 +48,7 @@ export class UserController {
           .get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
           .then(async (response) => {
             const userInfo: GoogleUserType = response.data
-            const tokenAndUserId= await UserService.GoogleUserAuth(userInfo)
+            const tokenAndUserId = await UserService.GoogleUserAuth(userInfo)
 
             return res.status(200).json(tokenAndUserId);
 

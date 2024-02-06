@@ -132,6 +132,8 @@ app.post("/"+service+"/"+v+"/emToOwner", authMiddleware,async (req: Request, res
 app.post(`/${service}/${v}/notifyUsers`, async (req: Request, res: Response) => {
   try{
     const data: types.AvailableRents[] = req.body.data
+
+    if(!data) return res.status(400).json({msg:"No available residences or user to be notified!"})
     const notifyUsers: NotifyUsers = new NotifyUsers(data)
 
     await notifyUsers.sendEmailToUsers()

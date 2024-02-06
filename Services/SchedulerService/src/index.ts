@@ -17,11 +17,13 @@ const week = {
 
 const rule = new schedule.RecurrenceRule()
 
-rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
-rule.hour = 23;
-rule.minute = 15;
+//rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
+rule.dayOfWeek = [week.tuesday];
+rule.hour = 10;
+rule.minute = 32;
 
 schedule.scheduleJob(rule, async function(){
+  console.log(`Scheduler started for send email with available residences by filter at ${rule.dayOfWeek} ${rule.hour}:${rule.minute}`)
   await new Scheduler().sendAvailableResidencesByFilter()
 });
 

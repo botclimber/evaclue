@@ -34,7 +34,7 @@ export class Scheduler{
 
         const addresses: Addresses[] = await db.selectAll<Addresses>("Addresses")
         const resOwners: ResidenceOwners[] = await db.selectAll<ResidenceOwners>("ResidenceOwners")
-        const usersFilters: UserFilters[] = await db.selectAll<UserFilters>("NBOFilters")
+        const usersFilters: UserFilters[] = await db.selectAll<UserFilters>("UserFilters")
         const users: Users[] = await db.selectAll<Users>("Users")
         const residences: Residences[] = await db.selectAll<Residences>("Residences")
 
@@ -93,14 +93,17 @@ export class Scheduler{
     }
 
     async sendAvailableResidencesByFilter(): Promise<void>  {
+        const filterOnNonEmptyAvailability  = (param: availableForRentByUserFilter): Boolean => param.available.length > 0 
+
         const data: availableForRentByUserFilter[] = await this.mountData()
+        const filteredData = data.filter(filterOnNonEmptyAvailability)
 
         console.log("Data preparation finished:")
-        console.log(data)
+        console.log(filteredData)
 
         console.log("\n sending request to Notification Service ...")
         await axios
-            .post(`http://localhost:${process.env.not_PORT}/notifications/v1/notifyUsers`, {data: data}, { headers: {"Content-Type": "application/json"}} )
+            .post(`http://localhost:${process.env.not_PORT}/notifications/v1/notifyUsers`, {data: filteredData}, { headers: {"Content-Type": "application/json"}} )
             .then(response => console.log(response))
             .catch(err => console.log(err))
     }

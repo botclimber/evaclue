@@ -94,7 +94,7 @@ export default defineComponent({
         const data = await UserService.login(this.email, this.password);
         console.log(data);
 
-        window.location.href = `http://localhost?token=${data.accessToken}&userId=${data.userId}`
+        window.location.href = `http://localhost?token=${data.accessToken}`
       } catch (error) {
         console.log(error);
       }

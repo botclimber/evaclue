@@ -15,6 +15,7 @@ export interface IUser extends RowDataPacket {
   password?: string
   created_at: Date
   blocked: boolean
+  authType: string
   verified: boolean
   type: string
 }

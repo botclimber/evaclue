@@ -16,6 +16,7 @@ import {
   generateRefreshToken,
   verifyToken,
 } from "../utils/jwtUtilities";
+import { passwordGenerator } from "../helpers/Lib";
 
 export default class UserService {
 
@@ -48,6 +49,8 @@ export default class UserService {
     const userExists = await UserRepository.FindOneByEmail(userInfo.email);
     if (!userExists){
       console.log(`User ${user.email} doesnt exist, creating new record on database ...`)
+      user.password = await bcrypt.hash(await passwordGenerator(), 10);
+      user.authType = "google"
       const newUser = await UserRepository.Create(user)
 
       const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(newUser.id || 0, user.email, user.firstName, user.image, user.type);
@@ -70,6 +73,7 @@ export default class UserService {
 
     const hashedPassword = await bcrypt.hash(user.password as string, 10);
     user.password = hashedPassword;
+    user.authType = "native"
 
     user = await UserRepository.Create(user);
 
@@ -93,6 +97,7 @@ export default class UserService {
 
           user.image = "default.gif";
           user.password = hashedPassword;
+          user.authType = "native"
           user.verified = true;
 
           await UserRepository.Create(user);
@@ -261,10 +266,7 @@ export default class UserService {
       throw new BadRequest("User does not exist");
     }
 
-    const verifyPassword = await bcrypt.compare(
-      user.password as string,
-      oldPassword
-    );
+    const verifyPassword = await bcrypt.compare(oldPassword, user.password as string);
 
     if (!verifyPassword) {
       console.log("WRONG PASSWORD");

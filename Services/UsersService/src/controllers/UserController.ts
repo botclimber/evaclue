@@ -150,12 +150,21 @@ export class UserController {
   }
 
   async ChangePassword(req: Request, res: Response, next: NextFunction) {
-    let { userId } = req.params;
+    const userId = req.user.userId;
 
-    let { password, oldPassword } = req.body;
-    UserService.ChangePassword(userId, oldPassword, password);
+    const { oldPassword, newPassword } = req.body;
 
-    return res.status(200).json({ msg: "updated  " });
+    // write enchanced checks for the passwords
+    if(!oldPassword || !newPassword) return res.status(401).json({ msg: ErrorMessages.ALL_REQUIRED });
+    
+    try{
+    await UserService.ChangePassword(userId, oldPassword, newPassword);
+    return res.status(200).json({ msg: "updated " });
+
+    }catch(e){
+      console.log(e)
+      res.status(500).json({ msg: `something went wrong ${e}` });
+    }
   }
 
   async RecoverPasswordConfirmation(
@@ -167,7 +176,7 @@ export class UserController {
 
     UserService.ChangePasswordWithToken(token, password);
 
-    return res.status(200).json({ msg: "updated  " });
+    return res.status(200).json({ msg: "updated "});
   }
 
   // TODO: if its colaborator or owner request show full email otherwise hide it
@@ -192,38 +201,4 @@ export class UserController {
 
     } else return res.status(401).json({ msg: "must send user ID within the request" })
   }
-
-  // /**
-  //  * Method that updates user profile image
-  //  *
-  //  * @param req
-  //  * @param res
-  //  * @param next
-  //  * @returns
-  //  */
-  // async updateProfileImg(req: Request, res: Response, next: NextFunction) {
-
-  //   if (!req.files || Object.keys(req.files).length === 0) {
-  //     return res.status(400).json({ message: "No file sent!" })
-  //   }
-
-  //   console.log("file received!")
-  //   const recFile: UploadedFile = req.files.userImg as UploadedFile
-  //   //const genFileName: string = await super._generateImgCode(recFile.name)
-  //   const uploadPath = process.env.DIRNAME;
-
-  //   console.log("Updating image on DataBase ...")
-  //   if (req.user.id) {
-  //     const fileName: string = "user-" + req.user.id.toString() + ".gif"
-  //     await UserControllerHelper._updateImgDB(fileName, req.user.id)
-
-  //     console.log("moving file ... " + uploadPath + fileName)
-  //     recFile.mv(uploadPath + fileName, (err) => {
-  //       if (err) return res.status(400).json({ message: "some error occurred" + err })
-
-  //       return res.status(200).json({ message: "Image uploaded with success!", img: fileName })
-  //     });
-
-  //   } else { return res.status(400).json({ message: "User id not found!" }) }
-  // }
 }

@@ -100,11 +100,13 @@ Create Table Users(
   password varchar(128) not null,
   type varchar(30) not null,
   blocked boolean DEFAULT false,
+  authType varchar(30) not null,
   verified boolean DEFAULT false,
   createdAt datetime DEFAULT "1000-01-01 00:00:00",
   createdBy int DEFAULT 0,
   modifiedOn datetime DEFAULT "1000-01-01 00:00:00",
   modifiedBy int DEFAULT 0,
+  UNIQUE (email),
   PRIMARY KEY (id)
 );
 
@@ -156,6 +158,7 @@ INSERT INTO
     password,
     type,
     blocked,
+    authType,
     verified,
     createdAt,
     createdBy,
@@ -171,6 +174,7 @@ VALUES
     "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
     "superAdmin",
     0,
+    "native",
     1,
     "1000-01-01 00:00:00",
     0,
@@ -188,6 +192,7 @@ INSERT INTO
     password,
     type,
     blocked,
+    authType,
     verified,
     createdAt,
     createdBy,
@@ -196,13 +201,14 @@ INSERT INTO
   )
 VALUES
   (
-    "daniel.silva.prg@gmail.com",
+    "botcompilation027@gmail.com",
     "Daniel",
     "default.gif",
     "Silva",
     "$2b$10$NMecm/pGsLagjXWMSNalmeLD11YIVKsQrYT1hv7JFiFGSrnyHanP.",
     "common",
     0,
+    "native",
     1,
     "1000-01-01 00:00:00",
     0,

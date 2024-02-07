@@ -3,6 +3,7 @@ import express from "express";
 import fileUpload from "express-fileupload";
 import routes from "./routes/post";
 import getRoutes from "./routes/get";
+import putRoutes from "./routes/update";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
 import nodemailer from "nodemailer";
@@ -54,6 +55,7 @@ routes.get('/', (req, res ) => {
 
 app.use(`/${service}/${version}/`, routes);
 app.use(`/${service}/${version}/`, getRoutes);
+app.use(`/${service}/${version}/`, putRoutes);
 app.use(errorMiddleware);
 
 

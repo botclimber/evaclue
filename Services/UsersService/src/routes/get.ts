@@ -6,4 +6,11 @@ const getRoutes = Router();
 
 getRoutes.get("/profile", authMiddleware, new UserController().getProfile);
 
+getRoutes.get(
+    "/recover-password/request/:email",
+    new UserController().RecoverUserPasswordEmailRequest
+);
+
+getRoutes.get("/verify/:userId/:token", new UserController().VerifyUser);
+
 export default getRoutes;

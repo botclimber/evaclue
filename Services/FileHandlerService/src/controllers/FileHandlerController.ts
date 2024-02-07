@@ -55,6 +55,17 @@ const TICKETS: folderConfig = {
     table: ""
 }
 
+const PROFILE: folderConfig = {
+    prefix: "profile",
+    fileAlternativeName: "user",
+    path: path.join(__dirname, "../../../../../../../evaclueFrontEnd/assets/images/userImages/"),
+    limit: 1,
+    fType: fileType.IMG,
+    paramName: "profileImg",
+    table: "Users"
+}
+
+
 const fileHandler = new FileHandlerActions();
 
 export class FileHandlerController {
@@ -207,6 +218,39 @@ export class FileHandlerController {
                     if(response.status === 200)
                         return res.status(response.status).json({msg: response.msg})
                     else
+                        return res.status(response.status).json({msg: response.msg})
+
+                }catch(e){
+                    console.log(e)
+                    throw e
+                }
+            }
+
+        }else{
+            return res.status(err.MISSING_ID_PARAM.status).json({msg: err.MISSING_ID_PARAM.text})
+        }
+    }
+
+    async changeUserProfileImg(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+        const data: requestFormat.profileFiles = req.body
+
+        if(data.userId){
+            if(!req.files || Object.keys(req.files).length === 0 || !Object.keys(req.files).includes(PROFILE.paramName)){
+                return res.status(err.NO_FILES_OR_KEY.status).json({msg: err.NO_FILES_OR_KEY.text})
+
+            }else {
+                try{
+                    const response = await fileHandler.saveFiles(data.userId, req.files[PROFILE.paramName], PROFILE.limit, PROFILE.prefix, PROFILE.path, PROFILE.fType, PROFILE.fileAlternativeName)
+                    console.log(response)
+                    
+                    if(response.status === 200){
+                        //update review hasImgs column value
+                        const fileName = response.newFileName || "default.gif"
+                        const update = eva.Try.evaluate(async () => await fileHandler.updateProfileImgOnDB(data.userId, fileName));
+
+                        if(update.itSucceed()) return res.status(response.status).json({msg: response.msg, fileName: fileName})
+                        else return res.status(500).json({msg: `something went wrong when trying to update column (image) from table (${PROFILE.table})`})
+                    }else
                         return res.status(response.status).json({msg: response.msg})
 
                 }catch(e){

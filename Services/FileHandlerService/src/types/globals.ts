@@ -11,8 +11,13 @@ declare namespace requestFormat{
         ticketId: number
     }
 
+    type profileFiles = {
+        userId: number
+    }
+
     type genericResponse = {
         status: number, 
-        msg: string
+        msg: string,
+        newFileName?: string
     }
 }

@@ -24,6 +24,7 @@ export class FileHandlerActions {
      * @returns 
      */
     async saveFiles(id: number, files: UploadedFile | UploadedFile[], limit: number, prefix: string, folderPath: string, fileType: fileTypeStrings, fileAlternativeName: string, table?: string): Promise<requestFormat.genericResponse>{
+        // TODO: this function is ugly make it cleaner by maybe move change the way we handle profile image update
 
         try{
 
@@ -41,7 +42,7 @@ export class FileHandlerActions {
             
             // create folder for the specific review containing images
             const newFolderName = `${prefix}-${id}/`
-            const newFolderPath = `${folderPath}${newFolderName}`
+            const newFolderPath = (prefix !== "profile")? `${folderPath}${newFolderName}` : folderPath // case profile image we dont want to create new folders, atleast for the moment
             await fHelper.orCreateFolder(newFolderPath)
             
             console.log(`Rename images and change its extension`)
@@ -50,14 +51,19 @@ export class FileHandlerActions {
 
             console.log(eFiles)
             console.log(`moving file(s) to ${newFolderPath}`)
-            eFiles.forEach(file => {
-                file.mv(newFolderPath + file.name, (err: any) => {
+            const newFileName = eFiles.map(file => {
+                const fileName = (prefix === "profile") ? `${fileAlternativeName}-${id}.${ext}` : file.name;
+
+                file.mv(newFolderPath + fileName, (err: any) => {
                     if(err) throw err
                     else return true
                 });
+
+                // return new image file name
+                if(prefix === "profile") return fileName
             })
 
-            return {status: 200, msg: `${fileAlternativeName}(s) added!`}
+            return {status: 200, msg: `${fileAlternativeName}(s) added!`, newFileName: newFileName[0]}
 
         }catch(e){
             console.log(e)
@@ -88,6 +94,20 @@ export class FileHandlerActions {
 
             const newImgsNr: number = currentImgs[0].imgs + nrImgs
             const toUpdate: DbParams.updateParams = {table: "ResidenceOwners", id: resOwnerId, columns: ["imgs"], values: [newImgsNr]}
+            await this.db.update(toUpdate)
+
+            return true
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+    }
+
+    async updateProfileImgOnDB(userId: number, imgName: string): Promise<boolean>{
+        try{
+
+            const toUpdate: DbParams.updateParams = {table: "Users", id: userId, columns: ["image"], values: [imgName]}
             await this.db.update(toUpdate)
 
             return true

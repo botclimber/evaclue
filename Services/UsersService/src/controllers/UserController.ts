@@ -48,9 +48,9 @@ export class UserController {
           .get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
           .then(async (response) => {
             const userInfo: GoogleUserType = response.data
-            const tokenAndUserId = await UserService.GoogleUserAuth(userInfo)
+            const token = await UserService.GoogleUserAuth(userInfo)
 
-            return res.status(200).json(tokenAndUserId);
+            return res.status(200).json(token);
 
           })
           .catch(err => {
@@ -122,14 +122,14 @@ export class UserController {
   async LoginUser(req: Request, res: Response, next: NextFunction) {
     const user: IUser = req.body;
 
-    const { acessToken, refreshToken, userId } = await UserService.Login(user);
+    const { acessToken, refreshToken } = await UserService.Login(user);
 
     res.cookie("refreshToken", refreshToken, {
       maxAge: 3.123e10,
       httpOnly: true, // TODO: this may cause issues in PROD
     });
 
-    return res.status(200).json({accessToken: acessToken, userId: userId});
+    return res.status(200).json({accessToken: acessToken});
   }
 
   async VerifyUser(req: Request, res: Response, next: NextFunction) {

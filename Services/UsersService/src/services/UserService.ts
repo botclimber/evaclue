@@ -29,7 +29,7 @@ export default class UserService {
     }
   }
 
-  static async GoogleUserAuth(userInfo: GoogleUserType): Promise<{accessToken: string, userId: number}> {
+  static async GoogleUserAuth(userInfo: GoogleUserType): Promise<{accessToken: string}> {
 
     const token = (user: middlewareTypes.JwtPayload): string => generateAcessToken(user); 
 
@@ -52,13 +52,13 @@ export default class UserService {
 
       const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(newUser.id || 0, user.email, user.firstName, user.image, user.type);
 
-      return {accessToken: token(tokenInfo), userId: user.userId || 0}
+      return {accessToken: token(tokenInfo)}
     }
     
     console.log(`User ${user.email} already registed! returning new generated token ...`)
     const tokenInfo: middlewareTypes.JwtPayload = UserService.parseToTokenObj(userExists.id || 0, user.email, user.firstName, user.image, user.type);
 
-    return {accessToken: token(tokenInfo), userId: userExists.id || 0}
+    return {accessToken: token(tokenInfo)}
   }
 
   static async Register(user: IUser, type: string) {
@@ -164,7 +164,7 @@ export default class UserService {
     const acessToken = generateAcessToken(tokenInfo);
     const refreshToken = generateRefreshToken(tokenInfo);
 
-    return { acessToken, refreshToken, userId: user.id};
+    return { acessToken, refreshToken};
   }
 
   static async RefreshToken(refreshToken: string) {

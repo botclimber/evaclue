@@ -10,5 +10,6 @@ postRoutes.post("/addReviewImgs", FH.addReviewImgs)
 postRoutes.post("/addResImgs", FH.addResImgs)
 postRoutes.post("/addResDoc", FH.addResDoc)
 postRoutes.post("/addTicketAttach", FH.addTicketAttachment)
+postRoutes.post("/changeUserProfileImg", FH.changeUserProfileImg)
 
 export default postRoutes

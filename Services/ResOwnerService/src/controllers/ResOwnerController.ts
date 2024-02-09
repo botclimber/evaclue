@@ -82,10 +82,10 @@ export class ResOwnerController {
                     console.log("Checking if user already claimed on this location ...")
                     const exists = await resOwnerActions.exists(data.userId, response.data.addrId, response.data.resId)
                     if(exists) return res.status(err.CLAIMED_ALREADY.status).json({msg: err.CLAIMED_ALREADY.text})
-                        
-                    // check there are empty parameters
+                    
                     const newResidenceOwner: ResidenceOwners = new ResidenceOwners(data.userId, 0, response.data.addrId, response.data.resId, data.rentPrice || 0.0, data.free || false, genNewDate(), "1000-01-01 00:00:00", 0, true)
                     
+                    console.log("Creating record ...")
                     const resOwnerId = await resOwnerActions.create(newResidenceOwner)
                     return res.status(200).json({msg: "Requested, we gonna analise it!", claimId: resOwnerId}) 
                         

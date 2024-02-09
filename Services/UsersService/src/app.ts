@@ -50,6 +50,8 @@ app.use(bodyParser.json())
 app.use(express.json());
 app.use(fileUpload())
 routes.get('/', (req, res ) => {
+
+  // TODO: send service documentation instead
   res.status(200).json({msg: "IT WORKS!"})
 });
 

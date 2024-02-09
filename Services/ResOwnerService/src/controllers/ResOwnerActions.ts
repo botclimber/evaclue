@@ -52,6 +52,18 @@ export class ResOwnerActions {
         this.db = new Db();
     }
 
+    async delOwnedRes(ownResId: number): Promise<void>{
+
+        try{
+            await this.db.delete("ResidenceOwners", `id = ${ownResId}`)
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+
+    }
+
     async getOwnedResidences(userId: number): Promise<ResidenceOwners[]> {
 
         try{

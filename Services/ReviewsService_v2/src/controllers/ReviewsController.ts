@@ -20,6 +20,25 @@ type reviewImgs = {
 const reviewActions: ReviewActions = new ReviewActions();
 export class ReviewsController {
 
+    async deleteReview(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+        try{
+            const revId: number = +req.body.revId // cast to number
+
+            // check if revId is valid
+            console.log("Checking if revId is valid ...")
+            if(revId && revId > 0) {
+                console.log(`Deleting review with id ${revId}`)
+                await reviewActions.deleteRev(revId)
+                return res.status(200).json({msg: "Review deleted!"})
+            }
+            else return res.status(400).json({msg: "Invalid review id!"})
+            
+        }catch(e){
+            console.log(e)
+            return res.status(500).json({msg: e})
+        }
+    }
+
     async reviews(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
 
         try{

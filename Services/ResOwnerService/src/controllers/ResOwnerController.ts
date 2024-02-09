@@ -13,6 +13,25 @@ const resOwnerActions = new ResOwnerActions()
 // TODO: on claim residence check if its an already claimed one
 export class ResOwnerController {
 
+    async releaseResidence(req: Request, res: Response, next: NextFunction): Promise<Response | void>{
+        try{
+            const resOwnerId: number = +req.body.resOwnerId// cast to number
+
+            // check if resOwnerId is valid
+            console.log("Checking if resOwnerId is valid ...")
+            if(resOwnerId && resOwnerId > 0) {
+                console.log(`Releasing owned residence for id ${resOwnerId}`)
+                await resOwnerActions.delOwnedRes(resOwnerId)
+                return res.status(200).json({msg: "Owned Residence deleted!"})
+            }
+            else return res.status(400).json({msg: "Invalid owned residence id!"})
+            
+        }catch(e){
+            console.log(e)
+            return res.status(500).json({msg: e})
+        }
+    }
+
     async getByOwnerId(req: Request, res: Response, next: NextFunction):  Promise<Response | void> {
         const data: middlewareTypes.JwtPayload = req.body 
         

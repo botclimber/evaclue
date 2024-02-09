@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import getRoutes from "./routes/get/getRequests";
 import postRoutes from "./routes/post/postRequests";
 import patchRoutes from "./routes/patch/patchRequests";
+import delRoutes from "./routes/delete/delRequests";
 import fileUpload from "express-fileupload";
 
 
@@ -25,6 +26,7 @@ const service: string = "reviews"
 app.use(`/${service}/${version}/`, getRoutes)   // GET
 app.use(`/${service}/${version}/`, postRoutes)  // POST
 app.use(`/${service}/${version}/`, patchRoutes) // PATCH
+app.use(`/${service}/${version}/`, delRoutes) // DELETE
 
 app.listen(port, () => {
   console.log(`Reviews Service listening to port: ${port}`)

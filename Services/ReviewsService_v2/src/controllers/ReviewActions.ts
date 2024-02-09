@@ -59,6 +59,16 @@ export class ReviewActions {
         }
     }
 
+    async deleteRev(revId: number ): Promise<void>{
+        try{
+            await this.db.delete("Reviews", `id = ${revId}`)
+
+        }catch(e){
+            console.log(e)
+            throw e
+        }
+    }
+
     async update (revId: number, decision: number, adminId: number): Promise<void> {
 
         try{

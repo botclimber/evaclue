@@ -1,5 +1,5 @@
 import {Response} from "express"
-import {Db} from "../../../../Db/Db"
+import {Db} from "../../../../../../CommonUtils/src/db/Db"
 import {EmailForm, Sub} from "../../../types/typeModels"
 import date from "date-and-time"
 import fs from "fs"
@@ -30,7 +30,7 @@ export class Subs{
         try{
 
             // check if email already exists
-            const getOne: Sub[] = await db.selectAll<Sub>("Subs", `email = '${this.sub.email}'`)
+            const getOne: Sub[] = await db.selectAll<Sub>("Subs", `email = ?`, [this.sub.email])
 
             if(getOne.length){
                 console.log(`Email ${this.sub.email} exists!`)

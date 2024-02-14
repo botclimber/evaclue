@@ -13,10 +13,10 @@ export class ReviewValidator {
     async reviewLimit(userId: number, addressId: number): Promise<boolean>{
         // TODO: also check residence to cover cases where it is a building with multiple residences   
         const table = "RevChecker"
-        const query = `userId = ${userId}`
+        const query = `userId = ?`
 
         console.log("Verifying if review for this address already exists...")
-        const getRevCheckerData: Required<RevChecker>[] = await this.db.selectAll<RevChecker>(table, query)
+        const getRevCheckerData: Required<RevChecker>[] = await this.db.selectAll<RevChecker>(table, query, [userId])
 
         console.log("Data get from Db:")
         console.log(getRevCheckerData)

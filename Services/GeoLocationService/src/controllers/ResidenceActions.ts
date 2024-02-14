@@ -15,7 +15,7 @@ export class ResidenceActions{
             const floor = (res.floor) ? res.floor : "";
             const direction = (res.direction) ? res.direction : "";
 
-            const exists: Required<Residences>[] | undefined = await this.db.selectAll<Residences>("Residences", `addressId = ${res.addressId} and floor = '${floor}' and direction = '${direction}' `)
+            const exists: Required<Residences>[] | undefined = await this.db.selectAll<Residences>("Residences", `addressId = ? and floor = ? and direction = ? `, [res.addressId, floor, direction])
 
             if(exists && exists.length > 0) return exists[0].id;
 

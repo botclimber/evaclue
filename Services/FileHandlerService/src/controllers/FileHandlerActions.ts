@@ -33,7 +33,7 @@ export class FileHandlerActions {
 
             const castedFiles: UploadedFile[] = (await fHelper.castFilesType(files)).filter(r => fHelper.onlyAllowed(r.mimetype, fileType))
 
-            const currentImgs: number = (table)? (await this.db.selectAll<ResidenceOwners | Reviews>(table, `id = ${id}`))[0].imgs : 0;
+            const currentImgs: number = (table)? (await this.db.selectAll<ResidenceOwners | Reviews>(table, `id = ?`, [id]))[0].imgs : 0;
             if(castedFiles.length === 0) return {status: 400, msg: "No files sent or not allowed extension"}
             if( (castedFiles.length + currentImgs) > limit) return {status: 400, msg: `We only accept at maximum ${limit} images!`}
 
@@ -88,7 +88,7 @@ export class FileHandlerActions {
     async updateResOwnerImgsStatus(resOwnerId: number, nrImgs: number): Promise<boolean>{
 
         try{
-            const currentImgs = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `id = ${resOwnerId}`)
+            const currentImgs = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `id = ?`, [resOwnerId])
             console.log("Current number of images existing is: ")
             console.log(currentImgs)
 
@@ -122,7 +122,7 @@ export class FileHandlerActions {
 
         try{
             // reduce from db 
-            const currentImgs = (await this.db.selectAll<ResidenceOwners | Reviews>(table, `id = ${id}`))[0].imgs
+            const currentImgs = (await this.db.selectAll<ResidenceOwners | Reviews>(table, `id = ?`, [id]))[0].imgs
 
             const toUpdate: DbParams.updateParams = {table: table, id: id, columns: ["imgs"], values: [currentImgs - 1]}
             await this.db.update(toUpdate)

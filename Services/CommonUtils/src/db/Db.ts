@@ -1,4 +1,3 @@
-// TODO: URGENT - BIND PARAMS
 import {createPool, Pool} from "mysql2";
 
 type DbConfig = {
@@ -29,14 +28,15 @@ export class Db {
         return connection;
     }
 
-    async selectAll<T>(table: string, conditions: string | undefined = undefined): Promise<Required<T>[]>  {
+    async selectAll<T>(table: string, conditions: string | undefined = undefined, values: any[] = []): Promise<Required<T>[]>  {
         const con = await this.openConnection()
 
         try{
+
             const cond = (conditions)? ` WHERE ${conditions}` : ""
             const sql = `SELECT * FROM ${table}${cond}`
 
-            const res: any = await con.promise().execute(sql)
+            const res: any = await con.promise().execute(sql, values)
             return res[0]
 
         }catch (e){
@@ -47,19 +47,23 @@ export class Db {
         }
     }
 
-    async insert<T extends {}>(object: T): Promise<number> {
+    async insert<T extends {}>(object: T, tableName?: string): Promise<number> {
         const con = await this.openConnection();
     
         try {
+            const table = (tableName)? tableName : object.constructor.name
             const columnNames: string = Object.keys(object).join(',');
-            const placeholders: string = Object.keys(object).map(() => '?').join(',');
+            const placeholders: string = Object.keys(object).map(() => '?').join(','); // bind applied
     
-            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${placeholders})`;
-            const values: any = Object.values(object);
+            const sql: string = `INSERT INTO ${table} (${columnNames}) VALUES (${placeholders})`;
+            const values: any = Object.values(object).map( r => { 
+                if(typeof(r) === "string") return r.trim(); 
+                else return r; 
+            }); // clean spaces
     
             console.log("[SQL - INSERT]: " + sql);
     
-            const res = await con.promise().execute(sql, values); // Pass the object as parameter values
+            const res = await con.promise().execute(sql, values);
     
             return res[0].insertId;
         } catch (e) {

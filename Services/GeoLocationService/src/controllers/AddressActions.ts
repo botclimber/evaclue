@@ -18,7 +18,7 @@ export class AddressActions{
             const operator: string | undefined = (addr.flag === "fromMapClick")? "or" :(addr.flag === "fromMarker")? "and" : undefined;
 
             if(operator){
-                const exists: Required<Addresses>[] | undefined = await this.db.selectAll<Addresses>("Addresses", `(lat=${addr.lat} and lng=${addr.lng}) ${operator} (city="${addr.city}" and street="${addr.street}" and nr="${addr.nr}")`)
+                const exists: Required<Addresses>[] | undefined = await this.db.selectAll<Addresses>("Addresses", `(lat=? and lng=?) ${operator} (city=? and street=? and nr=?)`, [addr.lat, addr.lng, addr.city, addr.street, addr.nr])
 
                 try{
                     console.log("check if this address is already registed ...")

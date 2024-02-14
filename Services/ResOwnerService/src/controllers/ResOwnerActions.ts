@@ -67,7 +67,7 @@ export class ResOwnerActions {
     async getOwnedResidences(userId: number): Promise<ResidenceOwners[]> {
 
         try{
-            const resOwners = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId}`);
+            const resOwners = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ?`, [userId]);
             return resOwners
 
         }catch(e){
@@ -135,7 +135,7 @@ export class ResOwnerActions {
     async exists(userId: number, addrId: number, resId: number): Promise<boolean> {
 
         // TODO: change logic, create new table to count how many claim attemps for each user
-        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ${userId} and addressId = ${addrId} and resId = ${resId} and approved < 2`)
+        const exists: ResidenceOwners[] | [] = await this.db.selectAll<ResidenceOwners>("ResidenceOwners", `userId = ? and addressId = ? and resId = ? and approved < ?`, [userId, addrId, resId, 2])
         if(exists.length){
             return true
 
@@ -173,7 +173,7 @@ export class ResOwnerActions {
             console.log("keys and values to be updated: ")
             console.log(paramKeysToUpdate)
             console.log(paramValuesToUpdate)
-            const getResidence = await this.db.selectAll("ResidenceOwners", `id = ${resId} and userId = ${userId}`)
+            const getResidence = await this.db.selectAll("ResidenceOwners", `id = ? and userId = ?`, [resId, userId])
 
             console.log("checking if user is owner of following residence")
             console.log(getResidence)

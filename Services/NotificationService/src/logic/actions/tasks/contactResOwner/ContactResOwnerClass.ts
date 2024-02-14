@@ -1,5 +1,5 @@
 import {Response} from "express"
-import {Db} from "../../../../Db/Db"
+import { Db } from "../../../../../../CommonUtils/src/db/Db"
 import {ToContact} from "../../../types/typeModels"
 import * as types from "../../../types/typeModels"
 import {Users} from "../../../../../../CommonUtils/src/models/Users"
@@ -13,7 +13,7 @@ export class classContactResOwnerCompanion{
         const db: Db = new Db()
 
         try{
-            const user: Users[] = await db.selectAll<Users>("Users", `id = ${userId}`)
+            const user: Users[] = await db.selectAll<Users>("Users", `id = ?`, [userId])
 
             // if(user.length > 0) never supposed to happen
             
@@ -26,7 +26,7 @@ export class classContactResOwnerCompanion{
         const db: Db = new Db();
 
         try{
-            const getRecord: ContactResOwner[] = await db.selectAll("ContactResOwner", `userId = ${fromUserId} and resOwnerId = ${toUserId}`)
+            const getRecord: ContactResOwner[] = await db.selectAll("ContactResOwner", `userId = ? and resOwnerId = ?`, [[fromUserId, toUserId]])
 
             return (getRecord.length > 0)
 

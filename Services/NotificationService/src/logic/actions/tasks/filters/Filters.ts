@@ -1,5 +1,5 @@
 import {Response} from "express"
-import {Db} from "../../../../Db/Db"
+import {Db} from "../../../../../../CommonUtils/src/db/Db"
 import { User, UserFilters } from "../../../types/typeModels"
 import * as eva from "eva-functional-utils"
 import { FileWatcherEventKind, NumericLiteral, collapseTextChangeRangesAcrossMultipleVersions } from "typescript"
@@ -37,7 +37,7 @@ export class Filters {
         const byRentPriceMax: number = (!this.userFilters.byRentPriceMax || eva.isEmpty(this.userFilters.byRentPriceMax) || this.userFilters.byRentPriceMax < 0)? 0.0 : this.userFilters.byRentPriceMax;
 
         try{
-            const filterExists: UserFilters[] = await db.selectAll<UserFilters>("UserFilters", `userId = ${this.userFilters.userId}`)
+            const filterExists: UserFilters[] = await db.selectAll<UserFilters>("UserFilters", `userId = ?`, [this.userFilters.userId])
 
             if(filterExists.length > 0 && filterExists[0].id){
                 // update
@@ -83,7 +83,7 @@ export class Filters {
 
         try{
             console.log(this.userFilters)
-            const userFilters: UserFilters[] = await db.selectAll<UserFilters>("UserFilters", `userId = ${this.userFilters.userId}`)
+            const userFilters: UserFilters[] = await db.selectAll<UserFilters>("UserFilters", `userId = ?`, [this.userFilters.userId])
             
             if(userFilters.length > 1) this.res.status(500).json({msg: "More than one record is not allowed!"});
             else this.res.status(200).json({filters: userFilters[0]});

@@ -1,6 +1,10 @@
 <template>
   <div class="container" style="margin-top: 60px; width: 30%">
+    <div style="margin-bottom: 25px; color:rgb(153, 21, 21);" v-if="error" class="error-message">
+      {{ errorMsg }}
+    </div>
     <Form @submit="login">
+
       <!-- Email input -->
       <div class="form-outline mb-4">
         <Field name="email" type="email" id="form2Example1" class="form-control" v-model="email" placeholder="Email" />
@@ -82,6 +86,8 @@ export default defineComponent({
   },
   data() {
     return {
+      error: false,
+      errorMsg: "",
       email: "",
       password: "",
       isLogged: false,
@@ -95,8 +101,13 @@ export default defineComponent({
         console.log(data);
 
         window.location.href = `http://localhost?token=${data.accessToken}`
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+
+        this.error = true;
+        this.errorMsg = (!error.response.data.msg)? error.response.data.message : error.response.data.msg;
+        setTimeout(() => this.error = false, 3000);
+
       }
     },
     register() {

@@ -134,8 +134,13 @@ export class UserController {
 
   async VerifyUser(req: Request, res: Response, next: NextFunction) {
     let { userId, token } = req.params;
-    token = await UserService.VerifyUser(userId, token);
-    return res.status(200).json(token);
+    try{
+    await UserService.VerifyUser(userId, token);
+    return res.status(200).redirect("/login/user/login");
+    }catch(e){
+      console.log(e)
+      return res.status(500).send(e)
+    }
   }
 
   async RecoverUserPasswordEmailRequest(

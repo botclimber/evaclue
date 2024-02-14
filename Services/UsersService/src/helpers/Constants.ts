@@ -9,5 +9,6 @@ export const ErrorMessages = {
   ADMIN_NOT_FOUND: "This type of regist can only be done by specific users",
   NO_PERMISSION: "Not sufficient user rights",
   ALL_REQUIRED: "All fields required",
-  ACCESS_TOKEN_REQUIRED: "Access_token is required using google auth"
+  ACCESS_TOKEN_REQUIRED: "Access_token is required using google auth",
+  NOT_VERIFIED: "Please go to your email and verify your account, before proceeding!"
 } as const;

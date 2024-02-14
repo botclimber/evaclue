@@ -1,8 +1,8 @@
 <template>
   <div class="container" style="margin-top: 60px; width: 30%">
-    <div v-if="isLogged">Login successful for user with email {{ email }}</div>
-    <div v-else>
-    <p>{{qResponse}}</p>
+    <div style="margin-bottom: 25px; color:rgb(153, 21, 21);" v-if="error" class="error-message">
+      {{ errorMsg }}
+    </div>
       <Form @submit="login">
         <!-- Email input -->
         <div class="form-outline mb-4">
@@ -76,7 +76,6 @@
         </div>
 
       </Form>
-    </div>
   </div>
 </template>
 
@@ -97,13 +96,14 @@ export default defineComponent({
   },
   data() {
     return {
+      error: false,
+      errorMsg: "",
       email: "",
       password: "",
       isLogged: false,
       isShow: false,
       modalHeader: "",
       modalBody: "",
-      qResponse: ""
     };
   },
   methods: {
@@ -114,9 +114,11 @@ export default defineComponent({
           this.isLogged = true;
           window.location.href = "http://localhost/admin/?token="+response.data.accessToken
         })
-        .catch((error) => {
-          this.qResponse = error["response"].data.message
+        .catch((error: any) => {
           console.error(error);
+          this.error = true;
+          this.errorMsg = (!error.response.data.msg)? error.response.data.message : error.response.data.msg;
+          setTimeout( () => this.error = false, 3000);
         });
     },
 

@@ -73,7 +73,8 @@ export default class UserService {
 
     const hashedPassword = await bcrypt.hash(user.password as string, 10);
     user.password = hashedPassword;
-    user.authType = "native"
+    user.authType = "native";
+    user.image = "default.gif"
 
     user = await UserRepository.Create(user);
 
@@ -88,7 +89,7 @@ export default class UserService {
     if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
 
     try {
-      const decToken: JwtPayload = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload
+      const decToken: JwtPayload = jwt.verify(token, process.env.SECRET ?? "") as JwtPayload
       const admin: IUser | undefined = await UserRepository.FindOneById(decToken.userId)
 
       if (admin) {
@@ -148,6 +149,8 @@ export default class UserService {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
+    if(!userFound.verified) throw new BadRequest(ErrorMessages.NOT_VERIFIED);
+
     const verifyPassword = await bcrypt.compare(
       user.password as string,
       userFound.password as string
@@ -202,7 +205,8 @@ export default class UserService {
     }
 
     try {
-      const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string); // if token wrong then triggers the catch exception
+      console.log(`TOKEN PROVIDED: ${token}`)
+      const decodedToken: JwtPayload = jwt.verify(token, process.env.SECRET ?? "") as JwtPayload
 
       const emailVerificationToken =
         await EmailVerificationTokensRepository.FindLast();
@@ -210,12 +214,11 @@ export default class UserService {
       // Should only verify last token since user can click multiple times to resend email
       if (
         !emailVerificationToken ||
-        emailVerificationToken.token != decodedToken
+        emailVerificationToken.token != token
       ) {
         throw new BadRequest("Token does not exist");
       }
 
-      console.log(decodedToken);
       user.verified = true;
       await UserRepository.Update(user);
       console.log(`User with ID ${userId} verified`);
@@ -223,7 +226,7 @@ export default class UserService {
       // After verification, remove all email verification tokens generated for that user
       await EmailVerificationTokensRepository.Remove(+userId);
 
-      return decodedToken;
+      return true;
     } catch (e) {
       console.log("Exception: " + e);
       throw new BadRequest(ErrorMessages.INVALID_TOKEN);
@@ -231,7 +234,7 @@ export default class UserService {
   }
 
   static async ParseToken(token: string): Promise<jwt.JwtPayload> {
-    return jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+    return jwt.verify(token, process.env.SECRET as string) as JwtPayload;
   }
 
   static async ChangePasswordWithToken(token: string, password: any) {

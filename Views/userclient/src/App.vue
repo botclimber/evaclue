@@ -2,8 +2,8 @@
   <div id="app">
     <v-app>
       <main>
-        <nav style="backgroundColor: #B7410E;" class="navbar justify-content-center">
-          <a :href="evacluePage" class="navbar-brand" style="color:white">Evaclue</a>
+        <nav style="backgroundColor: #111828;" class="navbar justify-content-center">
+          <a :href="evacluePage" class="navbar-brand" style="color:white"><img src="../public/logo.png" class="h-5 mr-3" alt="Flowbite Logo"></a>
         </nav>  
 
         <router-view />

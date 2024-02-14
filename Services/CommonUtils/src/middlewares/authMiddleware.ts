@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.SECRET ?? "") as middlewareTypes.JwtPayload}
 
+// TODO: handle expired token
 export const authMiddleware = async (
   req: Request,
   res: Response,

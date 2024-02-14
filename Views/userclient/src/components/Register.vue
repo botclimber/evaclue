@@ -95,8 +95,7 @@
           <!-- Submit button -->
           <button
             title="Register"
-            style="backgroundColor: rgb(221 131 92); color:white"
-            class="btn btn-default"
+            class="btn btn-primary btn-md btn-block"
             type="submit"
           >
             Register

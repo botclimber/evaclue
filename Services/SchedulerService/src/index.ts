@@ -1,6 +1,6 @@
 import express, {Express} from "express";
 import { Scheduler } from "./controllers/Scheduler";
-import * as schedule from "node-schedule" 
+import * as schedule from "node-schedule"
 
 const app: Express = express();
 const port = process.env.schedule_PORT || 8000;
@@ -17,10 +17,9 @@ const week = {
 
 const rule = new schedule.RecurrenceRule()
 
-//rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
-rule.dayOfWeek = [week.tuesday];
-rule.hour = 10;
-rule.minute = 40;
+rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
+rule.hour = 21;
+rule.minute = 30;
 
 schedule.scheduleJob(rule, async function(){
   console.log(`Scheduler started for send email with available residences by filter at ${rule.dayOfWeek} ${rule.hour}:${rule.minute}`)

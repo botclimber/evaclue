@@ -17,6 +17,7 @@ export default{
 
   methods:{
 
+    // TODO: refresh all data after each interaction
     async updateReview(revId, dec){
       if(confirm("Are you sure ?")){
         const res = await fetch(this.apis.reviewsApi+'/update/'+revId,{

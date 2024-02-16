@@ -9,6 +9,7 @@ const FILE_LIMIT_SIZE = "5mb"
 
 // Views // only for dev purposes
 const mainPlatform = "../../../evaclueFrontEnd/"
+
 const authPlatform = `${process.env.HOST}:${process.env.loginPage_PORT}`
 const adminPlatform = `${process.env.HOST}:${process.env.adminPage_PORT}`
 

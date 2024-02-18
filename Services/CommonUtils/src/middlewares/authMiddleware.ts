@@ -2,16 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { errorMessages as err} from "../helpers/errorMessages";
 import jwt from "jsonwebtoken";
 
-function deToken(token: string): middlewareTypes.JwtPayload { return jwt.verify(token, process.env.SECRET ?? "") as middlewareTypes.JwtPayload}
+function decryptToken(token: string): middlewareTypes.JwtPayload {
+  return jwt.verify(token, process.env.SECRET ?? "") as middlewareTypes.JwtPayload
+}
 
 // TODO: handle expired token
-export const authMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
-  const { authorization } = req.headers;
+  try{
+    const { authorization } = req.headers;
 
   if (!authorization) {
     res.status(err.TOKEN_REQUIRED.status).json({msg: err.TOKEN_REQUIRED.text})
@@ -21,12 +20,15 @@ export const authMiddleware = async (
   const token = authorization.split(" ")[1];
   console.log(`string to be decrypted: ${token}`)
 
-  // check if deToken returns JwtPayload otherwise it may be because of invalid SECRET or token
-  const decryptedToken  = deToken(token)
+  const decryptedToken  = decryptToken(token)
   console.log("decrypted token: ")
   console.log(decryptedToken)
 
-  // TODO: replace following lines | check if user exists
+  // TODO:
+  // - check if user exists 
+  // - check if token has expired
+
+  const userExists = await 
   /*
   const user = await userRepository.findOneById(userId);
 
@@ -42,4 +44,9 @@ export const authMiddleware = async (
 
   req.body = {...req.body, ...decryptedToken}
   next();
+
+  }catch(e){
+    console.log(e)
+
+  }
 };

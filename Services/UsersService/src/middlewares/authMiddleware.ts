@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorMessages } from "../helpers/Constants";
 import { BadRequest, Forbidden, Unauthorized } from "../helpers/ErrorTypes";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
-import { UserRepository } from "../database/UserRepository";
 import { IUser } from "../models/User";
 import { generateAcessToken, verifyToken } from "../utils/jwtUtilities";
 
@@ -13,6 +11,7 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
 
+  try {
   const authHeader = req.headers['authorization']
   console.log('auth middle: ' + authHeader)
   const token = authHeader && authHeader.split(' ')[1]
@@ -21,13 +20,17 @@ export const authMiddleware = async (
   const user = verifyToken(token) as IUser;
   console.log(user)
 
-  if(!user){
+  if (!user) {
     throw new Unauthorized(ErrorMessages.USER_NOT_AUTHORIZED);
   }
-
   req.user = user
-  return next();
- 
+  next();
+
+}catch (e){
+  console.log(e)
+  res.status(500).json({msg: e})
+}
+
   // const { accessToken, refreshToken } = req.cookies;
 
   // if (!accessToken) {

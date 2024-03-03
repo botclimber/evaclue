@@ -34,7 +34,9 @@ declare namespace middlewareTypes {
         userName?: string,
         userImage?: string,
         userEmail: string,
-        userType: string
+        userType: string,
+        iat?: number,
+        exp?: number
       };
 }
 

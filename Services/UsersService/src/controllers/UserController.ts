@@ -202,7 +202,7 @@ export class UserController {
       console.log("Getting user profile ...")
       const userData = await UserService.GetUserData(id)
 
-      return res.status(200).json(userData);
+      return res.status(200).json({...userData, ...{expiresIn: req.user.exp}});
 
     } else return res.status(401).json({ msg: "must send user ID within the request" })
   }

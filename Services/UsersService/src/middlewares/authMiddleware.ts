@@ -23,12 +23,13 @@ export const authMiddleware = async (
   if (!user) {
     throw new Unauthorized(ErrorMessages.USER_NOT_AUTHORIZED);
   }
+  
   req.user = user
   next();
 
 }catch (e){
   console.log(e)
-  res.status(500).json({msg: e})
+  return res.status(500).json({msg: e})
 }
 
   // const { accessToken, refreshToken } = req.cookies;

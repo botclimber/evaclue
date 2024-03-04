@@ -122,10 +122,11 @@ export default class UserService {
     // depending on whos getting the data remove and hide some fields
 
     try {
-      console.log(`Decrypting token`)
+      console.log(`Getting user information ...`)
       const user: IUser | undefined = await UserRepository.FindOneById(userId)
 
-      console.log(`Checking if user ${user} exists and returning it as response`)
+      console.log(`Checking if user exists and returning it as response`)
+      console.log(user)
       if (user) {
 
         delete user.password;

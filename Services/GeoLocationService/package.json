@@ -16,6 +16,7 @@
     "@types/jest": "29.5.3",
     "@types/jsonwebtoken": "9.0.2",
     "@types/node-geocoder": "4.2.0",
+    "@types/node": "20.8.4",
     "body-parser": "1.20.1",
     "cors": "2.8.5",
     "date-and-time": "2.4.2",

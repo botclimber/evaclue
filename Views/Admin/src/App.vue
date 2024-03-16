@@ -28,7 +28,6 @@ export default {
 
   data() {
     return {
-      apis: this.apis,
       reviews: null,
       addresses: null,
       residences: null,
@@ -119,7 +118,7 @@ export default {
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <a class="sidebar-brand brand-logo" href="#/"><b style="color:white">Evaclue</b></a>
-        <a class="sidebar-brand brand-logo-mini" href="#/"><b style="color:white">R</b></a>
+        <a class="sidebar-brand brand-logo-mini" href="#/"><b style="color:white">E</b></a>
       </div>
       <ul class="nav">
         <li class="nav-item profile">
@@ -142,7 +141,7 @@ export default {
         <li class="nav-item menu-items">
           <a class="nav-link" href="#/">
             <span class="menu-icon">
-              <i class="mdi mdi-speedometer"></i>
+              <i class="mdi mdi-view-dashboard"></i>
             </span>
             <span class="menu-title">Dashboard</span>
           </a>
@@ -150,9 +149,17 @@ export default {
         <li class="nav-item menu-items">
           <a class="nav-link" href="#/all_reviews">
             <span class="menu-icon">
-              <i class="mdi mdi-speedometer"></i>
+              <i class="mdi mdi-pen"></i>
             </span>
             <span class="menu-title">Reviews</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="#/all_residences">
+            <span class="menu-icon">
+              <i class="mdi mdi-office-building"></i>
+            </span>
+            <span class="menu-title">Residences</span>
           </a>
         </li>
         <li class="nav-item menu-items">
@@ -165,11 +172,19 @@ export default {
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#/pending_claims"> Pending Claims  </a></li>
+                <li class="nav-item"> <a class="nav-link" href="#/pending_claims"> Pending Residences </a></li>
                 <li class="nav-item"> <a class="nav-link" href="#/pending_reviews"> Pending Reviews </a></li>
               </ul>
             </div>
           </li>
+          <li class="nav-item menu-items">
+          <a class="nav-link" href="#/all_users">
+            <span class="menu-icon">
+              <i class="mdi mdi-account"></i>
+            </span>
+            <span class="menu-title">Users</span>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- partial -->
@@ -177,19 +192,9 @@ export default {
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar p-0 fixed-top d-flex flex-row">
         <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo-mini" href="#/"><img src="../public/assets/images/logo-mini.svg" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="#/" style="color:white"><b>E</b></a>
         </div>
         <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
-          </button>
-          <ul class="navbar-nav w-100">
-            <li class="nav-item w-100">
-              <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                <input type="text" class="form-control" placeholder="Search products">
-              </form>
-            </li>
-          </ul>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
@@ -252,7 +257,7 @@ export default {
                 <a href = "#/new_col" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-user text-success"></i>
+                      <i class="mdi mdi-account-edit"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">
@@ -262,7 +267,7 @@ export default {
                 <a href = "#/user_profile" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
-                      <i class="mdi mdi-settings text-success"></i>
+                      <i class="mdi mdi-account-details"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">

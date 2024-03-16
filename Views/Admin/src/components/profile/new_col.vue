@@ -52,41 +52,32 @@ export default {
 
 <div class="row">
 
-    <div class="col-12 grid-margin">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">New Colaborator</h4>
+                    <p class="card-description"> Give access to managment platform. </p>
+                    <form class="forms-sample">
+
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Regist new colaborator</h4>
-
-          <div class="row">
-          <div class="col-md-12 nto">
-            <input v-model="firstName"  placeholder="First Name" />
-            </div>
-
-          <div class="col-md-12 nto">
-          <input v-model="lastName"  placeholder="Last Name" />
-          </div>
-<div class="col-md-12 nto">
-          <input v-model="email"  placeholder="Email" />
-</div>
-<div class="col-md-12 nto">
-          <input type="password" v-model="pass"  placeholder="Password" />
-</div>
-<div class="col-md-12 nto">
-          <input type="password" v-model="confPass"  placeholder="Confirm Password" />
-</div>
-<div class="col-md-12 nto">
-          <select v-model="type">
+          <div class="form-group"><input class="form-control" v-model="firstName"  placeholder="First Name" /></div>
+          <div class="form-group"><input class="form-control" v-model="lastName"  placeholder="Last Name" /></div>
+          <div class="form-group"><input class="form-control" v-model="email"  placeholder="Email" /></div>
+          <div class="form-group"><input class="form-control" type="password" v-model="pass"  placeholder="Password" /></div>
+          <div class="form-group"><input class="form-control" type="password" v-model="confPass"  placeholder="Confirm Password" /></div>
+          <div class="form-group">
+            <select class="form-control" v-model="type">
             <option v-for="option in typeOpt" :value="option.value">
             {{ option.text }}
             </option>
           </select>
-</div>
+          </div>
 
-<div class="col-md-12 nto">
-  <button @click="registNewUser()">Regist</button>
-  </div>
+          <button type="button" @click="registNewUser()" class="btn btn-primary mr-2">Submit</button>
 </div>
-
+</div>
+</form>
             </div>
             </div>
             </div>
